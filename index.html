@@ -1,97 +1,41 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Monthly TT Challenge Leaderboard</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #111;
-      color: #eee;
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
-    }
-    h1 {
-      text-align: center;
-      color: #4caf50;
-    }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-    th, td {
-      padding: 10px;
-      border-bottom: 1px solid #444;
-      text-align: center;
-    }
-    th {
-      background-color: #222;
-      color: #4caf50;
-    }
-    .loading {
-      text-align: center;
-      margin-top: 30px;
-      font-size: 1.2rem;
-      color: #aaa;
-    }
-  </style>
-</head>
-<body>
-  <h1>Monthly TT Challenge</h1>
-  <div id="leaderboard-container">
-    <div class="loading">Loading leaderboard…</div>
-  </div>
+import json
+import requests
+from datetime import datetime
 
-  <script>
-    const allowedDrivers = ["ACEREES", "DRIVER2", "DRIVER3", "DRIVER4", "DRIVER5"]; // replace with your real names
+# URL of the leaderboard JSON
+url = "https://ams2leaderboards.neocities.org/data/boards/F3%20Brasil,%20Jacarepagu%C3%A1%20Historic%202012%20SCB.json"
 
-    fetch("leaderboard.json")
-      .then((response) => {
-        if (!response.ok) throw new Error("Failed to load leaderboard");
-        return response.json();
-      })
-      .then((data) => {
-        const filtered = data.filter(entry => allowedDrivers.includes(entry.driver));
-        const table = document.createElement("table");
+# List of target drivers
+target_drivers = {"ACEREES", "NEIL BYWATER", "reesyboy4", "Joe"}
 
-        table.innerHTML = `
-          <thead>
-            <tr>
-              <th>Pos</th>
-              <th>Driver</th>
-              <th>Lap Time</th>
-              <th>Sector 1</th>
-              <th>Sector 2</th>
-              <th>Sector 3</th>
-              <th>Car</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${filtered.map(driver => `
-              <tr>
-                <td>${driver.position}</td>
-                <td>${driver.driver}</td>
-                <td>${driver.lap_time}</td>
-                <td>${driver.sector1}</td>
-                <td>${driver.sector2}</td>
-                <td>${driver.sector3}</td>
-                <td>${driver.car}</td>
-                <td>${driver.date}</td>
-              </tr>
-            `).join("")}
-          </tbody>
-        `;
+# Fetch the JSON data from the URL
+response = requests.get(url)
+if response.status_code != 200:
+    print(f"Failed to fetch data: {response.status_code}")
+    exit(1)
 
-        const container = document.getElementById("leaderboard-container");
-        container.innerHTML = "";
-        container.appendChild(table);
-      })
-      .catch((error) => {
-        document.getElementById("leaderboard-container").innerHTML = `<div class="loading">Error: ${error.message}</div>`;
-      });
-  </script>
-</b
+data = response.json()
+
+# Filter entries for target drivers
+filtered_entries = [entry for entry in data if entry.get("driver") in target_drivers]
+
+# Sort entries by lap time
+def parse_lap_time(lap_time_str):
+    try:
+        minutes, seconds = lap_time_str.split(":")
+        return float(minutes) * 60 + float(seconds)
+    except:
+        return float('inf')  # Assign a high value if parsing fails
+
+filtered_entries.sort(key=lambda x: parse_lap_time(x.get("lap_time", "99:99.999")))
+
+# Update positions
+for idx, entry in enumerate(filtered_entries, start=1):
+    entry["position"] = str(idx)
+    entry["date"] = datetime.now().strftime("%y-%m-%d %H:%M")
+
+# Save to leaderboard.json
+with open("leaderboard.json", "w") as f:
+    json.dump(filtered_entries, f, indent=2)
+
+print(f"Saved {len(filtered_entries)} results to leaderboard.json")
