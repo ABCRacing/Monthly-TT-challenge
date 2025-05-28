@@ -1,37 +1,57 @@
-import json
 import requests
+import json
+import os
 
-# URL of the AMS2 leaderboard
+# URL to fetch the leaderboard JSON data
 url = "https://ams2leaderboards.neocities.org/data/boards/F3%20Brasil,%20Jacarepagu%C3%A1%20Historic%202012%20SCB.json"
 
-# List of Steam names or IDs you care about (adjust to match exactly)
-target_users = ["ACEREES", "Bobinator", "ieuanTT", "FuryF1", "SpeedCat"]  # Example names
+# List of users to filter by (put your actual usernames here)
+filter_users = [
+    "ACEREES",
+    "Neil Bywater",
+    "reesyboy4",
+    "Joe",
+    "Steve Jackson"
+]
 
-# Fetch the data
-response = requests.get(url)
-data = response.json()
+# This maps the list of values to meaningful keys
+keys = ['Position', 'Name', 'SteamID', 'LapTime', 'Sector1', 'Sector2', 'Sector3', 'Gap', 'Car', 'Date', 'Flags']
 
-# Check the structure and filter only the needed entries
-filtered_results = []
+# Output path
+output_dir = "data"
+output_path = os.path.join(output_dir, "leaderboard_filtered.json")
 
-for entry in data:
-    if isinstance(entry, list) and len(entry) > 1:
-        driver_name = entry[1]
-        if driver_name in target_users:
-            filtered_results.append({
-                "position": entry[0],
-                "driver": entry[1],
-                "steam_id": entry[2],
-                "lap_time": entry[3],
-                "sector1": entry[4],
-                "sector2": entry[5],
-                "sector3": entry[6],
-                "car": entry[8],
-                "date": entry[9]
-            })
+def fetch_leaderboard():
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
 
-# Save filtered data to a JSON file for the website to load
-with open("leaderboard.json", "w") as f:
-    json.dump(filtered_results, f, indent=4)
+        print(f"Type of data: {type(data)}")
+        print(f"Number of rows: {len(data)}")
+        print(f"First row (raw): {data[0]}")
 
-print(f"Saved {len(filtered_results)} results to leaderboard.json")
+        filtered_data = []
+        for row in data:
+            entry = dict(zip(keys, row))
+            if entry['Name'] in filter_users:
+                filtered_data.append(entry)
+
+        # Make sure the 'data' folder exists
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Write filtered data to JSON file
+        with open(output_path, "w", encoding="utf-8") as f:
+            json.dump(filtered_data, f, indent=2)
+        
+        print(f"\nFiltered {len(filtered_data)} rows and saved to {output_path}")
+
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP error occurred: {e}")
+    except requests.exceptions.RequestException as e:
+        print(f"Error fetching leaderboard: {e}")
+    except Exception as e:
+        print(f"Other error occurred: {e}")
+
+if __name__ == "__main__":
+    fetch_leaderboard()
