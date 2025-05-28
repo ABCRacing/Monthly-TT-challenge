@@ -1,22 +1,37 @@
+import json
 import requests
 
+# URL of the AMS2 leaderboard
 url = "https://ams2leaderboards.neocities.org/data/boards/F3%20Brasil,%20Jacarepagu%C3%A1%20Historic%202012%20SCB.json"
 
-try:
-    response = requests.get(url)
-    response.raise_for_status()
-    data = response.json()
+# List of Steam names or IDs you care about (adjust to match exactly)
+target_users = ["ACEREES", "Bobinator", "ieuanTT", "FuryF1", "SpeedCat"]  # Example names
 
-    print(f"Length of JSON list: {len(data)}")
+# Fetch the data
+response = requests.get(url)
+data = response.json()
 
-    for item in data:
-        # item is a list like ['1', 'ACEREES', '76561197971749679', '1:12.340', ...]
-        position = item[0]
-        driver_name = item[1]
-        lap_time = item[3]
-        print(f"Position {position}: {driver_name} - Lap Time: {lap_time}")
+# Check the structure and filter only the needed entries
+filtered_results = []
 
-except requests.exceptions.RequestException as e:
-    print(f"Failed to fetch the page: {e}")
-except ValueError:
-    print("Failed to parse JSON.")
+for entry in data:
+    if isinstance(entry, list) and len(entry) > 1:
+        driver_name = entry[1]
+        if driver_name in target_users:
+            filtered_results.append({
+                "position": entry[0],
+                "driver": entry[1],
+                "steam_id": entry[2],
+                "lap_time": entry[3],
+                "sector1": entry[4],
+                "sector2": entry[5],
+                "sector3": entry[6],
+                "car": entry[8],
+                "date": entry[9]
+            })
+
+# Save filtered data to a JSON file for the website to load
+with open("leaderboard.json", "w") as f:
+    json.dump(filtered_results, f, indent=4)
+
+print(f"Saved {len(filtered_results)} results to leaderboard.json")
