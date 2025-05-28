@@ -59,10 +59,8 @@
 <div id="error-message"></div>
 
 <script>
-  // Path to your filtered leaderboard JSON file (adjust if needed)
-  const leaderboardFile = 'data/leaderboard_filtered.json';
-
-  fetch(leaderboardFile)
+  // Full script to fetch and display leaderboard_filtered.json
+  fetch('data/leaderboard_filtered.json')
     .then(response => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -71,27 +69,19 @@
     })
     .then(data => {
       const tbody = document.querySelector('#leaderboard tbody');
-
       if (!Array.isArray(data) || data.length === 0) {
         document.getElementById('error-message').textContent = 'No leaderboard data found.';
         return;
       }
 
       data.forEach(entry => {
-        // Defensive: Provide fallback text if keys are missing
-        const pos = entry.Position || '-';
-        const name = entry.Name || '-';
-        const lap = entry.LapTime || '-';
-        const car = entry.Car || '-';
-        const date = entry.Date || '-';
-
         const tr = document.createElement('tr');
         tr.innerHTML = `
-          <td>${pos}</td>
-          <td>${name}</td>
-          <td>${lap}</td>
-          <td>${car}</td>
-          <td>${date}</td>
+          <td>${entry.Position || '-'}</td>
+          <td>${entry.Name || '-'}</td>
+          <td>${entry.LapTime || '-'}</td>
+          <td>${entry.Car || '-'}</td>
+          <td>${entry.Date || '-'}</td>
         `;
         tbody.appendChild(tr);
       });
