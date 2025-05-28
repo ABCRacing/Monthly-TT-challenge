@@ -1,41 +1,58 @@
-import json
-import requests
-from datetime import datetime
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monthly TT Challenge</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9; }
+    h1 { color: #333; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px 12px; border: 1px solid #ccc; text-align: left; }
+    th { background-color: #eee; }
+  </style>
+</head>
+<body>
+  <h1>Monthly TT Challenge</h1>
+  <table id="leaderboard">
+    <thead>
+      <tr>
+        <th>Position</th>
+        <th>Driver</th>
+        <th>Lap Time</th>
+        <th>Sector 1</th>
+        <th>Sector 2</th>
+        <th>Sector 3</th>
+        <th>Car</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-# URL of the leaderboard JSON
-url = "https://ams2leaderboards.neocities.org/data/boards/F3%20Brasil,%20Jacarepagu%C3%A1%20Historic%202012%20SCB.json"
-
-# List of target drivers
-target_drivers = {"ACEREES", "NEIL BYWATER", "reesyboy4", "Joe"}
-
-# Fetch the JSON data from the URL
-response = requests.get(url)
-if response.status_code != 200:
-    print(f"Failed to fetch data: {response.status_code}")
-    exit(1)
-
-data = response.json()
-
-# Filter entries for target drivers
-filtered_entries = [entry for entry in data if entry.get("driver") in target_drivers]
-
-# Sort entries by lap time
-def parse_lap_time(lap_time_str):
-    try:
-        minutes, seconds = lap_time_str.split(":")
-        return float(minutes) * 60 + float(seconds)
-    except:
-        return float('inf')  # Assign a high value if parsing fails
-
-filtered_entries.sort(key=lambda x: parse_lap_time(x.get("lap_time", "99:99.999")))
-
-# Update positions
-for idx, entry in enumerate(filtered_entries, start=1):
-    entry["position"] = str(idx)
-    entry["date"] = datetime.now().strftime("%y-%m-%d %H:%M")
-
-# Save to leaderboard.json
-with open("leaderboard.json", "w") as f:
-    json.dump(filtered_entries, f, indent=2)
-
-print(f"Saved {len(filtered_entries)} results to leaderboard.json")
+  <script>
+    fetch('leaderboard.json')
+      .then(response => response.json())
+      .then(data => {
+        const tbody = document.querySelector("#leaderboard tbody");
+        data.forEach(entry => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
+            <td>${entry.position}</td>
+            <td>${entry.driver}</td>
+            <td>${entry.lap_time}</td>
+            <td>${entry.sector1}</td>
+            <td>${entry.sector2}</td>
+            <td>${entry.sector3}</td>
+            <td>${entry.car}</td>
+            <td>${entry.date}</td>
+          `;
+          tbody.appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error("Error loading leaderboard:", error);
+      });
+  </script>
+</body>
+</html>
