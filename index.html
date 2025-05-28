@@ -1,23 +1,106 @@
-fetch('data/leaderboard_filtered.json')
-  .then(response => {
-    console.log('Response status:', response.status);
-    return response.json();
-  })
-  .then(data => {
-    console.log('Data loaded:', data);
-    const tbody = document.querySelector('#leaderboard tbody');
-    data.forEach(entry => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${entry.Position}</td>
-        <td>${entry.Name}</td>
-        <td>${entry.LapTime}</td>
-        <td>${entry.Car}</td>
-        <td>${entry.Date}</td>
-      `;
-      tbody.appendChild(tr);
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Filtered Leaderboard</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 1rem;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px 12px;
+    text-align: center;
+  }
+  th {
+    background-color: #eee;
+  }
+  tbody tr:hover {
+    background-color: #f9f9f9;
+  }
+  #error-message {
+    color: red;
+    text-align: center;
+    margin-top: 1rem;
+  }
+</style>
+</head>
+<body>
+
+<h1>Filtered Leaderboard</h1>
+
+<table id="leaderboard">
+  <thead>
+    <tr>
+      <th>Position</th>
+      <th>Name</th>
+      <th>Lap Time</th>
+      <th>Car</th>
+      <th>Date</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- Data rows will be inserted here -->
+  </tbody>
+</table>
+
+<div id="error-message"></div>
+
+<script>
+  // Path to your filtered leaderboard JSON file (adjust if needed)
+  const leaderboardFile = 'data/leaderboard_filtered.json';
+
+  fetch(leaderboardFile)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      const tbody = document.querySelector('#leaderboard tbody');
+
+      if (!Array.isArray(data) || data.length === 0) {
+        document.getElementById('error-message').textContent = 'No leaderboard data found.';
+        return;
+      }
+
+      data.forEach(entry => {
+        // Defensive: Provide fallback text if keys are missing
+        const pos = entry.Position || '-';
+        const name = entry.Name || '-';
+        const lap = entry.LapTime || '-';
+        const car = entry.Car || '-';
+        const date = entry.Date || '-';
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${pos}</td>
+          <td>${name}</td>
+          <td>${lap}</td>
+          <td>${car}</td>
+          <td>${date}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(error => {
+      console.error('Error loading leaderboard:', error);
+      document.getElementById('error-message').textContent = 'Failed to load leaderboard data.';
     });
-  })
-  .catch(err => console.error('Error loading leaderboard:', err));
+</script>
 
-
+</body>
+</html>
