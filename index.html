@@ -2,66 +2,50 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Monthly TT Challenge Leaderboard</title>
+<title>Leaderboard</title>
 <style>
-  body { font-family: Arial, sans-serif; background: #111; color: #eee; }
-  h1 { text-align: center; }
-  table { margin: 0 auto; border-collapse: collapse; width: 90%; }
-  th, td { border: 1px solid #444; padding: 8px; text-align: center; }
-  th { background: #222; }
-  tr:nth-child(even) { background: #222; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid #ccc; padding: 8px; }
+  th { background-color: #eee; }
 </style>
 </head>
 <body>
-
-<h1>Monthly TT Challenge Leaderboard</h1>
-
-<table>
+<h1>Filtered Leaderboard</h1>
+<table id="leaderboard">
   <thead>
     <tr>
       <th>Position</th>
-      <th>Driver</th>
+      <th>Name</th>
       <th>Lap Time</th>
-      <th>Sector 1</th>
-      <th>Sector 2</th>
-      <th>Sector 3</th>
       <th>Car</th>
       <th>Date</th>
     </tr>
   </thead>
-  <tbody id="leaderboard-body">
-    <!-- Leaderboard entries will go here -->
+  <tbody>
+    <!-- Rows will be inserted here -->
   </tbody>
 </table>
 
 <script>
-fetch('leaderboard.json')
-  .then(response => response.json())
-  .then(data => {
-    const tbody = document.getElementById('leaderboard-body');
-    tbody.innerHTML = ''; // Clear existing content
-    data.forEach(entry => {
-      const tr = document.createElement('tr');
-      tr.innerHTML = `
-        <td>${entry.position}</td>
-        <td>${entry.driver}</td>
-        <td>${entry.lap_time}</td>
-        <td>${entry.sector1}</td>
-        <td>${entry.sector2}</td>
-        <td>${entry.sector3}</td>
-        <td>${entry.car}</td>
-        <td>${entry.date}</td>
-      `;
-      tbody.appendChild(tr);
-    });
-  })
-  .catch(err => {
-    console.error('Error loading leaderboard:', err);
-    const tbody = document.getElementById('leaderboard-body');
-    tbody.innerHTML = '<tr><td colspan="8">Failed to load leaderboard data.</td></tr>';
-  });
+  fetch('data/leaderboard_filtered.json')
+    .then(response => response.json())
+    .then(data => {
+      const tbody = document.querySelector('#leaderboard tbody');
+      data.forEach(entry => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${entry.Position}</td>
+          <td>${entry.Name}</td>
+          <td>${entry.LapTime}</td>
+          <td>${entry.Car}</td>
+          <td>${entry.Date}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    })
+    .catch(err => console.error('Error loading leaderboard:', err));
 </script>
 
 </body>
 </html>
+
