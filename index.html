@@ -1,51 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8" />
-<title>Leaderboard</title>
-<style>
-  table { border-collapse: collapse; width: 100%; }
-  th, td { border: 1px solid #ccc; padding: 8px; }
-  th { background-color: #eee; }
-</style>
-</head>
-<body>
-<h1>Filtered Leaderboard</h1>
-<table id="leaderboard">
-  <thead>
-    <tr>
-      <th>Position</th>
-      <th>Name</th>
-      <th>Lap Time</th>
-      <th>Car</th>
-      <th>Date</th>
-    </tr>
-  </thead>
-  <tbody>
-    <!-- Rows will be inserted here -->
-  </tbody>
-</table>
+fetch('data/leaderboard_filtered.json')
+  .then(response => {
+    console.log('Response status:', response.status);
+    return response.json();
+  })
+  .then(data => {
+    console.log('Data loaded:', data);
+    const tbody = document.querySelector('#leaderboard tbody');
+    data.forEach(entry => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${entry.Position}</td>
+        <td>${entry.Name}</td>
+        <td>${entry.LapTime}</td>
+        <td>${entry.Car}</td>
+        <td>${entry.Date}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(err => console.error('Error loading leaderboard:', err));
 
-<script>
-  fetch('data/leaderboard_filtered.json')
-    .then(response => response.json())
-    .then(data => {
-      const tbody = document.querySelector('#leaderboard tbody');
-      data.forEach(entry => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td>${entry.Position}</td>
-          <td>${entry.Name}</td>
-          <td>${entry.LapTime}</td>
-          <td>${entry.Car}</td>
-          <td>${entry.Date}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-    })
-    .catch(err => console.error('Error loading leaderboard:', err));
-</script>
-
-</body>
-</html>
 
