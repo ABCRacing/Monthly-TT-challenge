@@ -6,32 +6,21 @@ $destinationPath = ".\data\leaderboard_filtered.json"
 try {
     $response = Invoke-WebRequest -Uri $sourceUrl -UseBasicParsing
     $jsonData = $response.Content | ConvertFrom-Json
-} catch {
-    Write-Error "Failed to download or parse JSON data: $_"
-    exit 1
-}
+# Step 1: Change to the project directory
+Set-Location "F:\Documents\python"
 
-# Process the data
-$processedData = @()
-foreach ($entry in $jsonData) {
-    $processedData += [PSCustomObject]@{
-        Name     = $entry.Name
-        LapTime  = $entry.LapTime
-        Sector1  = $entry.Sector1
-        Sector2  = $entry.Sector2
-        Sector3  = $entry.Sector3
-        Gap      = $entry.Gap
-    }
-}
+# Step 2: Pull latest changes from GitHub
+git pull origin main
 
-# Convert the processed data to JSON
-$processedJson = $processedData | ConvertTo-Json -Depth 3
+# Step 3: Run your Python scraping script
+python scrape_tt.py
 
-# Save the processed JSON to the destination path
-try {
-    $processedJson | Set-Content -Path $destinationPath -Encoding UTF8
-    Write-Host "Leaderboard updated successfully at $destinationPath"
-} catch {
-    Write-Error "Failed to write JSON data to file: $_"
-    exit 1
-}
+# Step 4: Stage all changes
+git add .
+
+# Step 5: Commit with timestamp
+$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
+git commit -m "Auto-update leaderboard: $timestamp"
+
+# Step 6: Push to GitHub
+git push origin main
