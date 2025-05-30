@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Archived Results</title>
 
-  <!-- Orbitron Font -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
@@ -25,95 +24,108 @@
       justify-content: center;
     }
 
-    h1 {
-      font-size: 2.5em;
+    header h1 {
       background-color: rgba(0, 0, 0, 0.6);
-      padding: 0.5em 1em;
+      padding: 10px 20px;
       border-radius: 10px;
-      color: #00ffcc;
-    }
-
-    .home-button {
-      margin: 1em;
-    }
-
-    .home-button a {
-      color: #00ffcc;
-      text-decoration: none;
-      font-weight: bold;
-      background: #222;
-      padding: 0.5em 1em;
-      border-radius: 5px;
-      transition: background 0.3s;
-    }
-
-    .home-button a:hover {
-      background: #444;
     }
 
     .controls {
-      padding: 1em;
+      padding: 20px;
       text-align: center;
     }
 
     select, button {
       font-family: 'Orbitron', sans-serif;
-      margin: 0.5em;
-      padding: 0.5em;
+      font-size: 1em;
+      padding: 10px;
+      margin: 5px;
+      border: none;
       border-radius: 5px;
-      background: #222;
-      color: #00ffcc;
-      border: 1px solid #00ffcc;
     }
 
-    .results {
-      padding: 1em;
-      max-width: 900px;
-      margin: 0 auto;
+    button {
+      background-color: #ff4444;
+      color: white;
+      cursor: pointer;
     }
 
-    .card {
-      background: #1a1a1a;
-      margin: 1em 0;
-      padding: 1em;
-      border-radius: 10px;
-      border-left: 5px solid #00ffcc;
+    button:hover {
+      background-color: #cc0000;
     }
 
-    .card h3 {
-      margin: 0;
-      color: #00ffcc;
+    .home-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      background-color: #444;
+      padding: 10px 15px;
+      border-radius: 8px;
+      text-decoration: none;
+      color: #fff;
     }
 
-    .card p {
-      margin: 0.3em 0;
-    }
-
-    .error {
-      color: #ff4444;
+    .summary {
       text-align: center;
-      padding: 1em;
+      font-size: 1.2em;
+      margin: 20px;
+    }
+
+    table {
+      width: 90%;
+      margin: 0 auto 50px auto;
+      border-collapse: collapse;
+      text-align: center;
+    }
+
+    th, td {
+      padding: 12px;
+      border: 1px solid #f0f0f0;
+    }
+
+    th {
+      background-color: #222;
+    }
+
+    tr:nth-child(1) {
+      background-color: gold;
+      color: black;
+    }
+
+    tr:nth-child(2) {
+      background-color: silver;
+      color: black;
+    }
+
+    tr:nth-child(3) {
+      background-color: #cd7f32;
+      color: black;
+    }
+
+    tr:nth-child(even) {
+      background-color: #1a1a1a;
+    }
+
+    tr:nth-child(odd) {
+      background-color: #2a2a2a;
     }
   </style>
 </head>
+
 <body>
+  <a class="home-button" href="index.html">🏠 Home</a>
 
   <header>
-    <h1>Archived Results</h1>
+    <h1>🏁 Archived Results</h1>
   </header>
 
-  <div class="home-button">
-    <a href="index.html">⬅ Home</a>
-  </div>
-
   <div class="controls">
-    <label for="year">Year: </label>
+    <label for="year">Year:</label>
     <select id="year">
       <option value="2025">2025</option>
-      <!-- Add more years as needed -->
     </select>
 
-    <label for="month">Month: </label>
+    <label for="month">Month:</label>
     <select id="month">
       <option value="MAY">May</option>
       <option value="JUNE">June</option>
@@ -123,48 +135,56 @@
     <button onclick="loadArchive()">Load Archive</button>
   </div>
 
-  <div id="results" class="results"></div>
-  <div id="error" class="error"></div>
+  <div class="summary" id="trackSummary"></div>
+  <div id="leaderboard"></div>
 
   <script>
     function loadArchive() {
       const year = document.getElementById('year').value;
       const month = document.getElementById('month').value.toUpperCase();
-      const url = `data/archive/${month}${year}_RESULTS.json`;
+      const filePath = `data/archive/${month}${year}_RESULTS.json`;
 
-      fetch(url)
+      fetch(filePath)
         .then(response => {
-          if (!response.ok) {
-            throw new Error(`Could not load archive for ${month} ${year}.`);
-          }
+          if (!response.ok) throw new Error("File not found");
           return response.json();
         })
-        .then(data => displayResults(data, month, year))
-        .catch(error => {
-          document.getElementById('results').innerHTML = '';
-          document.getElementById('error').textContent = error.message;
+        .then(data => {
+          const summaryText = `${data.track} (${data.variant}) - ${data.car}`;
+          document.getElementById('trackSummary').textContent = summaryText;
+
+          const rows = data.results.map((entry, index) => `
+            <tr>
+              <td>#${index + 1}</td>
+              <td>${entry.name}</td>
+              <td>${entry.laptime}</td>
+              <td>${entry.sector1} | ${entry.sector2} | ${entry.sector3}</td>
+              <td>${entry.time_set}</td>
+            </tr>
+          `).join("");
+
+          const table = `
+            <table>
+              <thead>
+                <tr>
+                  <th>Pos</th>
+                  <th>Name</th>
+                  <th>Laptime</th>
+                  <th>Sectors</th>
+                  <th>Time Set</th>
+                </tr>
+              </thead>
+              <tbody>${rows}</tbody>
+            </table>
+          `;
+
+          document.getElementById('leaderboard').innerHTML = table;
+        })
+        .catch(() => {
+          document.getElementById('trackSummary').textContent = `Could not load archive for ${month} ${year}.`;
+          document.getElementById('leaderboard').innerHTML = '';
         });
     }
-
-    function displayResults(data, month, year) {
-      document.getElementById('error').textContent = '';
-
-      let html = `<h2>${data.track} ${month} ${year} (${data.variant}) - ${month} ${year}</h2>`;
-
-      data.results.forEach(entry => {
-        html += `
-          <div class="card">
-            <h3>#${entry.position} - ${entry.driver}</h3>
-            <p><strong>Laptime:</strong> ${entry.laptime}</p>
-            <p>Sector 1: ${entry.sector1} | Sector 2: ${entry.sector2} | Sector 3: ${entry.sector3}</p>
-            <p><em>Time set: ${entry.timestamp}</em></p>
-          </div>
-        `;
-      });
-
-      document.getElementById('results').innerHTML = html;
-    }
   </script>
-
 </body>
 </html>
