@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Archived Results</title>
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
@@ -11,62 +11,100 @@
       background-color: #0f0f0f;
       color: #f0f0f0;
       margin: 0;
-      padding: 1rem;
+      padding: 20px;
     }
 
     header {
+      background: #1a1a1a;
+      padding: 20px;
       text-align: center;
-      padding: 1rem;
-      background-color: #222;
     }
 
-    .meta {
+    h1 {
+      margin: 0;
+      font-size: 2em;
+    }
+
+    .dropdowns {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      gap: 10px;
+    }
+
+    select {
+      padding: 10px;
+      font-size: 1em;
+    }
+
+    .track-info {
       text-align: center;
-      margin: 1rem 0;
+      margin-bottom: 20px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 1rem;
+      margin-top: 20px;
     }
 
     th, td {
-      border: 1px solid #444;
-      padding: 0.5rem;
+      padding: 12px;
       text-align: center;
+      border-bottom: 1px solid #444;
     }
 
-    th {
-      background-color: #333;
-    }
-
-    a.button {
+    a.home-button {
       display: inline-block;
-      margin-top: 1rem;
-      background-color: #333;
-      color: #fff;
-      padding: 0.5rem 1rem;
+      margin-bottom: 10px;
+      background-color: #444;
+      padding: 10px 20px;
+      color: white;
       text-decoration: none;
-      border-radius: 8px;
+      border-radius: 5px;
     }
 
-    a.button:hover {
-      background-color: #555;
+    a.home-button:hover {
+      background-color: #666;
     }
   </style>
 </head>
 <body>
+
   <header>
     <h1>Archived Results</h1>
-    <a class="button" href="index.html">🏁 Back to Current Leaderboard</a>
+    <a href="index.html" class="home-button">🏁 Current Leaderboard</a>
   </header>
 
-  <div class="meta" id="meta-info"></div>
-  <table id="leaderboard">
+  <div class="dropdowns">
+    <select id="yearSelect">
+      <option value="">Select Year</option>
+      <option>2024</option>
+      <option>2025</option>
+    </select>
+
+    <select id="monthSelect" disabled>
+      <option value="">Select Month</option>
+      <option value="JANUARY">January</option>
+      <option value="FEBRUARY">February</option>
+      <option value="MARCH">March</option>
+      <option value="APRIL">April</option>
+      <option value="MAY">May</option>
+      <option value="JUNE">June</option>
+      <option value="JULY">July</option>
+      <option value="AUGUST">August</option>
+      <option value="SEPTEMBER">September</option>
+      <option value="OCTOBER">October</option>
+      <option value="NOVEMBER">November</option>
+      <option value="DECEMBER">December</option>
+    </select>
+  </div>
+
+  <div class="track-info" id="trackInfo"></div>
+  <table id="resultsTable" style="display: none;">
     <thead>
       <tr>
-        <th>Pos</th>
+        <th>Position</th>
         <th>Driver</th>
         <th>Lap Time</th>
         <th>Sector 1</th>
@@ -75,31 +113,62 @@
         <th>Timestamp</th>
       </tr>
     </thead>
-    <tbody></tbody>
+    <tbody id="resultsBody"></tbody>
   </table>
 
   <script>
-    fetch('data/archive/MAY2025_RESULTS.json')
-      .then(response => response.json())
-      .then(data => {
-        const meta = `${data.track} (${data.variant}) · ${data.car} · ${data.month} ${data.year}`;
-        document.getElementById('meta-info').textContent = meta;
+    const yearSelect = document.getElementById('yearSelect');
+    const monthSelect = document.getElementById('monthSelect');
+    const trackInfo = document.getElementById('trackInfo');
+    const resultsBody = document.getElementById('resultsBody');
+    const resultsTable = document.getElementById('resultsTable');
 
-        const tbody = document.querySelector('#leaderboard tbody');
-        data.results.forEach(entry => {
-          const row = document.createElement('tr');
-          row.innerHTML = `
-            <td>${entry.position}</td>
-            <td>${entry.driver}</td>
-            <td>${entry.laptime}</td>
-            <td>${entry.sector1}</td>
-            <td>${entry.sector2}</td>
-            <td>${entry.sector3}</td>
-            <td>${entry.timestamp}</td>
-          `;
-          tbody.appendChild(row);
-        });
-      });
+    yearSelect.addEventListener('change', () => {
+      monthSelect.disabled = yearSelect.value === '';
+    });
+
+    monthSelect.addEventListener('change', () => {
+      const year = yearSelect.value;
+      const month = monthSelect.value;
+
+      if (year && month) {
+        const filename = `data/archive/${month.toUpperCase()}${year}_RESULTS.json`;
+        fetch(filename)
+          .then(res => {
+            if (!res.ok) throw new Error("File not found");
+            return res.json();
+          })
+          .then(data => {
+            // Show track info
+            trackInfo.innerHTML = `
+              <h2>${data.track} (${data.variant})</h2>
+              <h3>Car: ${data.car}</h3>
+            `;
+
+            // Fill table
+            resultsBody.innerHTML = '';
+            data.results.forEach(driver => {
+              const row = document.createElement('tr');
+              row.innerHTML = `
+                <td>${driver.position}</td>
+                <td>${driver.driver}</td>
+                <td>${driver.laptime}</td>
+                <td>${driver.sector1}</td>
+                <td>${driver.sector2}</td>
+                <td>${driver.sector3}</td>
+                <td>${driver.timestamp}</td>
+              `;
+              resultsBody.appendChild(row);
+            });
+
+            resultsTable.style.display = 'table';
+          })
+          .catch(err => {
+            trackInfo.innerHTML = `<p style="color: red;">Could not load archive for ${month} ${year}.</p>`;
+            resultsTable.style.display = 'none';
+          });
+      }
+    });
   </script>
 </body>
 </html>
