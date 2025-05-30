@@ -1,29 +1,29 @@
 [
   {
     "Position": "1",
+    "Name": "Neil Bywater",
+    "SteamID": "76561198118274739",
+    "LapTime": "1:12.287",
+    "Sector1": "23.581",
+    "Sector2": "20.018",
+    "Sector3": "28.688",
+    "Gap": "",
+    "Car": "Dallara F309",
+    "Date": "25-05-29 20:07",
+    "Flags": "W|+|C"
+  },
+  {
+    "Position": "2",
     "Name": "ACEREES",
     "SteamID": "76561197971749679",
     "LapTime": "1:12.300",
     "Sector1": "23.679",
     "Sector2": "20.100",
     "Sector3": "28.521",
-    "Gap": "",
+    "Gap": "+0.013",
     "Car": "Dallara F309",
     "Date": "25-05-28 20:57",
     "Flags": "W|+"
-  },
-  {
-    "Position": "2",
-    "Name": "Neil Bywater",
-    "SteamID": "76561198118274739",
-    "LapTime": "1:12.453",
-    "Sector1": "23.734",
-    "Sector2": "20.106",
-    "Sector3": "28.613",
-    "Gap": "+0.153",
-    "Car": "Dallara F309",
-    "Date": "25-05-25 09:19",
-    "Flags": "W|+|C"
   },
   {
     "Position": "8",
@@ -33,7 +33,7 @@
     "Sector1": "24.182",
     "Sector2": "20.230",
     "Sector3": "28.843",
-    "Gap": "+0.955",
+    "Gap": "+0.968",
     "Car": "Dallara F309",
     "Date": "25-05-21 17:56",
     "Flags": "W|+|C"
@@ -46,7 +46,7 @@
     "Sector1": "24.118",
     "Sector2": "21.632",
     "Sector3": "29.820",
-    "Gap": "+3.270",
+    "Gap": "+3.283",
     "Car": "Dallara F309",
     "Date": "25-05-26 14:00",
     "Flags": "W|+|C|D"
