@@ -1,4 +1,4 @@
-<!DOCTYPE html> 
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -16,113 +16,142 @@
       color: #f0f0f0;
     }
 
-    nav {
-      background-color: #1a1a1a;
-      padding: 10px;
-      text-align: center;
-    }
-
-    nav a {
-      color: #00ffcc;
-      text-decoration: none;
-      font-weight: bold;
-      font-size: 1.1em;
-    }
-
     header {
       background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
       background-size: cover;
-      padding: 60px 20px;
-      text-align: center;
+      height: 200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     header h1 {
-      font-size: 2.5em;
-      margin: 0;
-      color: #00ffcc;
-      text-shadow: 2px 2px #000;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 2rem;
     }
 
     main {
       padding: 20px;
+      background: url('https://images.pexels.com/photos/29321044/pexels-photo-29321044/free-photo-of-exciting-race-day-at-mexico-city-speedway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 20px;
-      background-color: #1c1c1c;
+      border: 5px solid white;
     }
 
     th, td {
-      border: 1px solid #333;
+      border: 1px solid white;
       padding: 10px;
       text-align: center;
     }
 
     th {
-      background-color: #2a2a2a;
-      color: #00ffcc;
+      background-color: red;
+      color: white;
     }
 
-    tr:nth-child(even) {
-      background-color: #2a2a2a;
-    }
+    .gold { background-color: #ffd700; color: #000; }
+    .silver { background-color: #c0c0c0; color: #000; }
+    .bronze { background-color: #cd7f32; color: #000; }
+    .fastest { background-color: purple; color: white; }
 
-    tr:hover {
-      background-color: #333;
+    #error-message {
+      color: red;
+      text-align: center;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
-
-  <nav>
-    <a href="archive.html">🏁 View Archive</a>
-  </nav>
-
   <header>
-    <h1>Monthly Time Trial Leaderboard</h1>
+    <h1>Current Month Leaderboard</h1>
   </header>
 
   <main>
-    <table id="leaderboard">
-      <thead>
-        <tr>
-          <th>Rank</th>
-          <th>Driver</th>
-          <th>Time</th>
-          <th>S1</th>
-          <th>S2</th>
-          <th>S3</th>
-          <th>Car</th>
-          <th>Set</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
+    <div class="overlay">
+      <div id="error-message"></div>
+      <table id="leaderboard">
+        <thead>
+          <tr>
+            <th>Position</th>
+            <th>Name</th>
+            <th>Lap Time</th>
+            <th>Sector 1</th>
+            <th>Sector 2</th>
+            <th>Sector 3</th>
+            <th>Gap</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </main>
 
   <script>
-    fetch('data/leaderboard_filtered.json')
-      .then(response => response.json())
-      .then(data => {
-        const tbody = document.querySelector("#leaderboard tbody");
-        data.forEach(row => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${row[0]}</td>
-            <td>${row[1]}</td>
-            <td>${row[3]}</td>
-            <td>${row[4]}</td>
-            <td>${row[5]}</td>
-            <td>${row[6]}</td>
-            <td>${row[8]}</td>
-            <td>${row[10]}</td>
-          `;
-          tbody.appendChild(tr);
-        });
-      });
-  </script>
+    async function fetchLeaderboard() {
+      try {
+        const response = await fetch("data/leaderboard_filtered.json");
+        if (!response.ok) throw new Error("Network response was not ok");
 
+        const data = await response.json();
+        const tbody = document.querySelector("#leaderboard tbody");
+        tbody.innerHTML = "";
+
+        let fastestS1 = Infinity;
+        let fastestS2 = Infinity;
+        let fastestS3 = Infinity;
+
+        data.forEach(entry => {
+          if (entry.Sector1 < fastestS1) fastestS1 = entry.Sector1;
+          if (entry.Sector2 < fastestS2) fastestS2 = entry.Sector2;
+          if (entry.Sector3 < fastestS3) fastestS3 = entry.Sector3;
+        });
+
+        data.forEach((entry, index) => {
+          const row = document.createElement("tr");
+
+          // Add medal class
+          if (index === 0) row.classList.add("gold");
+          else if (index === 1) row.classList.add("silver");
+          else if (index === 2) row.classList.add("bronze");
+
+          // Sector class check
+          const s1Class = entry.Sector1 === fastestS1 ? "fastest" : "";
+          const s2Class = entry.Sector2 === fastestS2 ? "fastest" : "";
+          const s3Class = entry.Sector3 === fastestS3 ? "fastest" : "";
+
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${entry.Name}</td>
+            <td>${entry.LapTime}</td>
+            <td class="${s1Class}">${entry.Sector1}</td>
+            <td class="${s2Class}">${entry.Sector2}</td>
+            <td class="${s3Class}">${entry.Sector3}</td>
+            <td>${entry.Gap || '-'}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (error) {
+        document.getElementById("error-message").textContent = "Failed to load leaderboard data.";
+        console.error("Error fetching leaderboard:", error);
+      }
+    }
+
+    fetchLeaderboard();
+  </script>
 </body>
 </html>
