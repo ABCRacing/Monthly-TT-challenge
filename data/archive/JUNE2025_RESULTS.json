@@ -7,7 +7,7 @@
   "results": [
     {
       "position": 1,
-      "driver": "Neil Bywater",
+      "name": "Neil Bywater",
       "laptime": "1:12.287",
       "sector1": "23.581",
       "sector2": "20.018",
@@ -16,7 +16,7 @@
     },
     {
       "position": 2,
-      "driver": "Jane Doe",
+      "name": "Jane Doe",
       "laptime": "1:13.001",
       "sector1": "23.782",
       "sector2": "20.300",
