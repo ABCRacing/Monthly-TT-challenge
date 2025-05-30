@@ -8,83 +8,65 @@
   <style>
     body {
       font-family: 'Orbitron', sans-serif;
+      margin: 0;
       background-color: #0f0f0f;
       color: #f0f0f0;
-      margin: 0;
       padding: 20px;
     }
 
     header {
-      background: #1a1a1a;
-      padding: 20px;
       text-align: center;
+      padding: 1rem 0;
+      background-color: #1a1a1a;
+      margin-bottom: 2rem;
     }
 
-    h1 {
-      margin: 0;
-      font-size: 2em;
+    select, button {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1rem;
+      padding: 0.5rem;
+      margin: 0.5rem;
     }
 
-    .dropdowns {
-      display: flex;
-      justify-content: center;
-      margin: 20px 0;
-      gap: 10px;
+    .result-entry {
+      background: #1f1f1f;
+      margin: 0.5rem 0;
+      padding: 1rem;
+      border-radius: 8px;
     }
 
-    select {
-      padding: 10px;
-      font-size: 1em;
-    }
-
-    .track-info {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 20px;
-    }
-
-    th, td {
-      padding: 12px;
-      text-align: center;
-      border-bottom: 1px solid #444;
-    }
-
-    a.home-button {
+    .home-button {
       display: inline-block;
-      margin-bottom: 10px;
+      margin-top: 1rem;
+      padding: 0.5rem 1rem;
       background-color: #444;
-      padding: 10px 20px;
-      color: white;
+      color: #fff;
       text-decoration: none;
-      border-radius: 5px;
+      border-radius: 4px;
     }
 
-    a.home-button:hover {
+    .home-button:hover {
       background-color: #666;
     }
   </style>
 </head>
 <body>
-
   <header>
     <h1>Archived Results</h1>
-    <a href="index.html" class="home-button">🏁 Current Leaderboard</a>
+    <a class="home-button" href="index.html">🏁 Current Leaderboard</a>
   </header>
 
-  <div class="dropdowns">
-    <select id="yearSelect">
-      <option value="">Select Year</option>
-      <option>2024</option>
-      <option>2025</option>
+  <div>
+    <label for="year">Year:</label>
+    <select id="year">
+      <option value="">-- Select Year --</option>
+      <option value="2025">2025</option>
+      <!-- Add more years as needed -->
     </select>
 
-    <select id="monthSelect" disabled>
-      <option value="">Select Month</option>
+    <label for="month">Month:</label>
+    <select id="month" disabled>
+      <option value="">-- Select Month --</option>
       <option value="JANUARY">January</option>
       <option value="FEBRUARY">February</option>
       <option value="MARCH">March</option>
@@ -98,76 +80,61 @@
       <option value="NOVEMBER">November</option>
       <option value="DECEMBER">December</option>
     </select>
+
+    <button id="loadArchive" disabled>Load Archive</button>
   </div>
 
-  <div class="track-info" id="trackInfo"></div>
-  <table id="resultsTable" style="display: none;">
-    <thead>
-      <tr>
-        <th>Position</th>
-        <th>Driver</th>
-        <th>Lap Time</th>
-        <th>Sector 1</th>
-        <th>Sector 2</th>
-        <th>Sector 3</th>
-        <th>Timestamp</th>
-      </tr>
-    </thead>
-    <tbody id="resultsBody"></tbody>
-  </table>
+  <div id="results"></div>
 
   <script>
-    const yearSelect = document.getElementById('yearSelect');
-    const monthSelect = document.getElementById('monthSelect');
-    const trackInfo = document.getElementById('trackInfo');
-    const resultsBody = document.getElementById('resultsBody');
-    const resultsTable = document.getElementById('resultsTable');
+    const yearSelect = document.getElementById('year');
+    const monthSelect = document.getElementById('month');
+    const loadButton = document.getElementById('loadArchive');
+    const resultsDiv = document.getElementById('results');
 
     yearSelect.addEventListener('change', () => {
       monthSelect.disabled = yearSelect.value === '';
+      loadButton.disabled = true;
     });
 
     monthSelect.addEventListener('change', () => {
+      loadButton.disabled = monthSelect.value === '';
+    });
+
+    loadButton.addEventListener('click', () => {
       const year = yearSelect.value;
-      const month = monthSelect.value;
+      const month = monthSelect.value.toUpperCase();
 
-      if (year && month) {
-        const filename = `data/archive/${month.toUpperCase()}${year}_RESULTS.json`;
-        fetch(filename)
-          .then(res => {
-            if (!res.ok) throw new Error("File not found");
-            return res.json();
-          })
-          .then(data => {
-            // Show track info
-            trackInfo.innerHTML = `
-              <h2>${data.track} (${data.variant})</h2>
-              <h3>Car: ${data.car}</h3>
+      const filename = `data/archive/${month}${year}_RESULTS.json`;
+
+      fetch(filename)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Could not load archive for ' + month + ' ' + year);
+          }
+          return response.json();
+        })
+        .then(data => {
+          resultsDiv.innerHTML = '';
+          const header = document.createElement('h2');
+          header.textContent = `${data.track} (${data.variant}) - ${month} ${year}`;
+          resultsDiv.appendChild(header);
+
+          data.results.forEach(entry => {
+            const div = document.createElement('div');
+            div.className = 'result-entry';
+            div.innerHTML = `
+              <strong>#${entry.position}</strong> - ${entry.driver}<br>
+              Laptime: ${entry.laptime}<br>
+              Sector 1: ${entry.sector1} | Sector 2: ${entry.sector2} | Sector 3: ${entry.sector3}<br>
+              Time set: ${entry.timestamp}
             `;
-
-            // Fill table
-            resultsBody.innerHTML = '';
-            data.results.forEach(driver => {
-              const row = document.createElement('tr');
-              row.innerHTML = `
-                <td>${driver.position}</td>
-                <td>${driver.driver}</td>
-                <td>${driver.laptime}</td>
-                <td>${driver.sector1}</td>
-                <td>${driver.sector2}</td>
-                <td>${driver.sector3}</td>
-                <td>${driver.timestamp}</td>
-              `;
-              resultsBody.appendChild(row);
-            });
-
-            resultsTable.style.display = 'table';
-          })
-          .catch(err => {
-            trackInfo.innerHTML = `<p style="color: red;">Could not load archive for ${month} ${year}.</p>`;
-            resultsTable.style.display = 'none';
+            resultsDiv.appendChild(div);
           });
-      }
+        })
+        .catch(error => {
+          resultsDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
+        });
     });
   </script>
 </body>
