@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Archived Results</title>
 
-  <!-- Racing-style Font -->
+  <!-- Orbitron Font -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
@@ -23,82 +23,98 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 2rem;
-      text-shadow: 2px 2px 4px #000;
     }
-<div style="padding: 1em;">
-  <a href="index.html" style="color: #00ffcc; text-decoration: none; font-weight: bold; background: #222; padding: 0.5em 1em; border-radius: 5px;">⬅ Home</a>
-</div>
+
+    h1 {
+      font-size: 2.5em;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 0.5em 1em;
+      border-radius: 10px;
+      color: #00ffcc;
+    }
+
+    .home-button {
+      margin: 1em;
+    }
+
+    .home-button a {
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: bold;
+      background: #222;
+      padding: 0.5em 1em;
+      border-radius: 5px;
+      transition: background 0.3s;
+    }
+
+    .home-button a:hover {
+      background: #444;
+    }
 
     .controls {
+      padding: 1em;
       text-align: center;
-      margin: 20px 0;
     }
 
     select, button {
       font-family: 'Orbitron', sans-serif;
-      background-color: #222;
-      color: #f0f0f0;
-      border: 1px solid #444;
-      padding: 10px 20px;
-      margin: 5px;
-      border-radius: 4px;
-      font-size: 1rem;
+      margin: 0.5em;
+      padding: 0.5em;
+      border-radius: 5px;
+      background: #222;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
     }
 
-    button:hover {
-      background-color: #333;
-      cursor: pointer;
-    }
-
-    .results-container {
-      max-width: 800px;
+    .results {
+      padding: 1em;
+      max-width: 900px;
       margin: 0 auto;
-      padding: 20px;
     }
 
-    .event-header {
-      text-align: center;
-      margin-bottom: 30px;
+    .card {
+      background: #1a1a1a;
+      margin: 1em 0;
+      padding: 1em;
+      border-radius: 10px;
+      border-left: 5px solid #00ffcc;
     }
 
-    .driver-card {
-      background-color: #1b1b1b;
-      border: 1px solid #333;
-      border-radius: 8px;
-      padding: 15px;
-      margin-bottom: 15px;
-    }
-
-    .driver-card h3 {
+    .card h3 {
       margin: 0;
-      font-size: 1.2rem;
-      color: #00ff99;
+      color: #00ffcc;
     }
 
-    .driver-card p {
-      margin: 5px 0;
+    .card p {
+      margin: 0.3em 0;
     }
 
     .error {
+      color: #ff4444;
       text-align: center;
-      color: red;
-      margin-top: 20px;
+      padding: 1em;
     }
   </style>
 </head>
 <body>
-  <header>🏁 Archived Results</header>
+
+  <header>
+    <h1>Archived Results</h1>
+  </header>
+
+  <div class="home-button">
+    <a href="index.html">⬅ Home</a>
+  </div>
 
   <div class="controls">
-    <label for="yearSelect">Year:</label>
-    <select id="yearSelect">
+    <label for="year">Year: </label>
+    <select id="year">
       <option value="2025">2025</option>
+      <!-- Add more years as needed -->
     </select>
 
-    <label for="monthSelect">Month:</label>
-    <select id="monthSelect">
+    <label for="month">Month: </label>
+    <select id="month">
       <option value="MAY">May</option>
       <option value="JUNE">June</option>
       <!-- Add more months as needed -->
@@ -107,54 +123,48 @@
     <button onclick="loadArchive()">Load Archive</button>
   </div>
 
-  <div class="results-container" id="resultsContainer"></div>
-  <div class="error" id="errorContainer"></div>
+  <div id="results" class="results"></div>
+  <div id="error" class="error"></div>
 
   <script>
     function loadArchive() {
-      const year = document.getElementById('yearSelect').value;
-      const month = document.getElementById('monthSelect').value;
-      const filePath = `data/archive/${month}${year}_RESULTS.json`;
+      const year = document.getElementById('year').value;
+      const month = document.getElementById('month').value.toUpperCase();
+      const url = `data/archive/${month}${year}_RESULTS.json`;
 
-      fetch(filePath)
+      fetch(url)
         .then(response => {
           if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`Could not load archive for ${month} ${year}.`);
           }
           return response.json();
         })
-        .then(data => {
-          displayResults(data, month, year);
-          document.getElementById('errorContainer').textContent = '';
-        })
+        .then(data => displayResults(data, month, year))
         .catch(error => {
-          document.getElementById('resultsContainer').innerHTML = '';
-          document.getElementById('errorContainer').textContent = `Could not load archive for ${month} ${year}.`;
+          document.getElementById('results').innerHTML = '';
+          document.getElementById('error').textContent = error.message;
         });
     }
 
     function displayResults(data, month, year) {
-      const container = document.getElementById('resultsContainer');
-      container.innerHTML = '';
+      document.getElementById('error').textContent = '';
 
-      const header = document.createElement('div');
-      header.className = 'event-header';
-      header.innerHTML = `<h2>${data.track} (${data.variant}) - ${month} ${year}</h2>`;
-      container.appendChild(header);
+      let html = `<h2>${data.track} ${month} ${year} (${data.variant}) - ${month} ${year}</h2>`;
 
-      data.results.forEach(result => {
-        const card = document.createElement('div');
-        card.className = 'driver-card';
-
-        card.innerHTML = `
-          <h3>#${result.position} - ${result.driver}</h3>
-          <p><strong>Laptime:</strong> ${result.laptime}</p>
-          <p><strong>Sector 1:</strong> ${result.sector1} | <strong>Sector 2:</strong> ${result.sector2} | <strong>Sector 3:</strong> ${result.sector3}</p>
-          <p><strong>Time set:</strong> ${result.timestamp}</p>
+      data.results.forEach(entry => {
+        html += `
+          <div class="card">
+            <h3>#${entry.position} - ${entry.driver}</h3>
+            <p><strong>Laptime:</strong> ${entry.laptime}</p>
+            <p>Sector 1: ${entry.sector1} | Sector 2: ${entry.sector2} | Sector 3: ${entry.sector3}</p>
+            <p><em>Time set: ${entry.timestamp}</em></p>
+          </div>
         `;
-        container.appendChild(card);
       });
+
+      document.getElementById('results').innerHTML = html;
     }
   </script>
+
 </body>
 </html>
