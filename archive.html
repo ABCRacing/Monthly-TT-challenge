@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Archived Results</title>
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
     body {
@@ -28,6 +28,8 @@
       background-color: rgba(0, 0, 0, 0.6);
       padding: 10px 20px;
       border-radius: 10px;
+      font-size: 2em;
+      color: #fff;
     }
 
     .controls {
@@ -35,172 +37,152 @@
       text-align: center;
     }
 
-    select, button {
+    .controls select,
+    .controls button {
       font-family: 'Orbitron', sans-serif;
       font-size: 1em;
-      padding: 10px;
       margin: 5px;
-      border: none;
+      padding: 10px;
+      background-color: #1f1f1f;
+      color: #f0f0f0;
+      border: 1px solid #444;
       border-radius: 5px;
     }
 
-    button {
-      background-color: #ff4444;
-      color: white;
+    .controls button:hover {
+      background-color: #333;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #cc0000;
-    }
-
     .home-button {
-      position: absolute;
-      top: 20px;
-      left: 20px;
-      background-color: #444;
-      padding: 10px 15px;
-      border-radius: 8px;
+      margin-top: 10px;
+      display: inline-block;
       text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1em;
+      background-color: #222;
       color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #555;
     }
 
-    .summary {
-      text-align: center;
-      font-size: 1.2em;
-      margin: 20px;
+    .home-button:hover {
+      background-color: #444;
     }
 
     table {
-      width: 90%;
-      margin: 0 auto 50px auto;
+      width: 95%;
+      margin: 20px auto;
       border-collapse: collapse;
-      text-align: center;
     }
 
     th, td {
-      padding: 12px;
-      border: 1px solid #f0f0f0;
+      padding: 10px;
+      border: 1px solid #fff;
+      text-align: center;
     }
 
-    th {
+    thead {
       background-color: #222;
     }
 
-    tr:nth-child(1) {
-      background-color: gold;
-      color: black;
-    }
-
-    tr:nth-child(2) {
-      background-color: silver;
-      color: black;
-    }
-
-    tr:nth-child(3) {
-      background-color: #cd7f32;
-      color: black;
-    }
-
-    tr:nth-child(even) {
+    tbody tr:nth-child(odd) {
       background-color: #1a1a1a;
     }
 
-    tr:nth-child(odd) {
-      background-color: #2a2a2a;
+    .gold {
+      background-color: #d4af37;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .silver {
+      background-color: #c0c0c0;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .bronze {
+      background-color: #cd7f32;
+      color: #000;
+      font-weight: bold;
     }
   </style>
 </head>
 
 <body>
-  <a class="home-button" href="index.html">🏠 Home</a>
-
   <header>
-    <h1>🏁 Archived Results</h1>
+    <h1 id="event-header">Archived Results</h1>
   </header>
 
   <div class="controls">
-    <label for="year">Year:</label>
-    <select id="year">
+    <select id="yearSelect">
       <option value="2025">2025</option>
     </select>
-
-    <label for="month">Month:</label>
-    <select id="month">
-      <option value="MAY">May</option>
-      <option value="JUNE">June</option>
-      <!-- Add more months as needed -->
+    <select id="monthSelect">
+      <option value="May">May</option>
     </select>
-
     <button onclick="loadArchive()">Load Archive</button>
+    <br>
+    <a class="home-button" href="index.html">🏠 Home</a>
   </div>
 
-  <div class="summary" id="trackSummary"></div>
-  <div id="leaderboard"></div>
+  <table id="leaderboard">
+    <thead>
+      <tr>
+        <th>Pos</th>
+        <th>Name</th>
+        <th>Laptime</th>
+        <th>Sector 1</th>
+        <th>Sector 2</th>
+        <th>Sector 3</th>
+        <th>Timestamp</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
     function loadArchive() {
-      const year = document.getElementById("year").value;
-      const month = document.getElementById("month").value.toLowerCase();
+      const year = document.getElementById('yearSelect').value;
+      const month = document.getElementById('monthSelect').value;
+      const filePath = `data/archive/${month.toUpperCase()}${year}_RESULTS.json`;
 
-      const filename = `${month}_${year}.json`;
-
-      fetch(filename)
+      fetch(filePath)
         .then(response => {
-          if (!response.ok) {
-            throw new Error("File not found");
-          }
+          if (!response.ok) throw new Error('Network response was not ok');
           return response.json();
         })
         .then(data => {
-          // Display track/car summary
-          document.getElementById("trackSummary").textContent =
-            `Track: ${data.track} | Variant: ${data.variant} | Car: ${data.car}`;
+          const tbody = document.querySelector("#leaderboard tbody");
+          tbody.innerHTML = "";
 
-          const leaderboardDiv = document.getElementById("leaderboard");
-          leaderboardDiv.innerHTML = "";
+          // Set header
+          document.getElementById('event-header').textContent = `${data.track} – ${data.variant} – ${data.car}`;
 
-          const table = document.createElement("table");
-
-          const headerRow = document.createElement("tr");
-          ["Pos", "Driver", "Laptime", "Sector 1", "Sector 2", "Sector 3", "Time Set"].forEach(text => {
-            const th = document.createElement("th");
-            th.textContent = text;
-            headerRow.appendChild(th);
-          });
-          table.appendChild(headerRow);
-
-          data.results.forEach((result, index) => {
+          data.results.forEach((entry, index) => {
             const row = document.createElement("tr");
 
-            const colorMap = ["#d4af37", "#c0c0c0", "#cd7f32"];
-            if (index < 3) {
-              row.style.backgroundColor = colorMap[index];
-              row.style.color = "black";
-            }
+            if (index === 0) row.classList.add("gold");
+            else if (index === 1) row.classList.add("silver");
+            else if (index === 2) row.classList.add("bronze");
 
-            [
-              result.position,
-              result.name,
-              result.laptime,
-              result.sector1,
-              result.sector2,
-              result.sector3,
-              result.timestamp
-            ].forEach(text => {
-              const td = document.createElement("td");
-              td.textContent = text;
-              row.appendChild(td);
-            });
-
-            table.appendChild(row);
+            row.innerHTML = `
+              <td>${entry.position}</td>
+              <td>${entry.name}</td>
+              <td>${entry.laptime}</td>
+              <td>${entry.sector1}</td>
+              <td>${entry.sector2}</td>
+              <td>${entry.sector3}</td>
+              <td>${entry.timestamp}</td>
+            `;
+            tbody.appendChild(row);
           });
-
-          leaderboardDiv.appendChild(table);
         })
         .catch(error => {
-          document.getElementById("leaderboard").innerHTML = `<p style="text-align: center;">No archive found for ${month.toUpperCase()} ${year}.</p>`;
-          document.getElementById("trackSummary").textContent = "";
+          console.error("Error loading archive:", error);
+          document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Error loading results</td></tr>`;
         });
     }
   </script>
