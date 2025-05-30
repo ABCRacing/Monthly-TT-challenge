@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Current Month Leaderboard</title>
+  <title>Archived Results</title>
 
   <!-- Racing-style Font -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
@@ -16,13 +16,6 @@
       color: #f0f0f0;
     }
 
-    header {
-      background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg') no-repeat center center;
-      background-size: cover;
-      padding: 2rem;
-      text-align: center;
-    }
-
     nav {
       background-color: #1a1a1a;
       padding: 10px;
@@ -33,25 +26,63 @@
       color: #00ffcc;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.2rem;
+      margin: 0 15px;
     }
 
-    nav a:hover {
-      text-decoration: underline;
+    header {
+      padding: 20px;
+      text-align: center;
+      background-color: #1f1f1f;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 2em;
+      color: #00ffcc;
+    }
+
+    main {
+      padding: 20px;
+      text-align: center;
+    }
+
+    select {
+      padding: 8px;
+      font-size: 1em;
+      background-color: #1f1f1f;
+      color: #f0f0f0;
+      border: 1px solid #00ffcc;
+      margin: 5px;
     }
   </style>
 </head>
 <body>
 
   <nav>
-    <a href="archive.html">🏁 View Archive</a>
+    <a href="index.html">🏁 Home</a>
   </nav>
 
   <header>
-    <h1>Current Month Leaderboard</h1>
+    <h1>Archived Results</h1>
   </header>
 
-  <!-- Your existing leaderboard content would go here -->
+  <main>
+    <label for="year-select">Select Year:</label>
+    <select id="year-select">
+      <option value="2025">2025</option>
+      <!-- Future years can be added dynamically -->
+    </select>
+
+    <label for="month-select">Select Month:</label>
+    <select id="month-select">
+      <option value="May">May</option>
+      <!-- Future months can be added dynamically -->
+    </select>
+
+    <div id="archive-content" style="margin-top: 20px;">
+      <!-- Archived content can be loaded/displayed here -->
+    </div>
+  </main>
 
 </body>
 </html>
