@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html> 
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -16,13 +16,6 @@
       color: #f0f0f0;
     }
 
-    header {
-      background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg') no-repeat center center;
-      background-size: cover;
-      padding: 2rem;
-      text-align: center;
-    }
-
     nav {
       background-color: #1a1a1a;
       padding: 10px;
@@ -33,11 +26,51 @@
       color: #00ffcc;
       text-decoration: none;
       font-weight: bold;
-      font-size: 1.2rem;
+      font-size: 1.1em;
     }
 
-    nav a:hover {
-      text-decoration: underline;
+    header {
+      background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
+      background-size: cover;
+      padding: 60px 20px;
+      text-align: center;
+    }
+
+    header h1 {
+      font-size: 2.5em;
+      margin: 0;
+      color: #00ffcc;
+      text-shadow: 2px 2px #000;
+    }
+
+    main {
+      padding: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+      background-color: #1c1c1c;
+    }
+
+    th, td {
+      border: 1px solid #333;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #2a2a2a;
+      color: #00ffcc;
+    }
+
+    tr:nth-child(even) {
+      background-color: #2a2a2a;
+    }
+
+    tr:hover {
+      background-color: #333;
     }
   </style>
 </head>
@@ -48,10 +81,48 @@
   </nav>
 
   <header>
-    <h1>Current Month Leaderboard</h1>
+    <h1>Monthly Time Trial Leaderboard</h1>
   </header>
 
-  <!-- Your existing leaderboard content would go here -->
+  <main>
+    <table id="leaderboard">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Driver</th>
+          <th>Time</th>
+          <th>S1</th>
+          <th>S2</th>
+          <th>S3</th>
+          <th>Car</th>
+          <th>Set</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <script>
+    fetch('data/leaderboard_filtered.json')
+      .then(response => response.json())
+      .then(data => {
+        const tbody = document.querySelector("#leaderboard tbody");
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row[0]}</td>
+            <td>${row[1]}</td>
+            <td>${row[3]}</td>
+            <td>${row[4]}</td>
+            <td>${row[5]}</td>
+            <td>${row[6]}</td>
+            <td>${row[8]}</td>
+            <td>${row[10]}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+  </script>
 
 </body>
 </html>
