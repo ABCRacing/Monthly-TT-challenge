@@ -2,140 +2,137 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Archived Results</title>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
   <style>
     body {
-      font-family: 'Orbitron', sans-serif;
+      font-family: Arial, sans-serif;
+      background-color: #1b1b1b;
+      color: #eaeaea;
       margin: 0;
-      background-color: #0f0f0f;
-      color: #f0f0f0;
       padding: 20px;
     }
 
-    header {
+    h1 {
       text-align: center;
-      padding: 1rem 0;
-      background-color: #1a1a1a;
-      margin-bottom: 2rem;
+      color: #ffcc00;
+    }
+
+    .dropdowns {
+      text-align: center;
+      margin-bottom: 20px;
     }
 
     select, button {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1rem;
-      padding: 0.5rem;
-      margin: 0.5rem;
+      margin: 0 10px;
+      padding: 8px 12px;
+      font-size: 16px;
+      border: none;
+      border-radius: 5px;
     }
 
-    .result-entry {
-      background: #1f1f1f;
-      margin: 0.5rem 0;
-      padding: 1rem;
-      border-radius: 8px;
+    button {
+      background-color: #ffcc00;
+      color: #1b1b1b;
+      font-weight: bold;
+      cursor: pointer;
     }
 
-    .home-button {
-      display: inline-block;
-      margin-top: 1rem;
-      padding: 0.5rem 1rem;
-      background-color: #444;
-      color: #fff;
-      text-decoration: none;
-      border-radius: 4px;
+    .result-container {
+      max-width: 800px;
+      margin: 0 auto;
     }
 
-    .home-button:hover {
-      background-color: #666;
+    .result-header {
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 20px;
+      color: #66ccff;
+    }
+
+    .result-card {
+      background-color: #2a2a2a;
+      padding: 15px 20px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    }
+
+    .result-card h3 {
+      margin: 0 0 10px;
+      color: #ffcc00;
+    }
+
+    .result-card p {
+      margin: 5px 0;
     }
   </style>
 </head>
 <body>
-  <header>
-    <h1>Archived Results</h1>
-    <a class="home-button" href="index.html">🏁 Current Leaderboard</a>
-  </header>
+  <h1>📁 Archived Results</h1>
 
-  <div>
-    <label for="year">Year:</label>
+  <div class="dropdowns">
+    <label for="year">Year: </label>
     <select id="year">
-      <option value="">-- Select Year --</option>
       <option value="2025">2025</option>
       <!-- Add more years as needed -->
     </select>
 
-    <label for="month">Month:</label>
-    <select id="month" disabled>
-      <option value="">-- Select Month --</option>
-      <option value="JANUARY">January</option>
-      <option value="FEBRUARY">February</option>
-      <option value="MARCH">March</option>
-      <option value="APRIL">April</option>
-      <option value="MAY">May</option>
-      <option value="JUNE">June</option>
-      <option value="JULY">July</option>
-      <option value="AUGUST">August</option>
-      <option value="SEPTEMBER">September</option>
-      <option value="OCTOBER">October</option>
-      <option value="NOVEMBER">November</option>
-      <option value="DECEMBER">December</option>
+    <label for="month">Month: </label>
+    <select id="month">
+      <option value="May">May</option>
+      <option value="June">June</option>
+      <!-- Add more months as needed -->
     </select>
 
-    <button id="loadArchive" disabled>Load Archive</button>
+    <button onclick="loadArchive()">Load Archive</button>
   </div>
 
-  <div id="results"></div>
+  <div class="result-container" id="archiveResults">
+    <p style="text-align: center;">🏁 Archived results will appear here.</p>
+  </div>
 
   <script>
-    const yearSelect = document.getElementById('year');
-    const monthSelect = document.getElementById('month');
-    const loadButton = document.getElementById('loadArchive');
-    const resultsDiv = document.getElementById('results');
-
-    yearSelect.addEventListener('change', () => {
-      monthSelect.disabled = yearSelect.value === '';
-      loadButton.disabled = true;
-    });
-
-    monthSelect.addEventListener('change', () => {
-      loadButton.disabled = monthSelect.value === '';
-    });
-
-    loadButton.addEventListener('click', () => {
-      const year = yearSelect.value;
-      const month = monthSelect.value.toUpperCase();
-
-      const filename = `data/archive/${month}${year}_RESULTS.json`;
+    function loadArchive() {
+      const year = document.getElementById("year").value;
+      const month = document.getElementById("month").value;
+      const filename = `data/archive/${month.toUpperCase()}${year}_RESULTS.json`;
 
       fetch(filename)
         .then(response => {
           if (!response.ok) {
-            throw new Error('Could not load archive for ' + month + ' ' + year);
+            throw new Error("Could not load archive for " + month + " " + year);
           }
           return response.json();
         })
         .then(data => {
-          resultsDiv.innerHTML = '';
-          const header = document.createElement('h2');
-          header.textContent = `${data.track} (${data.variant}) - ${month} ${year}`;
-          resultsDiv.appendChild(header);
+          const container = document.getElementById("archiveResults");
+          container.innerHTML = "";
 
-          data.results.forEach(entry => {
-            const div = document.createElement('div');
-            div.className = 'result-entry';
-            div.innerHTML = `
-              <strong>#${entry.position}</strong> - ${entry.driver}<br>
-              Laptime: ${entry.laptime}<br>
-              Sector 1: ${entry.sector1} | Sector 2: ${entry.sector2} | Sector 3: ${entry.sector3}<br>
-              Time set: ${entry.timestamp}
+          const header = document.createElement("div");
+          header.className = "result-header";
+          header.innerText = `${data.track} (${data.variant}) - ${month} ${year}`;
+          container.appendChild(header);
+
+          data.results.forEach(result => {
+            const card = document.createElement("div");
+            card.className = "result-card";
+
+            card.innerHTML = `
+              <h3>#${result.position} - ${result.driver}</h3>
+              <p><strong>Laptime:</strong> ${result.laptime}</p>
+              <p>Sector 1: ${result.sector1} | Sector 2: ${result.sector2} | Sector 3: ${result.sector3}</p>
+              <p><strong>Time set:</strong> ${result.timestamp}</p>
             `;
-            resultsDiv.appendChild(div);
+
+            container.appendChild(card);
           });
         })
         .catch(error => {
-          resultsDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
+          const container = document.getElementById("archiveResults");
+          container.innerHTML = `<p style="color: red; text-align: center;">${error.message}</p>`;
         });
-    });
+    }
   </script>
 </body>
 </html>
