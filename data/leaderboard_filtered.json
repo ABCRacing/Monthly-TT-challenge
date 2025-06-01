@@ -26,29 +26,29 @@
     "Flags": "W|+"
   },
   {
-    "Position": "8",
+    "Position": "3",
     "Name": "reesyboy4",
     "SteamID": "76561198207011993",
-    "LapTime": "1:13.255",
-    "Sector1": "24.182",
-    "Sector2": "20.230",
-    "Sector3": "28.843",
-    "Gap": "+1.475",
+    "LapTime": "1:12.401",
+    "Sector1": "23.751",
+    "Sector2": "20.093",
+    "Sector3": "28.557",
+    "Gap": "+0.621",
     "Car": "Dallara F309",
-    "Date": "25-05-21 17:56",
+    "Date": "25-05-31 23:02",
     "Flags": "W|+|C"
   },
   {
     "Position": "13",
     "Name": "Joe",
     "SteamID": "76561198083278256",
-    "LapTime": "1:15.570",
-    "Sector1": "24.118",
-    "Sector2": "21.632",
-    "Sector3": "29.820",
-    "Gap": "+3.790",
+    "LapTime": "1:15.419",
+    "Sector1": "24.321",
+    "Sector2": "21.471",
+    "Sector3": "29.627",
+    "Gap": "+3.639",
     "Car": "Dallara F309",
-    "Date": "25-05-26 14:00",
+    "Date": "25-06-01 17:09",
     "Flags": "W|+|C|D"
   }
 ]
