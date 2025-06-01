@@ -1,13 +1,13 @@
 {
-  "track": "Jacarepagu\u00e1",
-  "variant": "SCB 2012",
-  "car": "Dallara F309)",
+  "track": "test track",
+  "variant": "test variant",
+  "car": "test car",
   "month": "May",
   "year": 2025,
   "results": [
     {
       "position": 1,
-      "driver": "Neil Bywater",
+      "name": "Neil Bywater",
       "laptime": "1:11.780",
       "sector1": "23.488",
       "sector2": "19.950",
@@ -16,7 +16,7 @@
     },
     {
       "position": 2,
-      "driver": "ACEREES",
+      "name": "ACEREES",
       "laptime": "1:12.072",
       "sector1": "23.644",
       "sector2": "19.987",
@@ -25,7 +25,7 @@
     },
     {
       "position": 8,
-      "driver": "reesyboy4",
+      "name": "reesyboy4",
       "laptime": "1:13.255",
       "sector1": "24.182",
       "sector2": "20.230",
@@ -34,7 +34,7 @@
     },
     {
       "position": 13,
-      "driver": "Joe",
+      "name": "Joe",
       "laptime": "1:15.570",
       "sector1": "24.118",
       "sector2": "21.632",

@@ -40,7 +40,7 @@ with input_path.open("r", encoding="utf-8") as f:
 #      "results": [
 #        {
 #          "position": 1,
-#          "driver": "Neil Bywater",
+#          "name": "Neil Bywater",
 #          "laptime": "1:12.287",
 #          "sector1": "23.581",
 #          "sector2": "20.018",
@@ -61,7 +61,7 @@ for entry in filtered:
 
     archive_results.append({
         "position": pos,
-        "driver":   entry.get("Name", ""),
+        "name":   entry.get("Name", ""),
         "laptime":  entry.get("LapTime", ""),
         "sector1":  entry.get("Sector1", ""),
         "sector2":  entry.get("Sector2", ""),
