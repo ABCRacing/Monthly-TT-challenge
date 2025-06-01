@@ -1,7 +1,7 @@
 {
   "track": "Jacarepagu\u00e1",
-  "variant": "SCB 2012",
-  "car": "Dallara F309",
+  "variant": "Historical 2012 SCB",
+  "car": "Dallara F309)",
   "month": "May",
   "year": 2025,
   "results": [
@@ -24,22 +24,22 @@
       "timestamp": "25-05-31 13:51"
     },
     {
-      "position": 8,
+      "position": 3,
       "name": "reesyboy4",
-      "laptime": "1:13.255",
-      "sector1": "24.182",
-      "sector2": "20.230",
-      "sector3": "28.843",
-      "timestamp": "25-05-21 17:56"
+      "laptime": "1:12.401",
+      "sector1": "23.751",
+      "sector2": "20.093",
+      "sector3": "28.557",
+      "timestamp": "25-05-31 23:02"
     },
     {
       "position": 13,
       "name": "Joe",
-      "laptime": "1:15.570",
-      "sector1": "24.118",
-      "sector2": "21.632",
-      "sector3": "29.820",
-      "timestamp": "25-05-26 14:00"
+      "laptime": "1:15.419",
+      "sector1": "24.321",
+      "sector2": "21.471",
+      "sector3": "29.627",
+      "timestamp": "25-06-01 17:09"
     }
   ]
 }
