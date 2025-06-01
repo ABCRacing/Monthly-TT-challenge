@@ -26,18 +26,23 @@ for row in rows:
         "sector1": row[4],
         "sector2": row[5],
         "sector3": row[6],
-        "car": row[8],
+        "car": row[8],  # You might want to override this with challenge_car
         "date": row[9],
-        "medal": row[10],
-        "track": track,
-        "variant": variant,
-        "challenge_car": challenge_car,
-        "month": month
+        "splits": row[10]
     })
 
-# === Save archive ===
-output_path.parent.mkdir(parents=True, exist_ok=True)
-with output_path.open("w", encoding='utf-8') as f:
-    json.dump(results, f, indent=2)
+# === Build final archive structure ===
+final_data = {
+    "track": track,
+    "variant": variant,
+    "car": challenge_car,
+    "month": month,
+    "results": results
+}
 
-print(f"\n✅ Archived leaderboard to {output_path}")
+# === Write archive JSON ===
+output_path.parent.mkdir(parents=True, exist_ok=True)
+with output_path.open("w", encoding="utf-8") as f:
+    json.dump(final_data, f, indent=4)
+
+print(f"✅ Archived results saved to: {output_path}")
