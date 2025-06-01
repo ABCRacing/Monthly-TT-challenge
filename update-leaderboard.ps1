@@ -1,26 +1,43 @@
-# Define the source URL and destination path
-$sourceUrl = "https://ams2leaderboards.neocities.org/data/boards/F3%20Brasil,%20Jacarepagu%C3%A1%20Historic%202012%20SCB.json"
-$destinationPath = ".\data\leaderboard_filtered.json"
+import json
+from pathlib import Path
 
-# Download the JSON data
-try {
-    $response = Invoke-WebRequest -Uri $sourceUrl -UseBasicParsing
-    $jsonData = $response.Content | ConvertFrom-Json
-# Step 1: Change to the project directory
-Set-Location "F:\Documents\python"
+# === Get user input ===
+month = input("What month? (e.g., May 2025): ").strip()
+track = input("Track? (e.g., Brands Hatch): ").strip()
+variant = input("Variant? (e.g., Indy): ").strip()
+challenge_car = input("Car? (e.g., Dallara F309): ").strip()
 
-# Step 2: Pull latest changes from GitHub
-git pull origin main
+# === Load filtered leaderboard ===
+input_path = Path("data/leaderboard_filtered.json")
+output_filename = f"{month.upper().replace(' ', '')}_RESULTS.json"
+output_path = Path("data/archive") / output_filename
 
-# Step 3: Run your Python scraping script
-python scrape_tt.py
+with input_path.open(encoding='utf-8') as f:
+    rows = json.load(f)
 
-# Step 4: Stage all changes
-git add .
+# === Transform the data ===
+results = []
+for row in rows:
+    results.append({
+        "position": int(row[0]),
+        "name": row[1],
+        "steam_id": row[2],
+        "time": row[3],
+        "sector1": row[4],
+        "sector2": row[5],
+        "sector3": row[6],
+        "car": row[8],
+        "date": row[9],
+        "medal": row[10],
+        "track": track,
+        "variant": variant,
+        "challenge_car": challenge_car,
+        "month": month
+    })
 
-# Step 5: Commit with timestamp
-$timestamp = Get-Date -Format "yyyy-MM-dd HH:mm:ss"
-git commit -m "Auto-update leaderboard: $timestamp"
+# === Save archive ===
+output_path.parent.mkdir(parents=True, exist_ok=True)
+with output_path.open("w", encoding='utf-8') as f:
+    json.dump(results, f, indent=2)
 
-# Step 6: Push to GitHub
-git push origin main
+print(f"\n✅ Archived leaderboard to {output_path}")
