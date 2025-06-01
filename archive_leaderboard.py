@@ -88,3 +88,7 @@ with output_path.open("w", encoding="utf-8") as f:
     json.dump(archive_object, f, indent=2)
 
 print(f"\n✅ Archived results saved to: {output_path}")
+# === Save the output file path for the .bat file to read ===
+last_output_path = Path("last_output.txt")
+with last_output_path.open("w", encoding="utf-8") as f:
+    f.write(str(output_path))
