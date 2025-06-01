@@ -1,54 +1,45 @@
-[
-  {
-    "Position": "1",
-    "Name": "Neil Bywater",
-    "SteamID": "76561198118274739",
-    "LapTime": "1:11.780",
-    "Sector1": "23.488",
-    "Sector2": "19.950",
-    "Sector3": "28.342",
-    "Gap": "",
-    "Car": "Dallara F309",
-    "Date": "25-05-30 19:45",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "2",
-    "Name": "ACEREES",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:12.072",
-    "Sector1": "23.644",
-    "Sector2": "19.987",
-    "Sector3": "28.441",
-    "Gap": "+0.292",
-    "Car": "Dallara F309",
-    "Date": "25-05-31 13:51",
-    "Flags": "W|+"
-  },
-  {
-    "Position": "8",
-    "Name": "reesyboy4",
-    "SteamID": "76561198207011993",
-    "LapTime": "1:13.255",
-    "Sector1": "24.182",
-    "Sector2": "20.230",
-    "Sector3": "28.843",
-    "Gap": "+1.475",
-    "Car": "Dallara F309",
-    "Date": "25-05-21 17:56",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "13",
-    "Name": "Joe",
-    "SteamID": "76561198083278256",
-    "LapTime": "1:15.570",
-    "Sector1": "24.118",
-    "Sector2": "21.632",
-    "Sector3": "29.820",
-    "Gap": "+3.790",
-    "Car": "Dallara F309",
-    "Date": "25-05-26 14:00",
-    "Flags": "W|+|C|D"
-  }
-]
+import json
+from pathlib import Path
+
+# === Get user input ===
+month = input("What month? (e.g., May 2025): ").strip()
+track = input("Track? (e.g., Brands Hatch): ").strip()
+variant = input("Variant? (e.g., Indy): ").strip()
+challenge_car = input("Car? (e.g., Dallara F309): ").strip()
+
+# === Load filtered leaderboard ===
+input_path = Path("data/leaderboard_filtered.json")
+output_filename = f"{month.upper().replace(' ', '')}_RESULTS.json"
+output_path = Path("data/archive") / output_filename
+
+with input_path.open(encoding='utf-8') as f:
+    rows = json.load(f)
+
+# === Transform the data ===
+results = []
+for row in rows:
+    results.append({
+        "position": int(row[0]),
+        "name": row[1],
+        "steam_id": row[2],
+        "time": row[3],
+        "sector1": row[4],
+        "sector2": row[5],
+        "sector3": row[6]
+    })
+
+# === Wrap with archive format ===
+archive_data = {
+    "month": month,
+    "track": track,
+    "variant": variant,
+    "car": challenge_car,
+    "results": results
+}
+
+# === Save to archive ===
+output_path.parent.mkdir(parents=True, exist_ok=True)
+with output_path.open("w", encoding='utf-8') as f:
+    json.dump(archive_data, f, indent=2)
+
+print(f"✅ Archived results saved to: {output_path}")
