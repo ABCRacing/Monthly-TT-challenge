@@ -23,6 +23,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
     }
 
     header h1 {
@@ -31,6 +32,16 @@
       border-radius: 10px;
       color: #fff;
       font-size: 2rem;
+      margin: 0;
+    }
+
+    header p#challenge-info {
+      background: rgba(0, 0, 0, 0.5);
+      margin-top: 10px;
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 1.1rem;
+      color: #ddd;
     }
 
     main {
@@ -79,8 +90,10 @@
   <nav style="background-color: #1a1a1a; padding: 10px; text-align: center;">
     <a href="archive.html" style="color: #00ffcc; text-decoration: none; font-weight: bold;">🏁 View Archive</a>
   </nav>
+
   <header>
     <h1>Current Month Leaderboard</h1>
+    <p id="challenge-info"></p>
   </header>
 
   <main>
@@ -106,55 +119,56 @@
   <script>
     async function fetchLeaderboard() {
       try {
-        const response = await fetch("data/leaderboard_filtered.json");
-        if (!response.ok) throw new Error("Network response was not ok");
-
+        const response = await fetch('data/leaderboard.json');
         const data = await response.json();
         const tbody = document.querySelector("#leaderboard tbody");
         tbody.innerHTML = "";
 
-        let fastestS1 = Infinity;
-        let fastestS2 = Infinity;
-        let fastestS3 = Infinity;
-
-        data.forEach(entry => {
-          if (entry.Sector1 < fastestS1) fastestS1 = entry.Sector1;
-          if (entry.Sector2 < fastestS2) fastestS2 = entry.Sector2;
-          if (entry.Sector3 < fastestS3) fastestS3 = entry.Sector3;
-        });
+        if (data.length === 0) {
+          document.getElementById("error-message").textContent = "No leaderboard data available.";
+          return;
+        }
 
         data.forEach((entry, index) => {
           const row = document.createElement("tr");
 
-          // Add medal class
           if (index === 0) row.classList.add("gold");
           else if (index === 1) row.classList.add("silver");
           else if (index === 2) row.classList.add("bronze");
 
-          // Sector class check
-          const s1Class = entry.Sector1 === fastestS1 ? "fastest" : "";
-          const s2Class = entry.Sector2 === fastestS2 ? "fastest" : "";
-          const s3Class = entry.Sector3 === fastestS3 ? "fastest" : "";
-
           row.innerHTML = `
             <td>${index + 1}</td>
-            <td>${entry.Name}</td>
-            <td>${entry.LapTime}</td>
-            <td class="${s1Class}">${entry.Sector1}</td>
-            <td class="${s2Class}">${entry.Sector2}</td>
-            <td class="${s3Class}">${entry.Sector3}</td>
-            <td>${entry.Gap || '-'}</td>
+            <td>${entry.name}</td>
+            <td>${entry.lapTime}</td>
+            <td>${entry.sector1}</td>
+            <td>${entry.sector2}</td>
+            <td>${entry.sector3}</td>
+            <td>${entry.gap}</td>
           `;
+
           tbody.appendChild(row);
         });
 
       } catch (error) {
         document.getElementById("error-message").textContent = "Failed to load leaderboard data.";
-        console.error("Error fetching leaderboard:", error);
+        console.error("Error loading leaderboard:", error);
+      }
+    }
+
+    async function fetchChallengeInfo() {
+      try {
+        const response = await fetch('data/current_challenge.json');
+        const challenge = await response.json();
+        const info = `${challenge.track} - ${challenge.variant} - ${challenge.car}`;
+        document.getElementById("challenge-info").textContent = info;
+      } catch (error) {
+        console.error("Error fetching challenge info:", error);
+        document.getElementById("challenge-info").textContent = "";
       }
     }
 
     fetchLeaderboard();
+    fetchChallengeInfo();
   </script>
 </body>
 </html>
