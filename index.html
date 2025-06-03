@@ -26,118 +26,135 @@
     }
 
     header h1 {
-      font-size: 2.5rem;
-      text-shadow: 2px 2px #000;
-    }
-
-    .subtitle {
-      font-size: 1.2rem;
-      text-align: center;
-      margin-top: -20px;
-      margin-bottom: 30px;
-      color: #aaa;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 2rem;
     }
 
     main {
       padding: 20px;
+      background: url('https://images.pexels.com/photos/29321044/pexels-photo-29321044/free-photo-of-exciting-race-day-at-mexico-city-speedway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      background-color: #1f1f1f;
+      border: 5px solid white;
     }
 
     th, td {
-      border: 1px solid #333;
-      padding: 8px;
+      border: 1px solid white;
+      padding: 10px;
       text-align: center;
     }
 
     th {
-      background-color: #333;
+      background-color: red;
+      color: white;
     }
 
-    tr:nth-child(even) {
-      background-color: #2a2a2a;
-    }
+    .gold { background-color: #ffd700; color: #000; }
+    .silver { background-color: #c0c0c0; color: #000; }
+    .bronze { background-color: #cd7f32; color: #000; }
+    .fastest { background-color: purple; color: white; }
 
-    a {
-      color: #00f0ff;
-      text-decoration: none;
-    }
-
-    a:hover {
-      text-decoration: underline;
+    #error-message {
+      color: red;
+      text-align: center;
+      margin: 10px 0;
     }
   </style>
 </head>
 <body>
+  <nav style="background-color: #1a1a1a; padding: 10px; text-align: center;">
+    <a href="archive.html" style="color: #00ffcc; text-decoration: none; font-weight: bold;">🏁 View Archive</a>
+  </nav>
   <header>
     <h1>Current Month Leaderboard</h1>
   </header>
-  <div class="subtitle" id="challengeInfo">Loading challenge info...</div>
 
   <main>
-    <p><a href="archive.html">🏁 View Archive</a></p>
-
-    <table id="leaderboard">
-      <thead>
-        <tr>
-          <th>Position</th>
-          <th>Name</th>
-          <th>Lap Time</th>
-          <th>Sector 1</th>
-          <th>Sector 2</th>
-          <th>Sector 3</th>
-          <th>Gap</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr><td colspan="7">Loading...</td></tr>
-      </tbody>
-    </table>
+    <div class="overlay">
+      <div id="error-message"></div>
+      <table id="leaderboard">
+        <thead>
+          <tr>
+            <th>Position</th>
+            <th>Name</th>
+            <th>Lap Time</th>
+            <th>Sector 1</th>
+            <th>Sector 2</th>
+            <th>Sector 3</th>
+            <th>Gap</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
   </main>
 
   <script>
-    // Load challenge info
-    fetch('data/current_challenge.json')
-      .then(response => response.json())
-      .then(data => {
-        const variantText = data.variant ? data.variant : '';
-        const separator = variantText ? ' - ' : ' -';
-        document.getElementById('challengeInfo').textContent = `${data.track}${separator}${variantText} - ${data.car}`;
-      })
-      .catch(error => {
-        console.error('Error loading track info:', error);
-        document.getElementById('challengeInfo').textContent = 'Track info unavailable';
-      });
+    async function fetchLeaderboard() {
+      try {
+        const response = await fetch("data/leaderboard_filtered.json");
+        if (!response.ok) throw new Error("Network response was not ok");
 
-    // Load leaderboard
-    fetch('data/leaderboard_filtered.json')
-      .then(response => response.json())
-      .then(data => {
+        const data = await response.json();
         const tbody = document.querySelector("#leaderboard tbody");
         tbody.innerHTML = "";
 
-        data.forEach((row, index) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${row[1]}</td>
-            <td>${row[3]}</td>
-            <td>${row[4]}</td>
-            <td>${row[5]}</td>
-            <td>${row[6]}</td>
-            <td>${row[7] || ""}</td>
-          `;
-          tbody.appendChild(tr);
+        let fastestS1 = Infinity;
+        let fastestS2 = Infinity;
+        let fastestS3 = Infinity;
+
+        data.forEach(entry => {
+          if (entry.Sector1 < fastestS1) fastestS1 = entry.Sector1;
+          if (entry.Sector2 < fastestS2) fastestS2 = entry.Sector2;
+          if (entry.Sector3 < fastestS3) fastestS3 = entry.Sector3;
         });
-      })
-      .catch(error => {
-        console.error("Failed to load leaderboard data:", error);
-        document.querySelector("#leaderboard tbody").innerHTML = "<tr><td colspan='7'>Failed to load leaderboard data.</td></tr>";
-      });
+
+        data.forEach((entry, index) => {
+          const row = document.createElement("tr");
+
+          // Add medal class
+          if (index === 0) row.classList.add("gold");
+          else if (index === 1) row.classList.add("silver");
+          else if (index === 2) row.classList.add("bronze");
+
+          // Sector class check
+          const s1Class = entry.Sector1 === fastestS1 ? "fastest" : "";
+          const s2Class = entry.Sector2 === fastestS2 ? "fastest" : "";
+          const s3Class = entry.Sector3 === fastestS3 ? "fastest" : "";
+
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${entry.Name}</td>
+            <td>${entry.LapTime}</td>
+            <td class="${s1Class}">${entry.Sector1}</td>
+            <td class="${s2Class}">${entry.Sector2}</td>
+            <td class="${s3Class}">${entry.Sector3}</td>
+            <td>${entry.Gap || '-'}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (error) {
+        document.getElementById("error-message").textContent = "Failed to load leaderboard data.";
+        console.error("Error fetching leaderboard:", error);
+      }
+    }
+
+    fetchLeaderboard();
   </script>
 </body>
 </html>
