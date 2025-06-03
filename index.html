@@ -21,152 +21,123 @@
       background-size: cover;
       height: 200px;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
     }
 
     header h1 {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 2rem;
-      margin: 0;
+      font-size: 2.5rem;
+      text-shadow: 2px 2px #000;
     }
 
-    header h2 {
-      background: rgba(0, 0, 0, 0.5);
-      padding: 10px;
-      border-radius: 6px;
-      color: #ddd;
+    .subtitle {
       font-size: 1.2rem;
-      margin-top: 10px;
+      text-align: center;
+      margin-top: -20px;
+      margin-bottom: 30px;
+      color: #aaa;
     }
 
     main {
       padding: 20px;
-      background: url('https://images.pexels.com/photos/29321044/pexels-photo-29321044/free-photo-of-exciting-race-day-at-mexico-city-speedway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
-      background-size: cover;
-      background-attachment: fixed;
-    }
-
-    .overlay {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      border-radius: 10px;
     }
 
     table {
       width: 100%;
       border-collapse: collapse;
-      border: 5px solid white;
+      background-color: #1f1f1f;
     }
 
     th, td {
-      border: 1px solid white;
-      padding: 10px;
+      border: 1px solid #333;
+      padding: 8px;
       text-align: center;
     }
 
     th {
-      background-color: red;
-      color: white;
+      background-color: #333;
     }
 
-    .gold { background-color: #ffd700; color: #000; }
-    .silver { background-color: #c0c0c0; color: #000; }
-    .bronze { background-color: #cd7f32; color: #000; }
-    .fastest { background-color: purple; color: white; }
+    tr:nth-child(even) {
+      background-color: #2a2a2a;
+    }
 
-    #error-message {
-      color: red;
-      text-align: center;
-      margin: 10px 0;
+    a {
+      color: #00f0ff;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
 <body>
-  <nav style="background-color: #1a1a1a; padding: 10px; text-align: center;">
-    <a href="archive.html" style="color: #00ffcc; text-decoration: none; font-weight: bold;">🏁 View Archive</a>
-  </nav>
   <header>
     <h1>Current Month Leaderboard</h1>
-    <h2 id="track-info"></h2> <!-- ✅ Added secondary title -->
   </header>
+  <div class="subtitle" id="challengeInfo">Loading challenge info...</div>
 
   <main>
-    <div class="overlay">
-      <div id="error-message"></div>
-      <table id="leaderboard">
-        <thead>
-          <tr>
-            <th>Position</th>
-            <th>Name</th>
-            <th>Lap Time</th>
-            <th>Sector 1</th>
-            <th>Sector 2</th>
-            <th>Sector 3</th>
-            <th>Gap</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    <p><a href="archive.html">🏁 View Archive</a></p>
+
+    <table id="leaderboard">
+      <thead>
+        <tr>
+          <th>Position</th>
+          <th>Name</th>
+          <th>Lap Time</th>
+          <th>Sector 1</th>
+          <th>Sector 2</th>
+          <th>Sector 3</th>
+          <th>Gap</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td colspan="7">Loading...</td></tr>
+      </tbody>
+    </table>
   </main>
 
   <script>
-    async function fetchChallengeDetails() {
-      try {
-        const response = await fetch('data/challenge.json');
-        const challenge = await response.json();
-        const variantDisplay = challenge.variant ? ` - ${challenge.variant}` : "";
-        document.getElementById("track-info").innerText = `${challenge.track}${variantDisplay} - ${challenge.car}`;
-      } catch (error) {
-        console.error('Failed to load challenge details:', error);
-      }
-    }
+    // Load challenge info
+    fetch('data/current_challenge.json')
+      .then(response => response.json())
+      .then(data => {
+        const variantText = data.variant ? data.variant : '';
+        const separator = variantText ? ' - ' : ' -';
+        document.getElementById('challengeInfo').textContent = `${data.track}${separator}${variantText} - ${data.car}`;
+      })
+      .catch(error => {
+        console.error('Error loading track info:', error);
+        document.getElementById('challengeInfo').textContent = 'Track info unavailable';
+      });
 
-    async function fetchLeaderboard() {
-      try {
-        const response = await fetch('data/leaderboard_filtered.json');
-        const leaderboard = await response.json();
+    // Load leaderboard
+    fetch('data/leaderboard_filtered.json')
+      .then(response => response.json())
+      .then(data => {
+        const tbody = document.querySelector("#leaderboard tbody");
+        tbody.innerHTML = "";
 
-        const tbody = document.querySelector('#leaderboard tbody');
-        leaderboard.forEach((entry, index) => {
-          const row = document.createElement('tr');
-
-          if (index === 0) {
-            row.classList.add('gold');
-          } else if (index === 1) {
-            row.classList.add('silver');
-          } else if (index === 2) {
-            row.classList.add('bronze');
-          }
-
-          if (entry.fastestLap) {
-            row.classList.add('fastest');
-          }
-
-          row.innerHTML = `
+        data.forEach((row, index) => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
             <td>${index + 1}</td>
-            <td>${entry.name}</td>
-            <td>${entry.lapTime}</td>
-            <td>${entry.sector1}</td>
-            <td>${entry.sector2}</td>
-            <td>${entry.sector3}</td>
-            <td>${entry.gap || ''}</td>
+            <td>${row[1]}</td>
+            <td>${row[3]}</td>
+            <td>${row[4]}</td>
+            <td>${row[5]}</td>
+            <td>${row[6]}</td>
+            <td>${row[7] || ""}</td>
           `;
-          tbody.appendChild(row);
+          tbody.appendChild(tr);
         });
-      } catch (error) {
-        document.getElementById('error-message').innerText = 'Failed to load leaderboard data.';
-        console.error('Failed to load leaderboard:', error);
-      }
-    }
-
-    fetchChallengeDetails();
-    fetchLeaderboard();
+      })
+      .catch(error => {
+        console.error("Failed to load leaderboard data:", error);
+        document.querySelector("#leaderboard tbody").innerHTML = "<tr><td colspan='7'>Failed to load leaderboard data.</td></tr>";
+      });
   </script>
 </body>
 </html>
