@@ -23,6 +23,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
     }
 
     header h1 {
@@ -31,6 +32,16 @@
       border-radius: 10px;
       color: #fff;
       font-size: 2rem;
+      margin: 0;
+    }
+
+    header h2 {
+      background: rgba(0, 0, 0, 0.6);
+      padding: 10px;
+      border-radius: 10px;
+      color: #fff;
+      font-size: 1.2rem;
+      margin-top: 0.5em;
     }
 
     main {
@@ -79,8 +90,10 @@
   <nav style="background-color: #1a1a1a; padding: 10px; text-align: center;">
     <a href="archive.html" style="color: #00ffcc; text-decoration: none; font-weight: bold;">🏁 View Archive</a>
   </nav>
+
   <header>
     <h1>Current Month Leaderboard</h1>
+    <h2 id="challenge-subtitle" style="margin-top: 0.2em; font-weight: normal; font-size: 1.2em;"></h2>
   </header>
 
   <main>
@@ -110,18 +123,16 @@
         if (!response.ok) throw new Error("Network response was not ok");
 
         const data = await response.json();
-        const tbody = document.querySelector("#leaderboard tbody");
-        tbody.innerHTML = "";
+        const tableBody = document.querySelector("#leaderboard tbody");
 
-        let fastestS1 = Infinity;
-        let fastestS2 = Infinity;
-        let fastestS3 = Infinity;
+        if (!Array.isArray(data) || data.length === 0) {
+          document.getElementById("error-message").textContent = "No leaderboard data available.";
+          return;
+        }
 
-        data.forEach(entry => {
-          if (entry.Sector1 < fastestS1) fastestS1 = entry.Sector1;
-          if (entry.Sector2 < fastestS2) fastestS2 = entry.Sector2;
-          if (entry.Sector3 < fastestS3) fastestS3 = entry.Sector3;
-        });
+        let fastestS1 = Math.min(...data.map(e => parseFloat(e.Sector1)));
+        let fastestS2 = Math.min(...data.map(e => parseFloat(e.Sector2)));
+        let fastestS3 = Math.min(...data.map(e => parseFloat(e.Sector3)));
 
         data.forEach((entry, index) => {
           const row = document.createElement("tr");
@@ -132,9 +143,9 @@
           else if (index === 2) row.classList.add("bronze");
 
           // Sector class check
-          const s1Class = entry.Sector1 === fastestS1 ? "fastest" : "";
-          const s2Class = entry.Sector2 === fastestS2 ? "fastest" : "";
-          const s3Class = entry.Sector3 === fastestS3 ? "fastest" : "";
+          const s1Class = entry.Sector1 == fastestS1 ? "fastest" : "";
+          const s2Class = entry.Sector2 == fastestS2 ? "fastest" : "";
+          const s3Class = entry.Sector3 == fastestS3 ? "fastest" : "";
 
           row.innerHTML = `
             <td>${index + 1}</td>
@@ -145,16 +156,30 @@
             <td class="${s3Class}">${entry.Sector3}</td>
             <td>${entry.Gap || '-'}</td>
           `;
-          tbody.appendChild(row);
+
+          tableBody.appendChild(row);
         });
 
       } catch (error) {
+        console.error("Error loading leaderboard:", error);
         document.getElementById("error-message").textContent = "Failed to load leaderboard data.";
-        console.error("Error fetching leaderboard:", error);
       }
     }
 
     fetchLeaderboard();
+  </script>
+
+  <script>
+    fetch('data/current_challenge.json')
+      .then(response => response.json())
+      .then(challenge => {
+        const subtitle = document.getElementById('challenge-subtitle');
+        const variantText = challenge.variant ? ` - ${challenge.variant}` : '';
+        subtitle.textContent = `${challenge.track}${variantText} - ${challenge.car}`;
+      })
+      .catch(error => {
+        console.error("Failed to load challenge info:", error);
+      });
   </script>
 </body>
 </html>
