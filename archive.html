@@ -15,6 +15,22 @@
       color: #f0f0f0;
     }
 
+    /* Nav styled like index.html's nav */
+    nav {
+      background-color: #1a1a1a;
+      padding: 10px;
+      text-align: center;
+    }
+    nav a {
+      color: #00ffcc;
+      text-decoration: none;
+      font-weight: bold;
+      font-family: 'Orbitron', sans-serif;
+    }
+    nav a:hover {
+      text-decoration: underline;
+    }
+
     header {
       background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
       background-size: cover;
@@ -22,69 +38,69 @@
       display: flex;
       align-items: center;
       justify-content: center;
+      flex-direction: column;
     }
 
     header h1 {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 10px 20px;
+      background: rgba(0, 0, 0, 0.6);
+      padding: 20px;
       border-radius: 10px;
-      font-size: 2em;
       color: #fff;
+      font-size: 2rem;
+      margin: 0;
+    }
+
+    main {
+      padding: 20px;
+      background: url('https://images.pexels.com/photos/29321044/pexels-photo-29321044/free-photo-of-exciting-race-day-at-mexico-city-speedway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
+      background-size: cover;
+      background-attachment: fixed;
+    }
+
+    .overlay {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
     }
 
     .controls {
-      padding: 20px;
+      margin-bottom: 20px;
       text-align: center;
     }
 
-    .controls select,
-    .controls button {
+    select, button {
       font-family: 'Orbitron', sans-serif;
       font-size: 1em;
-      margin: 5px;
+      margin: 0 10px 10px 10px;
       padding: 10px;
-      background-color: #1f1f1f;
-      color: #f0f0f0;
-      border: 1px solid #444;
+      background-color: #1a1a1a;
+      color: #00ffcc;
+      border: 1px solid #00ffcc;
       border-radius: 5px;
-    }
-
-    .controls button:hover {
-      background-color: #333;
       cursor: pointer;
+      transition: background-color 0.3s ease;
     }
 
-    .home-button {
-      margin-top: 10px;
-      display: inline-block;
-      text-decoration: none;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1em;
-      background-color: #222;
-      color: #fff;
-      padding: 10px 15px;
-      border-radius: 5px;
-      border: 1px solid #555;
-    }
-
-    .home-button:hover {
-      background-color: #444;
+    select:hover, button:hover {
+      background-color: #00ffcc;
+      color: #0f0f0f;
     }
 
     table {
-      width: 95%;
-      margin: 20px auto;
+      width: 100%;
       border-collapse: collapse;
+      border: 5px solid white;
     }
 
     th, td {
+      border: 1px solid white;
       padding: 10px;
-      border: 1px solid #fff;
       text-align: center;
     }
 
-    thead {
-      background-color: #222;
+    th {
+      background-color: red;
+      color: white;
     }
 
     tbody tr:nth-child(odd) {
@@ -92,7 +108,7 @@
     }
 
     .gold {
-      background-color: #d4af37;
+      background-color: #ffd700;
       color: #000;
       font-weight: bold;
     }
@@ -108,48 +124,65 @@
       color: #000;
       font-weight: bold;
     }
+
+    #error-message {
+      color: red;
+      text-align: center;
+      margin: 10px 0;
+    }
   </style>
 </head>
 
 <body>
+  <nav>
+    <a href="index.html">🏠 Home</a>
+  </nav>
+
   <header>
     <h1 id="event-header">Archived Results</h1>
   </header>
 
-  <div class="controls">
-    <select id="yearSelect">
-      <option value="2025">2025</option>
-    </select>
-    <select id="monthSelect">
-      <option value="May">May</option>
-      <option value="June">June</option>
-      <option value="July">July</option>
-    </select>
-    <button onclick="loadArchive()">Load Archive</button>
-    <br>
-    <a class="home-button" href="index.html">🏠 Home</a>
-  </div>
+  <main>
+    <div class="overlay">
+      <div class="controls">
+        <select id="yearSelect">
+          <option value="2025">2025</option>
+        </select>
+        <select id="monthSelect">
+          <option value="May">May</option>
+          <option value="June">June</option>
+          <option value="July">July</option>
+        </select>
+        <button onclick="loadArchive()">Load Archive</button>
+      </div>
 
-  <table id="leaderboard">
-    <thead>
-      <tr>
-        <th>Pos</th>
-        <th>Name</th>
-        <th>Laptime</th>
-        <th>Sector 1</th>
-        <th>Sector 2</th>
-        <th>Sector 3</th>
-        <th>Timestamp</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+      <div id="error-message"></div>
+
+      <table id="leaderboard">
+        <thead>
+          <tr>
+            <th>Pos</th>
+            <th>Name</th>
+            <th>Laptime</th>
+            <th>Sector 1</th>
+            <th>Sector 2</th>
+            <th>Sector 3</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </main>
 
   <script>
     function loadArchive() {
       const year = document.getElementById('yearSelect').value;
       const month = document.getElementById('monthSelect').value;
       const filePath = `data/archive/${month.toUpperCase()}${year}_RESULTS.json`;
+
+      // Clear previous error message
+      document.getElementById('error-message').textContent = '';
 
       fetch(filePath)
         .then(response => {
@@ -161,7 +194,8 @@
           tbody.innerHTML = "";
 
           // Set header
-          document.getElementById('event-header').textContent = `${data.track} – ${data.variant} – ${data.car}`;
+          const variantText = data.variant ? ` – ${data.variant}` : '';
+          document.getElementById('event-header').textContent = `${data.track}${variantText} – ${data.car}`;
 
           data.results.forEach((entry, index) => {
             const row = document.createElement("tr");
@@ -185,6 +219,7 @@
         .catch(error => {
           console.error("Error loading archive:", error);
           document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Error loading results</td></tr>`;
+          document.getElementById('event-header').textContent = 'Archived Results';
         });
     }
   </script>
