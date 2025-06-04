@@ -15,22 +15,6 @@
       color: #f0f0f0;
     }
 
-    /* Nav styled like index.html's nav */
-    nav {
-      background-color: #1a1a1a;
-      padding: 10px;
-      text-align: center;
-    }
-    nav a {
-      color: #00ffcc;
-      text-decoration: none;
-      font-weight: bold;
-      font-family: 'Orbitron', sans-serif;
-    }
-    nav a:hover {
-      text-decoration: underline;
-    }
-
     header {
       background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
       background-size: cover;
@@ -38,77 +22,84 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
     }
 
     header h1 {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      border-radius: 10px;
-      color: #fff;
-      font-size: 2rem;
-      margin: 0;
-    }
-
-    main {
-      padding: 20px;
-      background: url('https://images.pexels.com/photos/29321044/pexels-photo-29321044/free-photo-of-exciting-race-day-at-mexico-city-speedway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
-      background-size: cover;
-      background-attachment: fixed;
-    }
-
-    .overlay {
       background-color: rgba(0, 0, 0, 0.6);
-      padding: 20px;
+      padding: 10px 20px;
       border-radius: 10px;
+      font-size: 2em;
+      color: #fff;
     }
 
     .controls {
-      margin-bottom: 20px;
+      padding: 20px;
       text-align: center;
     }
 
-    select, button {
+    .controls select,
+    .controls button {
       font-family: 'Orbitron', sans-serif;
       font-size: 1em;
-      margin: 0 10px 10px 10px;
+      margin: 5px;
       padding: 10px;
-      background-color: #1a1a1a;
-      color: #00ffcc;
-      border: 1px solid #00ffcc;
+      background-color: #1f1f1f;
+      color: #f0f0f0;
+      border: 1px solid #444;
       border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
-    select:hover, button:hover {
-      background-color: #00ffcc;
-      color: #0f0f0f;
+    .controls button:hover {
+      background-color: #333;
+      cursor: pointer;
+    }
+
+    .home-button {
+      margin-top: 10px;
+      display: inline-block;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1em;
+      background-color: #222;
+      color: #fff;
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #555;
+    }
+
+    .home-button:hover {
+      background-color: #444;
     }
 
     table {
-      width: 100%;
+      width: 95%;
+      margin: 20px auto;
       border-collapse: collapse;
-      border: 5px solid white;
+      color: #f0f0f0;
     }
 
     th, td {
-      border: 1px solid white;
       padding: 10px;
+      border: 1px solid #666;
       text-align: center;
     }
 
-    th {
-      background-color: red;
-      color: white;
+    thead {
+      background-color: #2e004f; /* dark purple */
+      color: #d1b3ff; /* light purple */
     }
 
     tbody tr:nth-child(odd) {
-      background-color: #1a1a1a;
+      background-color: #1a0a3a;
     }
 
+    tbody tr:nth-child(even) {
+      background-color: #260d53;
+    }
+
+    /* Medal colors for top 3 positions */
     .gold {
-      background-color: #ffd700;
+      background-color: #d4af37;
       color: #000;
       font-weight: bold;
     }
@@ -125,64 +116,78 @@
       font-weight: bold;
     }
 
-    #error-message {
-      color: red;
-      text-align: center;
-      margin: 10px 0;
+    /* Purple sector times */
+    td.sector-time {
+      color: #b37fff; /* bright purple */
+      font-weight: 600;
+      font-family: 'Orbitron', monospace;
     }
   </style>
 </head>
 
 <body>
-  <nav>
-    <a href="index.html">🏠 Home</a>
-  </nav>
-
   <header>
     <h1 id="event-header">Archived Results</h1>
   </header>
 
-  <main>
-    <div class="overlay">
-      <div class="controls">
-        <select id="yearSelect">
-          <option value="2025">2025</option>
-        </select>
-        <select id="monthSelect">
-          <option value="May">May</option>
-          <option value="June">June</option>
-          <option value="July">July</option>
-        </select>
-        <button onclick="loadArchive()">Load Archive</button>
-      </div>
+  <div class="controls">
+    <select id="yearSelect">
+      <option value="2025">2025</option>
+    </select>
+    <select id="monthSelect">
+      <option value="May">May</option>
+      <option value="June">June</option>
+      <option value="July">July</option>
+    </select>
+    <button onclick="loadArchive()">Load Archive</button>
+    <br>
+    <a class="home-button" href="index.html">🏠 Home</a>
+  </div>
 
-      <div id="error-message"></div>
-
-      <table id="leaderboard">
-        <thead>
-          <tr>
-            <th>Pos</th>
-            <th>Name</th>
-            <th>Laptime</th>
-            <th>Sector 1</th>
-            <th>Sector 2</th>
-            <th>Sector 3</th>
-            <th>Timestamp</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
-  </main>
+  <table id="leaderboard">
+    <thead>
+      <tr>
+        <th>Pos</th>
+        <th>Name</th>
+        <th>Laptime</th>
+        <th>Sector 1</th>
+        <th>Sector 2</th>
+        <th>Sector 3</th>
+        <th>Gap</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
   <script>
+    // Convert lap time string (e.g. "1:23.456" or "83.456") to seconds (number)
+    function parseLapTime(lapTime) {
+      if (!lapTime) return Infinity;
+      const parts = lapTime.split(':');
+      if (parts.length === 2) {
+        // format mm:ss.sss
+        return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+      } else {
+        // format ss.sss
+        return parseFloat(lapTime);
+      }
+    }
+
+    // Format seconds back to mm:ss.sss or ss.sss string
+    function formatLapTime(seconds) {
+      if (seconds === Infinity) return '-';
+      if (seconds >= 60) {
+        const m = Math.floor(seconds / 60);
+        const s = (seconds % 60).toFixed(3);
+        return `${m}:${s.padStart(6, '0')}`;
+      }
+      return seconds.toFixed(3);
+    }
+
     function loadArchive() {
       const year = document.getElementById('yearSelect').value;
       const month = document.getElementById('monthSelect').value;
       const filePath = `data/archive/${month.toUpperCase()}${year}_RESULTS.json`;
-
-      // Clear previous error message
-      document.getElementById('error-message').textContent = '';
 
       fetch(filePath)
         .then(response => {
@@ -194,24 +199,35 @@
           tbody.innerHTML = "";
 
           // Set header
-          const variantText = data.variant ? ` – ${data.variant}` : '';
-          document.getElementById('event-header').textContent = `${data.track}${variantText} – ${data.car}`;
+          document.getElementById('event-header').textContent = `${data.track} – ${data.variant} – ${data.car}`;
 
-          data.results.forEach((entry, index) => {
+          // Sort results by lap time ascending
+          const sortedResults = data.results.slice().sort((a, b) => {
+            return parseLapTime(a.laptime) - parseLapTime(b.laptime);
+          });
+
+          const fastestTime = parseLapTime(sortedResults[0]?.laptime);
+
+          sortedResults.forEach((entry, index) => {
             const row = document.createElement("tr");
 
+            // Add medal classes
             if (index === 0) row.classList.add("gold");
             else if (index === 1) row.classList.add("silver");
             else if (index === 2) row.classList.add("bronze");
 
+            // Calculate gap from fastest lap
+            const lapSeconds = parseLapTime(entry.laptime);
+            const gapSeconds = lapSeconds - fastestTime;
+
             row.innerHTML = `
-              <td>${entry.position}</td>
+              <td>${index + 1}</td>
               <td>${entry.name}</td>
               <td>${entry.laptime}</td>
-              <td>${entry.sector1}</td>
-              <td>${entry.sector2}</td>
-              <td>${entry.sector3}</td>
-              <td>${entry.timestamp}</td>
+              <td class="sector-time">${entry.sector1}</td>
+              <td class="sector-time">${entry.sector2}</td>
+              <td class="sector-time">${entry.sector3}</td>
+              <td>${gapSeconds === 0 ? '-' : '+' + formatLapTime(gapSeconds)}</td>
             `;
             tbody.appendChild(row);
           });
@@ -219,7 +235,6 @@
         .catch(error => {
           console.error("Error loading archive:", error);
           document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Error loading results</td></tr>`;
-          document.getElementById('event-header').textContent = 'Archived Results';
         });
     }
   </script>
