@@ -2,8 +2,12 @@ import requests
 import json
 import os
 
-# URL to fetch the leaderboard JSON data
-url = "https://ams2leaderboards.neocities.org/data/boards/F3%20Brasil,%20Jacarepagu%C3%A1%20Historic%202012%20SCB.json"
+# Load current challenge info
+with open("data/current_challenge.json", "r") as f:
+    challenge_info = json.load(f)
+
+# Use the data_link from current_challenge.json
+url = challenge_info.get("data_link")
 
 # List of users to filter by (put your actual usernames here)
 filter_users = [
