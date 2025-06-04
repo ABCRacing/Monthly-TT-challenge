@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Current Month Leaderboard</title>
+  <title>Archived Results</title>
 
-  <!-- Racing-style Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
 
   <style>
-    body  {
+    body {
       font-family: 'Orbitron', sans-serif;
       margin: 0;
       background-color: #0f0f0f;
@@ -23,50 +22,77 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
     }
 
     header h1 {
-      background: rgba(0, 0, 0, 0.6);
-      padding: 20px;
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 10px 20px;
       border-radius: 10px;
+      font-size: 2em;
       color: #fff;
-      font-size: 2rem;
-      margin: 0;
     }
 
-    header h2 {
-      background: rgba(0, 0, 0, 0.6);
+    .controls {
+      padding: 20px;
+      text-align: center;
+    }
+
+    .controls select,
+    .controls button {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1em;
+      margin: 5px;
       padding: 10px;
-      border-radius: 10px;
+      background-color: #1f1f1f;
+      color: #f0f0f0;
+      border: 1px solid #444;
+      border-radius: 5px;
+    }
+
+    .controls button:hover {
+      background-color: #333;
+      cursor: pointer;
+    }
+
+    .home-button {
+      margin-top: 10px;
+      display: inline-block;
+      text-decoration: none;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 1em;
+      background-color: #222;
       color: #fff;
-      font-size: 1.2rem;
-      margin-top: 0.5em;
+      padding: 10px 15px;
+      border-radius: 5px;
+      border: 1px solid #555;
     }
 
-    main {
-      padding: 20px;
-      background: url('https://images.pexels.com/photos/29321044/pexels-photo-29321044/free-photo-of-exciting-race-day-at-mexico-city-speedway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
-      background-size: cover;
-      background-attachment: fixed;
+    .home-button:hover {
+      background-color: #444;
     }
 
+    /* === Overlay container for the table === */
     .overlay {
       background-color: rgba(0, 0, 0, 0.6);
       padding: 20px;
+      margin: 0 auto 40px;
+      max-width: 1100px;
       border-radius: 10px;
     }
 
+    /* === Table styling === */
     table {
       width: 100%;
       border-collapse: collapse;
       border: 5px solid white;
+      font-size: 1em;
     }
 
     th, td {
       border: 1px solid white;
       padding: 10px;
       text-align: center;
+      font-variant-numeric: tabular-nums;
     }
 
     th {
@@ -74,37 +100,62 @@
       color: white;
     }
 
-    .gold { background-color: #ffd700; color: #000; }
-    .silver { background-color: #c0c0c0; color: #000; }
-    .bronze { background-color: #cd7f32; color: #000; }
-    .fastest { background-color: purple; color: white; }
+    /* Medal row background colors */
+    .gold {
+      background-color: #ffd700;
+      color: #000;
+      font-weight: bold;
+    }
 
-    #error-message {
-      color: red;
-      text-align: center;
-      margin: 10px 0;
+    .silver {
+      background-color: #c0c0c0;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .bronze {
+      background-color: #cd7f32;
+      color: #000;
+      font-weight: bold;
+    }
+
+    /* Fastest sector times styling */
+    td.fastest {
+      background-color: purple;
+      color: white;
+      font-weight: 700;
+      font-family: 'Orbitron', monospace;
     }
   </style>
 </head>
-<body>
-  <nav style="background-color: #1a1a1a; padding: 10px; text-align: center;">
-    <a href="archive.html" style="color: #00ffcc; text-decoration: none; font-weight: bold;">🏁 View Archive</a>
-  </nav>
 
+<body>
   <header>
-    <h1>Current Month Leaderboard</h1>
-    <h2 id="challenge-subtitle" style="margin-top: 0.2em; font-weight: normal; font-size: 1.2em;"></h2>
+    <h1 id="event-header">Archived Results</h1>
   </header>
+
+  <div class="controls">
+    <select id="yearSelect">
+      <option value="2025">2025</option>
+    </select>
+    <select id="monthSelect">
+      <option value="May">May</option>
+      <option value="June">June</option>
+      <option value="July">July</option>
+    </select>
+    <button onclick="loadArchive()">Load Archive</button>
+    <br />
+    <a class="home-button" href="index.html">🏠 Home</a>
+  </div>
 
   <main>
     <div class="overlay">
-      <div id="error-message"></div>
       <table id="leaderboard">
         <thead>
           <tr>
-            <th>Position</th>
+            <th>Pos</th>
             <th>Name</th>
-            <th>Lap Time</th>
+            <th>Laptime</th>
             <th>Sector 1</th>
             <th>Sector 2</th>
             <th>Sector 3</th>
@@ -117,69 +168,88 @@
   </main>
 
   <script>
-    async function fetchLeaderboard() {
-      try {
-        const response = await fetch("data/leaderboard_filtered.json");
-        if (!response.ok) throw new Error("Network response was not ok");
-
-        const data = await response.json();
-        const tableBody = document.querySelector("#leaderboard tbody");
-
-        if (!Array.isArray(data) || data.length === 0) {
-          document.getElementById("error-message").textContent = "No leaderboard data available.";
-          return;
-        }
-
-        let fastestS1 = Math.min(...data.map(e => parseFloat(e.Sector1)));
-        let fastestS2 = Math.min(...data.map(e => parseFloat(e.Sector2)));
-        let fastestS3 = Math.min(...data.map(e => parseFloat(e.Sector3)));
-
-        data.forEach((entry, index) => {
-          const row = document.createElement("tr");
-
-          // Add medal class
-          if (index === 0) row.classList.add("gold");
-          else if (index === 1) row.classList.add("silver");
-          else if (index === 2) row.classList.add("bronze");
-
-          // Sector class check
-          const s1Class = entry.Sector1 == fastestS1 ? "fastest" : "";
-          const s2Class = entry.Sector2 == fastestS2 ? "fastest" : "";
-          const s3Class = entry.Sector3 == fastestS3 ? "fastest" : "";
-
-          row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${entry.Name}</td>
-            <td>${entry.LapTime}</td>
-            <td class="${s1Class}">${entry.Sector1}</td>
-            <td class="${s2Class}">${entry.Sector2}</td>
-            <td class="${s3Class}">${entry.Sector3}</td>
-            <td>${entry.Gap || '-'}</td>
-          `;
-
-          tableBody.appendChild(row);
-        });
-
-      } catch (error) {
-        console.error("Error loading leaderboard:", error);
-        document.getElementById("error-message").textContent = "Failed to load leaderboard data.";
+    // Convert lap time string (e.g. "1:23.456" or "83.456") to seconds (number)
+    function parseLapTime(lapTime) {
+      if (!lapTime) return Infinity;
+      const parts = lapTime.split(':');
+      if (parts.length === 2) {
+        // format mm:ss.sss
+        return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+      } else {
+        // format ss.sss
+        return parseFloat(lapTime);
       }
     }
 
-    fetchLeaderboard();
-  </script>
+    // Format seconds back to mm:ss.sss or ss.sss string
+    function formatLapTime(seconds) {
+      if (seconds === Infinity) return '-';
+      if (seconds >= 60) {
+        const m = Math.floor(seconds / 60);
+        const s = (seconds % 60).toFixed(3);
+        return `${m}:${s.padStart(6, '0')}`;
+      }
+      return seconds.toFixed(3);
+    }
 
-  <script>
-    fetch('data/current_challenge.json')
-      .then(response => response.json())
-      .then(challenge => {
-        const subtitle = document.getElementById('challenge-subtitle');
-        const variantText = challenge.variant ? ` - ${challenge.variant}` : '';
-        subtitle.textContent = `${challenge.track}${variantText} - ${challenge.car}`;
-      })
-      .catch(error => {
-        console.error("Failed to load challenge info:", error);
-      });
+    function loadArchive() {
+      const year = document.getElementById('yearSelect').value;
+      const month = document.getElementById('monthSelect').value;
+      const filePath = `data/archive/${month.toUpperCase()}${year}_RESULTS.json`;
+
+      fetch(filePath)
+        .then(response => {
+          if (!response.ok) throw new Error('Network response was not ok');
+          return response.json();
+        })
+        .then(data => {
+          const tbody = document.querySelector("#leaderboard tbody");
+          tbody.innerHTML = "";
+
+          // Set header
+          document.getElementById('event-header').textContent = `${data.track} – ${data.variant} – ${data.car}`;
+
+          // Sort results by lap time ascending
+          const sortedResults = data.results.slice().sort((a, b) => {
+            return parseLapTime(a.laptime) - parseLapTime(b.laptime);
+          });
+
+          const fastestTime = parseLapTime(sortedResults[0]?.laptime);
+
+          // Find fastest sector times
+          const fastestSector1 = Math.min(...sortedResults.map(r => parseLapTime(r.sector1)));
+          const fastestSector2 = Math.min(...sortedResults.map(r => parseLapTime(r.sector2)));
+          const fastestSector3 = Math.min(...sortedResults.map(r => parseLapTime(r.sector3)));
+
+          sortedResults.forEach((entry, index) => {
+            const row = document.createElement("tr");
+
+            // Add medal classes
+            if (index === 0) row.classList.add("gold");
+            else if (index === 1) row.classList.add("silver");
+            else if (index === 2) row.classList.add("bronze");
+
+            // Calculate gap from fastest lap
+            const lapSeconds = parseLapTime(entry.laptime);
+            const gapSeconds = lapSeconds - fastestTime;
+
+            row.innerHTML = `
+              <td>${index + 1}</td>
+              <td>${entry.name}</td>
+              <td>${entry.laptime}</td>
+              <td class="${parseLapTime(entry.sector1) === fastestSector1 ? 'fastest' : ''}">${entry.sector1}</td>
+              <td class="${parseLapTime(entry.sector2) === fastestSector2 ? 'fastest' : ''}">${entry.sector2}</td>
+              <td class="${parseLapTime(entry.sector3) === fastestSector3 ? 'fastest' : ''}">${entry.sector3}</td>
+              <td>${gapSeconds === 0 ? '-' : '+' + formatLapTime(gapSeconds)}</td>
+            `;
+            tbody.appendChild(row);
+          });
+        })
+        .catch(error => {
+          console.error("Error loading archive:", error);
+          document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Error loading results</td></tr>`;
+        });
+    }
   </script>
 </body>
 </html>
