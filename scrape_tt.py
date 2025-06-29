@@ -16,40 +16,34 @@ name_map = {
     "Joe": "Joe Bywater"
 }
 
-# List of users to keep (case-insensitive match after name_map applied)
-filter_users = [
-    "Chris Rees",
-    "Neil Bywater",
-    "Ieuan Rees",
-    "Joe Bywater",
-    "Steve Jackson"
-]
+# List of users to filter by (you can include original or friendly names here)
+filter_users = list(name_map.keys()) + list(name_map.values())
 
-# This maps the list of values to meaningful keys
+# Keys for leaderboard fields
 keys = ['Position', 'Name', 'SteamID', 'LapTime', 'Sector1', 'Sector2', 'Sector3', 'Gap', 'Car', 'Date', 'Flags']
 
 # Output path
 output_dir = "data"
 output_path = os.path.join(output_dir, "leaderboard_filtered.json")
 
-# === Time formatting ===
-
-def format_lap_time(ms):
-    if not isinstance(ms, int):
-        return ms
+# Helper: convert milliseconds to m:ss.SSS (e.g. 90300 → "1:30.300")
+def format_laptime(ms):
     minutes = ms // 60000
     seconds = (ms % 60000) // 1000
     milliseconds = ms % 1000
-    return f"{minutes}:{seconds:02}.{milliseconds:03}"
+    return f"{minutes}:{seconds:02d}.{milliseconds:03d}"
 
-def format_sector_time(ms):
-    if not isinstance(ms, int):
-        return ms
+# Helper: convert milliseconds to ss.SSS (e.g. 22260 → "22.260")
+def format_sectortime(ms):
     seconds = ms // 1000
     milliseconds = ms % 1000
-    return f"{seconds}.{milliseconds:03}"
+    return f"{seconds}.{milliseconds:03d}"
 
-# === Fetch and filter ===
+# Helper: convert gap to "+s.SSS" (e.g. 1400 → "+1.400")
+def format_gap(ms):
+    seconds = ms // 1000
+    milliseconds = ms % 1000
+    return f"+{seconds}.{milliseconds:03d}"
 
 def fetch_leaderboard():
     try:
@@ -57,32 +51,34 @@ def fetch_leaderboard():
         response.raise_for_status()
         data = response.json()
 
-        filtered = []
-
+        filtered_data = []
         for entry in data:
-            row = dict(zip(keys, entry))
+            entry_dict = dict(zip(keys, entry))
 
-            # Replace name with friendly version if available
-            raw_name = row['Name']
-            friendly_name = name_map.get(raw_name, raw_name)
-            row['Name'] = friendly_name
+            name = entry_dict["Name"]
+            if name in name_map:
+                entry_dict["Name"] = name_map[name]
+                name = name_map[name]  # update for filtering
 
-            # Filter based on friendly name
-            if friendly_name in filter_users:
-                # Format times
-                row['LapTime']  = format_lap_time(row['LapTime'])
-                row['Sector1']  = format_sector_time(row['Sector1'])
-                row['Sector2']  = format_sector_time(row['Sector2'])
-                row['Sector3']  = format_sector_time(row['Sector3'])
+            if name not in filter_users:
+                continue
 
-                filtered.append(row)
+            # Format times
+            entry_dict["LapTime"] = format_laptime(entry_dict["LapTime"])
+            entry_dict["Sector1"] = format_sectortime(entry_dict["Sector1"])
+            entry_dict["Sector2"] = format_sectortime(entry_dict["Sector2"])
+            entry_dict["Sector3"] = format_sectortime(entry_dict["Sector3"])
+            entry_dict["Gap"] = format_gap(entry_dict["Gap"])
 
-        with open(output_path, 'w') as f:
-            json.dump(filtered, f, indent=2)
+            filtered_data.append(entry_dict)
+
+        with open(output_path, "w") as f:
+            json.dump(filtered_data, f, indent=2)
+
         print(f"Filtered leaderboard saved to {output_path}")
 
-    except requests.RequestException as e:
-        print("Error fetching leaderboard data:", e)
+    except Exception as e:
+        print("Error fetching leaderboard:", e)
 
 # Run it
 fetch_leaderboard()

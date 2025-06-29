@@ -7,23 +7,10 @@
     "Sector1": "22.260",
     "Sector2": "48.383",
     "Sector3": "19.657",
-    "Gap": 0,
+    "Gap": "+0.000",
     "Car": "Caterham Superlight",
     "Date": "25-06-29 10:58",
     "Flags": "W|+"
-  },
-  {
-    "Position": "2",
-    "Name": "Neil Bywater",
-    "SteamID": "76561198118274739",
-    "LapTime": "1:30.437",
-    "Sector1": "22.303",
-    "Sector2": "48.360",
-    "Sector3": "19.774",
-    "Gap": 137,
-    "Car": "Caterham Superlight",
-    "Date": "25-06-07 20:20",
-    "Flags": "W|+|C"
   },
   {
     "Position": "12",
@@ -33,7 +20,7 @@
     "Sector1": "23.226",
     "Sector2": "49.933",
     "Sector3": "20.387",
-    "Gap": 3246,
+    "Gap": "+3.246",
     "Car": "Caterham Superlight",
     "Date": "25-06-12 17:23",
     "Flags": "W|+|C"
@@ -46,7 +33,7 @@
     "Sector1": "23.743",
     "Sector2": "53.716",
     "Sector3": "20.702",
-    "Gap": 7861,
+    "Gap": "+7.861",
     "Car": "Caterham Superlight",
     "Date": "25-06-08 15:41",
     "Flags": "W|+|C"
