@@ -9,12 +9,24 @@ with open("data/current_challenge.json", "r") as f:
 # Use the data_link from current_challenge.json
 url = challenge_info.get("data_link")
 
+
 # Friendly name mapping
 name_map = {
     "ACEREES": "Chris Rees",
     "reesyboy4": "Ieuan Rees",
     "Joe": "Joe Bywater"
 }
+
+# List of users to keep (case-insensitive match after name_map applied)
+filter_users = [
+    "Chris Rees",
+    "Neil Bywater",
+    "Ieuan Rees",
+    "Joe Bywater",
+    "Steve Jackson"
+]
+
+
 
 # List of users to filter by (you can include original or friendly names here)
 filter_users = list(name_map.keys()) + list(name_map.values())
