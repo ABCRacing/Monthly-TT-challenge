@@ -9,53 +9,48 @@ with open("data/current_challenge.json", "r") as f:
 # Use the data_link from current_challenge.json
 url = challenge_info.get("data_link")
 
-
-# Friendly name mapping
+# Mapping Steam usernames to friendly names
 name_map = {
     "ACEREES": "Chris Rees",
     "reesyboy4": "Ieuan Rees",
     "Joe": "Joe Bywater"
 }
 
-# List of users to keep (case-insensitive match after name_map applied)
+# List of users to include
 filter_users = [
-    "Chris Rees",
+    "ACEREES",
     "Neil Bywater",
-    "Ieuan Rees",
-    "Joe Bywater",
+    "reesyboy4",
+    "Joe",
     "Steve Jackson"
 ]
 
-
-
-# List of users to filter by (you can include original or friendly names here)
-filter_users = list(name_map.keys()) + list(name_map.values())
-
-# Keys for leaderboard fields
+# Keys for each value from the raw data
 keys = ['Position', 'Name', 'SteamID', 'LapTime', 'Sector1', 'Sector2', 'Sector3', 'Gap', 'Car', 'Date', 'Flags']
 
-# Output path
+# Output file location
 output_dir = "data"
 output_path = os.path.join(output_dir, "leaderboard_filtered.json")
 
-# Helper: convert milliseconds to m:ss.SSS (e.g. 90300 → "1:30.300")
-def format_laptime(ms):
+def format_time(ms):
+    """Convert milliseconds to MM:SS.sss or SS.sss format."""
+    if ms is None:
+        return ""
+    ms = int(ms)
     minutes = ms // 60000
-    seconds = (ms % 60000) // 1000
-    milliseconds = ms % 1000
-    return f"{minutes}:{seconds:02d}.{milliseconds:03d}"
+    seconds = (ms % 60000) / 1000
+    if minutes > 0:
+        return f"{minutes}:{seconds:06.3f}"
+    else:
+        return f"{seconds:.3f}"
 
-# Helper: convert milliseconds to ss.SSS (e.g. 22260 → "22.260")
-def format_sectortime(ms):
-    seconds = ms // 1000
-    milliseconds = ms % 1000
-    return f"{seconds}.{milliseconds:03d}"
-
-# Helper: convert gap to "+s.SSS" (e.g. 1400 → "+1.400")
 def format_gap(ms):
-    seconds = ms // 1000
-    milliseconds = ms % 1000
-    return f"+{seconds}.{milliseconds:03d}"
+    """Format gap time in +X.XXX seconds."""
+    if ms is None:
+        return ""
+    ms = int(ms)
+    seconds = ms / 1000
+    return f"+{seconds:.3f}"
 
 def fetch_leaderboard():
     try:
@@ -63,34 +58,36 @@ def fetch_leaderboard():
         response.raise_for_status()
         data = response.json()
 
-        filtered_data = []
-        for entry in data:
-            entry_dict = dict(zip(keys, entry))
+        filtered = []
+        for row in data:
+            mapped = dict(zip(keys, row))
 
-            name = entry_dict["Name"]
-            if name in name_map:
-                entry_dict["Name"] = name_map[name]
-                name = name_map[name]  # update for filtering
-
-            if name not in filter_users:
+            # Only keep if in filter list
+            if mapped['Name'] not in filter_users:
                 continue
 
-            # Format times
-            entry_dict["LapTime"] = format_laptime(entry_dict["LapTime"])
-            entry_dict["Sector1"] = format_sectortime(entry_dict["Sector1"])
-            entry_dict["Sector2"] = format_sectortime(entry_dict["Sector2"])
-            entry_dict["Sector3"] = format_sectortime(entry_dict["Sector3"])
-            entry_dict["Gap"] = format_gap(entry_dict["Gap"])
+            # Rename friendly names
+            mapped['Name'] = name_map.get(mapped['Name'], mapped['Name'])
 
-            filtered_data.append(entry_dict)
+            # Format lap and sector times
+            mapped['LapTime'] = format_time(mapped.get('LapTime'))
+            mapped['Sector1'] = format_time(mapped.get('Sector1'))
+            mapped['Sector2'] = format_time(mapped.get('Sector2'))
+            mapped['Sector3'] = format_time(mapped.get('Sector3'))
 
+            # Format gap
+            mapped['Gap'] = format_gap(mapped.get('Gap'))
+
+            filtered.append(mapped)
+
+        # Save filtered data
         with open(output_path, "w") as f:
-            json.dump(filtered_data, f, indent=2)
+            json.dump(filtered, f, indent=2)
 
-        print(f"Filtered leaderboard saved to {output_path}")
+        print(f"Filtered leaderboard saved to: {output_path}")
 
     except Exception as e:
-        print("Error fetching leaderboard:", e)
+        print(f"Error fetching leaderboard: {e}")
 
-# Run it
-fetch_leaderboard()
+if __name__ == "__main__":
+    fetch_leaderboard()
