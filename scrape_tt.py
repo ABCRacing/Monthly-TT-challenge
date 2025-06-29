@@ -9,12 +9,19 @@ with open("data/current_challenge.json", "r") as f:
 # Use the data_link from current_challenge.json
 url = challenge_info.get("data_link")
 
-# List of users to filter by
+# Friendly name mapping
+name_map = {
+    "ACEREES": "Chris Rees",
+    "reesyboy4": "Ieuan Rees",
+    "Joe": "Joe Bywater"
+}
+
+# List of users to keep (case-insensitive match after name_map applied)
 filter_users = [
-    "ACEREES",
+    "Chris Rees",
     "Neil Bywater",
-    "reesyboy4",
-    "Joe",
+    "Ieuan Rees",
+    "Joe Bywater",
     "Steve Jackson"
 ]
 
@@ -26,6 +33,7 @@ output_dir = "data"
 output_path = os.path.join(output_dir, "leaderboard_filtered.json")
 
 # === Time formatting ===
+
 def format_lap_time(ms):
     if not isinstance(ms, int):
         return ms
@@ -41,6 +49,8 @@ def format_sector_time(ms):
     milliseconds = ms % 1000
     return f"{seconds}.{milliseconds:03}"
 
+# === Fetch and filter ===
+
 def fetch_leaderboard():
     try:
         response = requests.get(url)
@@ -50,23 +60,29 @@ def fetch_leaderboard():
         filtered = []
 
         for entry in data:
-            entry_dict = dict(zip(keys, entry))
-            if entry_dict['Name'] in filter_users:
+            row = dict(zip(keys, entry))
+
+            # Replace name with friendly version if available
+            raw_name = row['Name']
+            friendly_name = name_map.get(raw_name, raw_name)
+            row['Name'] = friendly_name
+
+            # Filter based on friendly name
+            if friendly_name in filter_users:
                 # Format times
-                entry_dict['LapTime'] = format_lap_time(entry_dict['LapTime'])
-                entry_dict['Sector1'] = format_sector_time(entry_dict['Sector1'])
-                entry_dict['Sector2'] = format_sector_time(entry_dict['Sector2'])
-                entry_dict['Sector3'] = format_sector_time(entry_dict['Sector3'])
-                filtered.append(entry_dict)
+                row['LapTime']  = format_lap_time(row['LapTime'])
+                row['Sector1']  = format_sector_time(row['Sector1'])
+                row['Sector2']  = format_sector_time(row['Sector2'])
+                row['Sector3']  = format_sector_time(row['Sector3'])
 
-        with open(output_path, "w") as f:
+                filtered.append(row)
+
+        with open(output_path, 'w') as f:
             json.dump(filtered, f, indent=2)
-
         print(f"Filtered leaderboard saved to {output_path}")
 
-    except Exception as e:
-        print("Failed to fetch or process leaderboard:", e)
+    except requests.RequestException as e:
+        print("Error fetching leaderboard data:", e)
 
-if __name__ == "__main__":
-    fetch_leaderboard()
-
+# Run it
+fetch_leaderboard()
