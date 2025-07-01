@@ -2,26 +2,44 @@
   "track": "Santa Cruz do Sul",
   "variant": "",
   "car": "Caterham Superlight",
-  "month": "june",
+  "month": "June",
   "year": 2025,
   "results": [
     {
-      "position": 9,
-      "name": "ACEREES",
-      "laptime": "1:32.557",
-      "sector1": "22.537",
-      "sector2": "50.219",
-      "sector3": "19.801",
-      "timestamp": "25-06-03 20:51"
+      "position": 1,
+      "name": "Chris Rees",
+      "laptime": "1:30.300",
+      "sector1": "22.260",
+      "sector2": "48.383",
+      "sector3": "19.657",
+      "timestamp": "25-06-29 10:58"
     },
     {
-      "position": 11,
-      "name": "reesyboy4",
-      "laptime": "1:33.619",
-      "sector1": "23.065",
-      "sector2": "50.639",
-      "sector3": "19.915",
-      "timestamp": "25-06-03 18:02"
+      "position": 2,
+      "name": "Neil Bywater",
+      "laptime": "1:30.437",
+      "sector1": "22.303",
+      "sector2": "48.360",
+      "sector3": "19.774",
+      "timestamp": "25-06-07 20:20"
+    },
+    {
+      "position": 12,
+      "name": "Ieuan Rees",
+      "laptime": "1:33.546",
+      "sector1": "23.226",
+      "sector2": "49.933",
+      "sector3": "20.387",
+      "timestamp": "25-06-12 17:23"
+    },
+    {
+      "position": 16,
+      "name": "Joe Bywater",
+      "laptime": "1:38.161",
+      "sector1": "23.743",
+      "sector2": "53.716",
+      "sector3": "20.702",
+      "timestamp": "25-06-08 15:41"
     }
   ]
 }
