@@ -1,8 +1,8 @@
 {
-  "month": "June",
+  "month": "July",
   "year": "2025",
-  "track": "Santa Cruz do Sul",
-  "variant": "",
-  "car": "Caterham Superlight",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Caterham%20Superlight/Santa%20Cruz%20do%20Sul.json"
+  "track": "Curvelo",
+  "variant": "Long",
+  "car": "P1Gen2",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/P1Gen2/Curvelo%20Long.json"
 }

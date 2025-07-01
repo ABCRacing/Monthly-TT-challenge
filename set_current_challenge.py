@@ -7,7 +7,7 @@ year    = input("Year?           (e.g. 2025): ").strip()
 track   = input("Track?          (e.g. Donington Park): ").strip()
 variant = input("Track Variant?  (e.g. National): ").strip()
 car     = input("Car?            (e.g. Dallara F309): ").strip()
-link    = input("Data link?      (optional - leave blank to skip): ").strip()
+link    = input("Data link?      (JSON link from scraping website): ").strip()
 
 # Build the challenge dictionary
 challenge = {
