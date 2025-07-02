@@ -91,3 +91,60 @@ def fetch_leaderboard():
 
 if __name__ == "__main__":
     fetch_leaderboard()
+def format_time(ms):
+    minutes = ms // 60000
+    seconds = (ms % 60000) // 1000
+    milliseconds = ms % 1000
+    return f"{minutes}:{seconds:02d}.{milliseconds:03d}"
+
+def format_gap(ms):
+    seconds = ms / 1000
+    return f"+{seconds:.3f}"
+
+def extract_lap_time(entry):
+    return entry["LapTime"]
+
+def convert_times(entry):
+    # Convert numeric times into formatted strings
+    entry["LapTime"] = format_time(entry["LapTime"])
+    entry["Sector1"] = format_time(entry["Sector1"])
+    entry["Sector2"] = format_time(entry["Sector2"])
+    entry["Sector3"] = format_time(entry["Sector3"])
+    return entry
+
+def fetch_leaderboard():
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        raw_data = response.json()
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        return
+
+    filtered = []
+    for row in raw_data:
+        if row[1] in filter_users:
+            mapped_name = name_map.get(row[1], row[1])  # Friendly name if available
+            entry = dict(zip(keys, row))
+            entry["Name"] = mapped_name
+            entry["LapTime"] = int(entry["LapTime"])
+            entry["Sector1"] = int(entry["Sector1"])
+            entry["Sector2"] = int(entry["Sector2"])
+            entry["Sector3"] = int(entry["Sector3"])
+            filtered.append(entry)
+
+    # Sort by LapTime to find gaps relative to fastest friend
+    filtered.sort(key=extract_lap_time)
+    fastest_time = filtered[0]["LapTime"]
+
+    for i, entry in enumerate(filtered):
+        gap_ms = entry["LapTime"] - fastest_time
+        entry["Gap"] = format_gap(gap_ms)
+        filtered[i] = convert_times(entry)
+
+    # Write to JSON
+    with open(output_path, "w") as f:
+        json.dump(filtered, f, indent=2)
+
+# Run the function
+fetch_leaderboard()
