@@ -1,41 +1,41 @@
 [
   {
+    "Position": "5",
+    "Name": "Neil Bywater",
+    "SteamID": "76561198118274739",
+    "LapTime": "1:40.299",
+    "Sector1": "0:33.666",
+    "Sector2": "0:32.314",
+    "Sector3": "0:34.319",
+    "Gap": "+0.000",
+    "Car": "Ligier JS P320",
+    "Date": "25-07-05 19:34",
+    "Flags": "W|+|A|T|C"
+  },
+  {
     "Position": "7",
+    "Name": "Chris Rees",
+    "SteamID": "76561197971749679",
+    "LapTime": "1:40.560",
+    "Sector1": "0:34.188",
+    "Sector2": "0:32.213",
+    "Sector3": "0:34.159",
+    "Gap": "+0.261",
+    "Car": "Ligier JS P320",
+    "Date": "25-07-05 21:30",
+    "Flags": "W|+|A|T"
+  },
+  {
+    "Position": "9",
     "Name": "Ieuan Rees",
     "SteamID": "76561198207011993",
     "LapTime": "1:41.581",
     "Sector1": "0:34.050",
     "Sector2": "0:33.177",
     "Sector3": "0:34.354",
-    "Gap": "+0.000",
+    "Gap": "+1.282",
     "Car": "Ligier JS P320",
     "Date": "25-07-05 07:37",
     "Flags": "W|+|A|T|C"
-  },
-  {
-    "Position": "8",
-    "Name": "Neil Bywater",
-    "SteamID": "76561198118274739",
-    "LapTime": "1:41.700",
-    "Sector1": "0:33.902",
-    "Sector2": "0:32.997",
-    "Sector3": "0:34.801",
-    "Gap": "+0.119",
-    "Car": "Ligier JS P320",
-    "Date": "25-07-03 20:06",
-    "Flags": "W|+|A|T|C"
-  },
-  {
-    "Position": "23",
-    "Name": "Chris Rees",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:57.840",
-    "Sector1": "0:39.165",
-    "Sector2": "0:39.294",
-    "Sector3": "0:39.381",
-    "Gap": "+16.259",
-    "Car": "MetalMoro AJR Gen2 Honda",
-    "Date": "25-07-01 21:12",
-    "Flags": "W|+|A|T"
   }
 ]
