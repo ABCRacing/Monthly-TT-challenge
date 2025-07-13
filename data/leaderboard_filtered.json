@@ -1,29 +1,29 @@
 [
   {
     "Position": "5",
+    "Name": "Chris Rees",
+    "SteamID": "76561197971749679",
+    "LapTime": "1:39.840",
+    "Sector1": "0:33.459",
+    "Sector2": "0:32.160",
+    "Sector3": "0:34.221",
+    "Gap": "+0.000",
+    "Car": "Ligier JS P320",
+    "Date": "25-07-06 19:28",
+    "Flags": "W|+|A|T"
+  },
+  {
+    "Position": "6",
     "Name": "Neil Bywater",
     "SteamID": "76561198118274739",
     "LapTime": "1:40.299",
     "Sector1": "0:33.666",
     "Sector2": "0:32.314",
     "Sector3": "0:34.319",
-    "Gap": "+0.000",
+    "Gap": "+0.459",
     "Car": "Ligier JS P320",
     "Date": "25-07-05 19:34",
     "Flags": "W|+|A|T|C"
-  },
-  {
-    "Position": "7",
-    "Name": "Chris Rees",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:40.560",
-    "Sector1": "0:34.188",
-    "Sector2": "0:32.213",
-    "Sector3": "0:34.159",
-    "Gap": "+0.261",
-    "Car": "Ligier JS P320",
-    "Date": "25-07-05 21:30",
-    "Flags": "W|+|A|T"
   },
   {
     "Position": "9",
@@ -33,7 +33,7 @@
     "Sector1": "0:34.050",
     "Sector2": "0:33.177",
     "Sector3": "0:34.354",
-    "Gap": "+1.282",
+    "Gap": "+1.741",
     "Car": "Ligier JS P320",
     "Date": "25-07-05 07:37",
     "Flags": "W|+|A|T|C"
