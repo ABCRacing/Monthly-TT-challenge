@@ -1,8 +1,8 @@
 {
-  "month": "July",
+  "month": "AUGUST",
   "year": "2025",
-  "track": "Curvelo",
-  "variant": "Long",
-  "car": "P1Gen2",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/P1Gen2/Curvelo%20Long.json"
+  "track": "OULTON PARK",
+  "variant": "CLASSIC",
+  "car": "FORMULA RETRO GEN 3",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/F-Retro%20Gen3/Oulton%20Park%20Classic.json"
 }
