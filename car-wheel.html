@@ -22,115 +22,112 @@
       margin-bottom: 20px;
     }
 
-    #wheel {
-      width: 400px;
-      height: 400px;
-      border-radius: 50%;
+    #wheelCanvas {
       border: 10px solid #fff;
-      position: relative;
-      overflow: hidden;
+      border-radius: 50%;
+      background-color: #111;
       box-shadow: 0 0 20px #00ffcc;
     }
 
-    .segment {
-      position: absolute;
-      width: 50%;
-      height: 50%;
-      transform-origin: 100% 100%;
-      background: #222;
-      color: white;
-      text-align: right;
-      padding: 10px;
-      font-size: 14px;
-    }
-
-    #spin-btn {
-      margin-top: 30px;
-      padding: 15px 30px;
-      font-size: 1.2em;
+    #spinButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
       background-color: #00ffcc;
       color: #000;
       border: none;
       border-radius: 10px;
       cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
-
-    #spin-btn:hover {
-      background-color: #00ddaa;
-    }
-
-    #arrow {
-      width: 0;
-      height: 0;
-      border-left: 20px solid transparent;
-      border-right: 20px solid transparent;
-      border-bottom: 30px solid red;
-      position: absolute;
-      top: -30px;
-      left: 50%;
-      transform: translateX(-50%);
+      font-weight: bold;
     }
 
     #result {
       margin-top: 20px;
-      font-size: 1.5em;
-      color: gold;
+      font-size: 24px;
+      color: #00ffcc;
     }
   </style>
 </head>
 <body>
-
-  <h1>Spin to Choose a Car</h1>
-
-  <div id="arrow"></div>
-  <div id="wheel"></div>
-  <button id="spin-btn">🎰 Spin</button>
+  <h1>Wheel Spin - Choose a Car</h1>
+  <canvas id="wheelCanvas" width="500" height="500"></canvas>
+  <button id="spinButton">SPIN</button>
   <div id="result"></div>
 
   <script>
     const cars = [
-      "Ferrari 488 GT3",
-      "Porsche 911 RSR",
-      "BMW M4 GT4",
-      "Mazda MX-5 Cup",
-      "Mercedes-AMG GT3",
-      "Lamborghini Huracán ST",
-      "Audi R8 LMS",
-      "Caterham 620R"
+      "Dallara F309", "Stock Car 2021", "Mini Cooper", "Brabham BT46B", "Puma GTB", 
+      "Formula Vee", "MCR Sports 2000", "Formula Classic G1", "Caterham Academy", "Super V8"
     ];
 
-    const wheel = document.getElementById("wheel");
-    const result = document.getElementById("result");
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const spinButton = document.getElementById('spinButton');
+    const resultDiv = document.getElementById('result');
 
-    const segmentAngle = 360 / cars.length;
-
-    cars.forEach((car, i) => {
-      const seg = document.createElement("div");
-      seg.className = "segment";
-      seg.style.transform = `rotate(${i * segmentAngle}deg) skewY(${90 - segmentAngle}deg)`;
-      seg.style.backgroundColor = i % 2 === 0 ? "#333" : "#444";
-      seg.innerText = car;
-      wheel.appendChild(seg);
-    });
-
+    const radius = canvas.width / 2;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const sliceAngle = (2 * Math.PI) / cars.length;
+    let rotation = 0;
     let spinning = false;
 
-    document.getElementById("spin-btn").addEventListener("click", () => {
+    function drawWheel() {
+      for (let i = 0; i < cars.length; i++) {
+        const angle = i * sliceAngle + rotation;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
+        ctx.fillStyle = i % 2 === 0 ? '#00ffcc' : '#007777';
+        ctx.fill();
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(angle + sliceAngle / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = '#000';
+        ctx.font = "16px Orbitron";
+        ctx.fillText(cars[i], radius - 10, 5);
+        ctx.restore();
+      }
+    }
+
+    function spinWheel() {
       if (spinning) return;
       spinning = true;
+      resultDiv.textContent = '';
+      let spinTime = 0;
+      let spinDuration = Math.random() * 2000 + 3000;
+      const startRotation = rotation;
+      const finalRotation = startRotation + (Math.random() * 10 + 10) * Math.PI;
 
-      const spinDegrees = 360 * 5 + Math.floor(Math.random() * 360);
-      wheel.style.transition = "transform 4s ease-out";
-      wheel.style.transform = `rotate(${spinDegrees}deg)`;
+      function animateSpin(timestamp) {
+        if (spinTime === 0) spinTime = timestamp;
+        const progress = timestamp - spinTime;
 
-      setTimeout(() => {
-        const finalDeg = spinDegrees % 360;
-        const selectedIndex = Math.floor((360 - finalDeg) / segmentAngle) % cars.length;
-        result.innerText = `Selected: ${cars[selectedIndex]}`;
-        spinning = false;
-      }, 4000);
-    });
+        if (progress < spinDuration) {
+          rotation = startRotation + easeOutCubic(progress / spinDuration) * (finalRotation - startRotation);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawWheel();
+          requestAnimationFrame(animateSpin);
+        } else {
+          spinning = false;
+          rotation = finalRotation % (2 * Math.PI);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawWheel();
+          const selectedIndex = Math.floor((cars.length - (rotation / sliceAngle)) % cars.length);
+          resultDiv.textContent = `You got: ${cars[selectedIndex]}`;
+        }
+      }
+
+      requestAnimationFrame(animateSpin);
+    }
+
+    function easeOutCubic(t) {
+      return (--t) * t * t + 1;
+    }
+
+    drawWheel();
+    spinButton.addEventListener('click', spinWheel);
   </script>
 </body>
 </html>
