@@ -1,41 +1,15 @@
 [
   {
-    "Position": "5",
-    "Name": "Chris Rees",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:39.838",
-    "Sector1": "0:33.455",
-    "Sector2": "0:32.341",
-    "Sector3": "0:34.042",
-    "Gap": "+0.000",
-    "Car": "Ligier JS P320",
-    "Date": "25-07-27 17:31",
-    "Flags": "W|+|A|T"
-  },
-  {
-    "Position": "6",
-    "Name": "Neil Bywater",
-    "SteamID": "76561198118274739",
-    "LapTime": "1:40.299",
-    "Sector1": "0:33.666",
-    "Sector2": "0:32.314",
-    "Sector3": "0:34.319",
-    "Gap": "+0.461",
-    "Car": "Ligier JS P320",
-    "Date": "25-07-05 19:34",
-    "Flags": "W|+|A|T|C"
-  },
-  {
-    "Position": "9",
+    "Position": "1",
     "Name": "Ieuan Rees",
     "SteamID": "76561198207011993",
-    "LapTime": "1:41.203",
-    "Sector1": "0:33.603",
-    "Sector2": "0:33.136",
-    "Sector3": "0:34.464",
-    "Gap": "+1.365",
-    "Car": "Ligier JS P320",
-    "Date": "25-07-16 17:07",
-    "Flags": "W|+|A|T|C"
+    "LapTime": "1:16.727",
+    "Sector1": "0:20.302",
+    "Sector2": "0:31.717",
+    "Sector3": "0:24.708",
+    "Gap": "+0.000",
+    "Car": "McLaren Cosworth MP4/1C",
+    "Date": "25-08-02 10:33",
+    "Flags": "W|+|C"
   }
 ]
