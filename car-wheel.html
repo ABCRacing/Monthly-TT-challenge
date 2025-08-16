@@ -1,3 +1,141 @@
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Wheel Spin - Choose a Car</title>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #0f0f0f;
+      font-family: 'Orbitron', sans-serif;
+      color: #f0f0f0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    h1 {
+      color: #00ffcc;
+      margin-bottom: 20px;
+    }
+
+    #wheelCanvas {
+      border: 10px solid #fff;
+      border-radius: 50%;
+      background-color: #111;
+      box-shadow: 0 0 20px #00ffcc;
+    }
+
+    #spinButton {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 18px;
+      background-color: #00ffcc;
+      color: #000;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    #result {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #00ffcc;
+    }
+  </style>
+</head>
+<body>
+  <h1>Wheel Spin - Choose a Car</h1>
+  <canvas id="wheelCanvas" width="500" height="500"></canvas>
+  <button id="spinButton">SPIN</button>
+  <div id="result"></div>
+
+  <script>
+    const cars = [
+      "Dallara F309", "Stock Car 2021", "Mini Cooper", "Brabham BT46B", "Puma GTB", 
+      "Formula Vee", "MCR Sports 2000", "Formula Classic G1", "Caterham Academy", "Super V8"
+    ];
+
+    const canvas = document.getElementById('wheelCanvas');
+    const ctx = canvas.getContext('2d');
+    const spinButton = document.getElementById('spinButton');
+    const resultDiv = document.getElementById('result');
+
+    const radius = canvas.width / 2;
+    const centerX = canvas.width / 2;
+    const centerY = canvas.height / 2;
+    const sliceAngle = (2 * Math.PI) / cars.length;
+    let rotation = 0;
+    let spinning = false;
+
+    function drawWheel() {
+      for (let i = 0; i < cars.length; i++) {
+        const angle = i * sliceAngle + rotation;
+        ctx.beginPath();
+        ctx.moveTo(centerX, centerY);
+        ctx.arc(centerX, centerY, radius, angle, angle + sliceAngle);
+        ctx.fillStyle = i % 2 === 0 ? '#00ffcc' : '#007777';
+        ctx.fill();
+        ctx.save();
+        ctx.translate(centerX, centerY);
+        ctx.rotate(angle + sliceAngle / 2);
+        ctx.textAlign = "right";
+        ctx.fillStyle = '#000';
+        ctx.font = "16px Orbitron";
+        ctx.fillText(cars[i], radius - 10, 5);
+        ctx.restore();
+      }
+    }
+
+    function spinWheel() {
+      if (spinning) return;
+      spinning = true;
+      resultDiv.textContent = '';
+      let spinTime = 0;
+      let spinDuration = Math.random() * 2000 + 3000;
+      const startRotation = rotation;
+      const finalRotation = startRotation + (Math.random() * 10 + 10) * Math.PI;
+
+      function animateSpin(timestamp) {
+        if (spinTime === 0) spinTime = timestamp;
+        const progress = timestamp - spinTime;
+
+        if (progress < spinDuration) {
+          rotation = startRotation + easeOutCubic(progress / spinDuration) * (finalRotation - startRotation);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawWheel();
+          requestAnimationFrame(animateSpin);
+        } else {
+          spinning = false;
+          rotation = finalRotation % (2 * Math.PI);
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawWheel();
+          const selectedIndex = Math.floor((cars.length - (rotation / sliceAngle)) % cars.length);
+          resultDiv.textContent = `You got: ${cars[selectedIndex]}`;
+        }
+      }
+
+      requestAnimationFrame(animateSpin);
+    }
+
+    function easeOutCubic(t) {
+      return (--t) * t * t + 1;
+    }
+
+    drawWheel();
+    spinButton.addEventListener('click', spinWheel);
+  </script>
+</body>
+</html>
+=======
+>>>>>>> c87566f
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -134,3 +272,7 @@
   </script>
 </body>
 </html>
+<<<<<<< HEAD
+=======
+>>>>>>> fcd5b3d (Updated leaderboard with latest data)
+>>>>>>> c87566f
