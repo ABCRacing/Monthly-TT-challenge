@@ -1,8 +1,8 @@
 {
-  "month": "AUGUST",
+  "month": "SEPTEMBER",
   "year": "2025",
-  "track": "OULTON PARK",
-  "variant": "CLASSIC",
-  "car": "FORMULA RETRO GEN 3",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/F-Retro%20Gen3/Oulton%20Park%20Classic.json"
+  "track": "Buenos Aires",
+  "variant": "No 9",
+  "car": "MITSUBISHI LANCER CUP",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Lancer%20Cup/Buenos%20Aires%20Circuito%20No.9.json"
 }
