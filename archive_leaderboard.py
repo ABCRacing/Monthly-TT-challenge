@@ -66,7 +66,32 @@ with output_path.open("w", encoding="utf-8") as f:
 
 print(f"\n✅ Archived results saved to: {output_path}")
 
+# === 5) Update index.json ===
+index_path = archive_dir / "index.json"
+
+# Load existing index if available
+if index_path.exists():
+    with index_path.open("r", encoding="utf-8") as f:
+        try:
+            index_list = json.load(f)
+        except json.JSONDecodeError:
+            print("⚠️ Warning: index.json was corrupt. Rebuilding from scratch.")
+            index_list = []
+else:
+    index_list = []
+
+# Remove duplicate if it exists already, then insert at top
+index_list = [entry for entry in index_list if entry != output_filename]
+index_list.insert(0, output_filename)
+
+# Save updated index.json
+with index_path.open("w", encoding="utf-8") as f:
+    json.dump(index_list, f, indent=2)
+
+print(f"✅ Updated archive index: {index_path}")
+
 # Save last output path for batch file to read
 last_output_path = Path("last_output.txt")
 with last_output_path.open("w", encoding="utf-8") as f:
     f.write(str(output_path))
+
