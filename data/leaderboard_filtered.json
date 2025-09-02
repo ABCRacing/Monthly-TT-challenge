@@ -1,41 +1,10 @@
-[
-  {
-    "Position": "1",
-    "Name": "Neil Bywater",
-    "SteamID": "76561198118274739",
-    "LapTime": "1:14.242",
-    "Sector1": "0:19.824",
-    "Sector2": "0:31.198",
-    "Sector3": "0:23.220",
-    "Gap": "+0.000",
-    "Car": "Formula Retro Gen3 Turbo",
-    "Date": "25-08-31 18:23",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "2",
-    "Name": "Chris Rees",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:14.580",
-    "Sector1": "0:20.080",
-    "Sector2": "0:30.564",
-    "Sector3": "0:23.936",
-    "Gap": "+0.338",
-    "Car": "Formula Retro Gen3 Turbo",
-    "Date": "25-08-16 21:32",
-    "Flags": "W|+"
-  },
-  {
-    "Position": "3",
-    "Name": "Ieuan Rees",
-    "SteamID": "76561198207011993",
-    "LapTime": "1:15.002",
-    "Sector1": "0:20.284",
-    "Sector2": "0:30.515",
-    "Sector3": "0:24.203",
-    "Gap": "+0.760",
-    "Car": "Formula Retro Gen3 Turbo",
-    "Date": "25-09-01 14:23",
-    "Flags": "W|+|C"
-  }
+[ {
+      "position": 1,
+      "name": "  ",
+      "laptime": " ",
+      "sector1": " ",
+      "sector2": " ",
+      "sector3": " ",
+      "timestamp": " "
+    }
 ]
