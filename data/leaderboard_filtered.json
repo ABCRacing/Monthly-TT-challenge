@@ -3,13 +3,13 @@
     "Position": "2",
     "Name": "Ieuan Rees",
     "SteamID": "76561198207011993",
-    "LapTime": "1:29.260",
-    "Sector1": "0:18.560",
-    "Sector2": "0:41.864",
-    "Sector3": "0:28.836",
+    "LapTime": "1:28.720",
+    "Sector1": "0:18.599",
+    "Sector2": "0:41.600",
+    "Sector3": "0:28.521",
     "Gap": "+0.000",
     "Car": "Mitsubishi Lancer RS",
-    "Date": "25-09-02 21:07",
+    "Date": "25-09-03 09:15",
     "Flags": "W|+|A|T|C"
   },
   {
@@ -20,7 +20,7 @@
     "Sector1": "0:19.200",
     "Sector2": "0:43.461",
     "Sector3": "0:29.639",
-    "Gap": "+3.040",
+    "Gap": "+3.580",
     "Car": "Mitsubishi Lancer RS",
     "Date": "25-09-02 19:39",
     "Flags": "W|-|A|T"
