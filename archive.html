@@ -95,6 +95,7 @@
       font-weight: 700;
       font-family: 'Orbitron', monospace;
     }
+    #error-message { color: #ff8080; text-align:center; margin: 8px 0; }
   </style>
 </head>
 
@@ -109,6 +110,7 @@
     <button onclick="loadArchive()">Load Archive</button>
     <br />
     <a class="home-button" href="index.html">🏠 Home</a>
+    <div id="error-message"></div>
   </div>
 
   <main>
@@ -131,17 +133,19 @@
   </main>
 
   <script>
-    const MONTH_ORDER = [
-      "January","February","March","April","May","June",
-      "July","August","September","October","November","December"
-    ];
+    // month ordering
+    const MONTH_ORDER = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+    function capitalize(s){
+      if(!s) return s;
+      return s[0].toUpperCase() + s.slice(1).toLowerCase();
+    }
 
     function parseLapTime(lapTime) {
       if (!lapTime) return Infinity;
-      const parts = lapTime.split(':');
-      return parts.length === 2
-        ? parseFloat(parts[0]) * 60 + parseFloat(parts[1])
-        : parseFloat(lapTime);
+      const parts = String(lapTime).split(':');
+      if (parts.length === 2) return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
+      return parseFloat(lapTime);
     }
 
     function formatLapTime(seconds) {
@@ -154,24 +158,58 @@
       return seconds.toFixed(3);
     }
 
+    // Robust index.json loader and dropdown population
     async function loadIndex() {
+      const errEl = document.getElementById('error-message');
       try {
-        const res = await fetch('data/archive/index.json');
-        if (!res.ok) throw new Error('Failed to load index.json');
-        const files = await res.json();
+        // no-cache to make sure you're seeing latest index
+        const res = await fetch('data/archive/index.json', { cache: 'no-store' });
+        if (!res.ok) throw new Error(`index.json fetch failed (${res.status})`);
+        const raw = await res.json();
+        console.log('index.json content:', raw);
 
-        const entries = files.map(file => {
-          const match = file.match(/^([A-Z]+)(\d{4})_RESULTS\.json$/);
-          if (!match) return null;
-          const month = match[1];
-          const year = match[2];
-          return { file, month, year: parseInt(year) };
+        // Normalize into an array of filename strings
+        let files = [];
+        if (Array.isArray(raw)) {
+          files = raw.slice();
+        } else if (typeof raw === 'object' && raw !== null) {
+          // if it's an object attempt to find a files array or values
+          if (Array.isArray(raw.files)) files = raw.files.slice();
+          else {
+            // flatten object values and pull strings
+            files = Object.values(raw).flat().filter(Boolean);
+          }
+        }
+
+        // map to just the filename (strip paths)
+        files = files.map(f => {
+          if (typeof f !== 'string') return null;
+          const parts = f.split('/');
+          return parts[parts.length - 1].trim();
         }).filter(Boolean);
 
+        // parse filenames like "MAY2025_RESULTS.json" (case-insensitive)
+        const entries = files.map(fn => {
+          const m = fn.match(/([A-Za-z]+)(\d{4})_RESULTS\.json$/i);
+          if (!m) return null;
+          const month = capitalize(m[1]);
+          const year = parseInt(m[2], 10);
+          return { file: fn, month, year };
+        }).filter(Boolean);
+
+        if (entries.length === 0) {
+          errEl.textContent = "No valid archive files found in data/archive/index.json.";
+          console.warn('No parseable entries from index.json:', files);
+          return;
+        }
+
+        // build year list (unique, newest first)
         const years = [...new Set(entries.map(e => e.year))].sort((a,b) => b - a);
 
         const yearSelect = document.getElementById('yearSelect');
         const monthSelect = document.getElementById('monthSelect');
+        yearSelect.innerHTML = '';
+        monthSelect.innerHTML = '';
 
         years.forEach(y => {
           const opt = document.createElement('option');
@@ -180,13 +218,15 @@
           yearSelect.appendChild(opt);
         });
 
-        yearSelect.addEventListener('change', () => {
-          populateMonths(entries, parseInt(yearSelect.value));
-        });
+        // when the year changes we populate months for that year
+        yearSelect.addEventListener('change', () => populateMonths(entries, parseInt(yearSelect.value, 10)));
 
+        // populate months for the newest year by default
         populateMonths(entries, years[0]);
+        errEl.textContent = ''; // clear any previous error
       } catch (err) {
         console.error('Error loading index.json:', err);
+        document.getElementById('error-message').textContent = 'Could not load data/archive/index.json — check the file and JSON format.';
       }
     }
 
@@ -194,77 +234,107 @@
       const monthSelect = document.getElementById('monthSelect');
       monthSelect.innerHTML = '';
 
-      const monthsForYear = entries
+      // get months available for year; dedupe and sort by MONTH_ORDER
+      const monthsSet = entries
         .filter(e => e.year === year)
-        .map(e => e.month)
-        .sort((a, b) => MONTH_ORDER.indexOf(capitalize(a)) - MONTH_ORDER.indexOf(capitalize(b)));
+        .map(e => e.month);
 
-      monthsForYear.forEach(m => {
+      const uniqueMonths = [...new Set(monthsSet)].sort((a,b) => {
+        return MONTH_ORDER.indexOf(capitalize(a)) - MONTH_ORDER.indexOf(capitalize(b));
+      });
+
+      // Fill select in calendar order (Jan -> Dec)
+      uniqueMonths.forEach(m => {
         const opt = document.createElement('option');
-        opt.value = capitalize(m);
-        opt.textContent = capitalize(m);
+        opt.value = m;
+        opt.textContent = m;
         monthSelect.appendChild(opt);
       });
+
+      // Select latest available month by default (the last item because sorted Jan->Dec)
+      if (uniqueMonths.length) {
+        monthSelect.selectedIndex = uniqueMonths.length - 1;
+      }
     }
 
-    function capitalize(s) {
-      return s.charAt(0) + s.slice(1).toLowerCase();
-    }
-
-    function loadArchive() {
+    // load the chosen archive file and display it
+    async function loadArchive() {
       const year = document.getElementById('yearSelect').value;
-      const month = document.getElementById('monthSelect').value.toUpperCase();
-      const filePath = `data/archive/${month}${year}_RESULTS.json`;
+      const month = document.getElementById('monthSelect').value;
+      if (!year || !month) {
+        document.getElementById('error-message').textContent = 'Please select year and month.';
+        return;
+      }
+      document.getElementById('error-message').textContent = '';
 
-      fetch(filePath)
-        .then(response => {
-          if (!response.ok) throw new Error('Network response was not ok');
-          return response.json();
-        })
-        .then(data => {
-          const tbody = document.querySelector("#leaderboard tbody");
-          tbody.innerHTML = "";
+      // fetch index.json again to find the exact filename (safer than constructing name)
+      try {
+        const res = await fetch('data/archive/index.json', { cache: 'no-store' });
+        const raw = await res.json();
+        let files = Array.isArray(raw) ? raw.slice() : (Array.isArray(raw.files) ? raw.files.slice() : Object.values(raw).flat());
+        files = files.map(f => (typeof f === 'string' ? f.split('/').pop().trim() : null)).filter(Boolean);
 
-          document.getElementById('event-header').textContent =
-            `${data.track} – ${data.variant} – ${data.car}`;
-
-          const sortedResults = data.results.slice().sort((a, b) =>
-            parseLapTime(a.laptime) - parseLapTime(b.laptime)
-          );
-
-          const fastestTime = parseLapTime(sortedResults[0]?.laptime);
-          const fastestSector1 = Math.min(...sortedResults.map(r => parseLapTime(r.sector1)));
-          const fastestSector2 = Math.min(...sortedResults.map(r => parseLapTime(r.sector2)));
-          const fastestSector3 = Math.min(...sortedResults.map(r => parseLapTime(r.sector3)));
-
-          sortedResults.forEach((entry, index) => {
-            const row = document.createElement("tr");
-            if (index === 0) row.classList.add("gold");
-            else if (index === 1) row.classList.add("silver");
-            else if (index === 2) row.classList.add("bronze");
-
-            const lapSeconds = parseLapTime(entry.laptime);
-            const gapSeconds = lapSeconds - fastestTime;
-
-            row.innerHTML = `
-              <td>${index + 1}</td>
-              <td>${entry.name}</td>
-              <td>${entry.laptime}</td>
-              <td class="${parseLapTime(entry.sector1) === fastestSector1 ? 'fastest' : ''}">${entry.sector1}</td>
-              <td class="${parseLapTime(entry.sector2) === fastestSector2 ? 'fastest' : ''}">${entry.sector2}</td>
-              <td class="${parseLapTime(entry.sector3) === fastestSector3 ? 'fastest' : ''}">${entry.sector3}</td>
-              <td>${gapSeconds === 0 ? '-' : '+' + formatLapTime(gapSeconds)}</td>
-            `;
-            tbody.appendChild(row);
-          });
-        })
-        .catch(error => {
-          console.error("Error loading archive:", error);
-          document.querySelector("#leaderboard tbody").innerHTML =
-            `<tr><td colspan="7">Error loading results</td></tr>`;
+        // find the entry matching month/year (case-insensitive)
+        const match = files.find(fn => {
+          const m = fn.match(/([A-Za-z]+)(\d{4})_RESULTS\.json$/i);
+          if (!m) return false;
+          return m[1].toLowerCase() === month.toLowerCase() && m[2] === String(year);
         });
+
+        if (!match) {
+          document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Archive file not listed in index.json</td></tr>`;
+          return;
+        }
+
+        const filePath = `data/archive/${match}`;
+        const r = await fetch(filePath, { cache: 'no-store' });
+        if (!r.ok) throw new Error(`Failed to fetch ${filePath} (${r.status})`);
+        const data = await r.json();
+
+        // populate table
+        const tbody = document.querySelector("#leaderboard tbody");
+        tbody.innerHTML = '';
+
+        document.getElementById('event-header').textContent = `${data.track} – ${data.variant || ''} – ${data.car}`;
+
+        const sortedResults = (data.results || []).slice().sort((a,b) => parseLapTime(a.laptime) - parseLapTime(b.laptime));
+        if (sortedResults.length === 0) {
+          tbody.innerHTML = `<tr><td colspan="7">No results in this archive file.</td></tr>`;
+          return;
+        }
+
+        const fastestTime = parseLapTime(sortedResults[0].laptime);
+        const fastestSector1 = Math.min(...sortedResults.map(r => parseLapTime(r.sector1)));
+        const fastestSector2 = Math.min(...sortedResults.map(r => parseLapTime(r.sector2)));
+        const fastestSector3 = Math.min(...sortedResults.map(r => parseLapTime(r.sector3)));
+
+        sortedResults.forEach((entry, index) => {
+          const row = document.createElement('tr');
+          if (index === 0) row.classList.add('gold');
+          else if (index === 1) row.classList.add('silver');
+          else if (index === 2) row.classList.add('bronze');
+
+          const lapSeconds = parseLapTime(entry.laptime);
+          const gapSeconds = lapSeconds - fastestTime;
+          row.innerHTML = `
+            <td>${index + 1}</td>
+            <td>${entry.name}</td>
+            <td>${entry.laptime}</td>
+            <td class="${parseLapTime(entry.sector1) === fastestSector1 ? 'fastest' : ''}">${entry.sector1}</td>
+            <td class="${parseLapTime(entry.sector2) === fastestSector2 ? 'fastest' : ''}">${entry.sector2}</td>
+            <td class="${parseLapTime(entry.sector3) === fastestSector3 ? 'fastest' : ''}">${entry.sector3}</td>
+            <td>${gapSeconds === 0 ? '-' : '+' + formatLapTime(gapSeconds)}</td>
+          `;
+          tbody.appendChild(row);
+        });
+
+      } catch (err) {
+        console.error('Error loading archive:', err);
+        document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Error loading results</td></tr>`;
+      }
     }
 
+    // start
     loadIndex();
   </script>
 </body>
