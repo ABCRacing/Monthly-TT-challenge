@@ -1,8 +1,8 @@
 {
-  "month": "SEPTEMBER",
+  "month": "October",
   "year": "2025",
-  "track": "Buenos Aires",
-  "variant": "No 9",
-  "car": "MITSUBISHI LANCER CUP",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Lancer%20Cup/Buenos%20Aires%20Circuito%20No.9.json"
+  "track": "Campo Grande",
+  "variant": "",
+  "car": "Super V8",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Super%20V8/Campo%20Grande.json"
 }
