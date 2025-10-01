@@ -1,29 +1,29 @@
 [
   {
     "Position": "1",
+    "Name": "Ieuan Rees",
+    "SteamID": "76561198207011993",
+    "LapTime": "1:27.334",
+    "Sector1": "18.293",
+    "Sector2": "40.790",
+    "Sector3": "28.251",
+    "Gap": "+0.000",
+    "Car": "Mitsubishi Lancer RS",
+    "Date": "25-09-30 20:06",
+    "Flags": "W|+|A|T|C"
+  },
+  {
+    "Position": "2",
     "Name": "Chris Rees",
     "SteamID": "76561197971749679",
     "LapTime": "1:27.701",
     "Sector1": "18.488",
     "Sector2": "40.931",
     "Sector3": "28.282",
-    "Gap": "+0.000",
+    "Gap": "+0.367",
     "Car": "Mitsubishi Lancer RS",
     "Date": "25-09-14 17:34",
     "Flags": "W|+|A|T"
-  },
-  {
-    "Position": "2",
-    "Name": "Ieuan Rees",
-    "SteamID": "76561198207011993",
-    "LapTime": "1:27.732",
-    "Sector1": "18.453",
-    "Sector2": "40.939",
-    "Sector3": "28.340",
-    "Gap": "+0.031",
-    "Car": "Mitsubishi Lancer RS",
-    "Date": "25-09-16 20:16",
-    "Flags": "W|+|A|T|C"
   },
   {
     "Position": "3",
@@ -33,7 +33,7 @@
     "Sector1": "18.429",
     "Sector2": "41.030",
     "Sector3": "28.384",
-    "Gap": "+0.142",
+    "Gap": "+0.509",
     "Car": "Mitsubishi Lancer RS",
     "Date": "25-09-05 19:06",
     "Flags": "W|+|A|T|C"
