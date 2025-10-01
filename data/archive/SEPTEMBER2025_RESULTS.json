@@ -6,22 +6,31 @@
   "year": 2025,
   "results": [
     {
-      "position": 2,
+      "position": 1,
       "name": "Ieuan Rees",
-      "laptime": "1:29.260",
-      "sector1": "0:18.560",
-      "sector2": "0:41.864",
-      "sector3": "0:28.836",
-      "timestamp": "25-09-02 21:07"
+      "laptime": "1:27.334",
+      "sector1": "18.293",
+      "sector2": "40.790",
+      "sector3": "28.251",
+      "timestamp": "25-09-30 20:06"
     },
     {
-      "position": 4,
+      "position": 2,
       "name": "Chris Rees",
-      "laptime": "1:32.300",
-      "sector1": "0:19.200",
-      "sector2": "0:43.461",
-      "sector3": "0:29.639",
-      "timestamp": "25-09-02 19:39"
+      "laptime": "1:27.701",
+      "sector1": "18.488",
+      "sector2": "40.931",
+      "sector3": "28.282",
+      "timestamp": "25-09-14 17:34"
+    },
+    {
+      "position": 3,
+      "name": "Neil Bywater",
+      "laptime": "1:27.843",
+      "sector1": "18.429",
+      "sector2": "41.030",
+      "sector3": "28.384",
+      "timestamp": "25-09-05 19:06"
     }
   ]
 }
