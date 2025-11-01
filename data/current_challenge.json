@@ -1,8 +1,8 @@
 {
-  "month": "October",
+  "month": "November",
   "year": "2025",
-  "track": "Campo Grande",
-  "variant": "",
-  "car": "Super V8",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Super%20V8/Campo%20Grande.json"
+  "track": "Montreal",
+  "variant": "1988",
+  "car": "F-Classic Gen4",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/F-Classic%20Gen4/Montreal%20Historic%201988.json"
 }
