@@ -1,41 +1,28 @@
 [
   {
     "Position": "3",
-    "Name": "Chris Rees",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:16.960",
-    "Sector1": "22.456",
-    "Sector2": "26.225",
-    "Sector3": "28.279",
-    "Gap": "+0.675",
-    "Car": "Formula Classic Gen4 Model2",
-    "Date": "25-11-23 21:15",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "7",
-    "Name": "Neil Bywater",
-    "SteamID": "76561198118274739",
-    "LapTime": "1:17.259",
-    "Sector1": "23.002",
-    "Sector2": "26.137",
-    "Sector3": "28.120",
-    "Gap": "+0.974",
-    "Car": "Formula Classic Gen4 Model2",
-    "Date": "25-11-02 13:38",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "11",
     "Name": "Ieuan Rees",
     "SteamID": "76561198207011993",
-    "LapTime": "1:17.898",
-    "Sector1": "22.861",
-    "Sector2": "26.458",
-    "Sector3": "28.579",
-    "Gap": "+1.613",
-    "Car": "Formula Classic Gen4 Model2",
-    "Date": "25-11-24 18:54",
+    "LapTime": "1:44.600",
+    "Sector1": "40.064",
+    "Sector2": "31.215",
+    "Sector3": "33.321",
+    "Gap": "+0.399",
+    "Car": "Copa Montana",
+    "Date": "25-12-29 16:03",
     "Flags": "W|+|C"
+  },
+  {
+    "Position": "6",
+    "Name": "Chris Rees",
+    "SteamID": "76561197971749679",
+    "LapTime": "1:54.316",
+    "Sector1": "44.604",
+    "Sector2": "33.099",
+    "Sector3": "36.613",
+    "Gap": "+10.115",
+    "Car": "Copa Montana",
+    "Date": "25-12-10 09:39",
+    "Flags": "P|+|G|C"
   }
 ]
