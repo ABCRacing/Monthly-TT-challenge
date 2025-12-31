@@ -1,8 +1,8 @@
 {
-  "month": "November",
+  "month": "Dec",
   "year": "2025",
-  "track": "Montreal",
-  "variant": "1988",
-  "car": "F-Classic Gen4",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/F-Classic%20Gen4/Montreal%20Historic%201988.json"
+  "track": "Cascais",
+  "variant": "Alternate",
+  "car": "Copa Montana",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Copa%20Montana/Cascais%20Alternate.json"
 }
