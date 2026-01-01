@@ -13,16 +13,16 @@
     "Flags": "W|+|C"
   },
   {
-    "Position": "6",
+    "Position": "5",
     "Name": "Chris Rees",
     "SteamID": "76561197971749679",
-    "LapTime": "1:54.316",
-    "Sector1": "44.604",
-    "Sector2": "33.099",
-    "Sector3": "36.613",
-    "Gap": "+10.115",
+    "LapTime": "1:48.244",
+    "Sector1": "42.667",
+    "Sector2": "31.679",
+    "Sector3": "33.898",
+    "Gap": "+4.043",
     "Car": "Copa Montana",
-    "Date": "25-12-10 09:39",
+    "Date": "25-12-31 23:18",
     "Flags": "P|+|G|C"
   }
 ]
