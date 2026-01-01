@@ -1,8 +1,8 @@
 {
-  "month": "Dec",
-  "year": "2025",
-  "track": "Cascais",
-  "variant": "Alternate",
-  "car": "Copa Montana",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Copa%20Montana/Cascais%20Alternate.json"
+  "month": "Jan",
+  "year": "2026",
+  "track": "Velo Citta",
+  "variant": "Track Day",
+  "car": "P3",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/P3/Velo%20Citt%C3%A0%20Track%20Day.json"
 }
