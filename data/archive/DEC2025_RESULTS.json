@@ -1,0 +1,27 @@
+{
+  "track": "Cascais",
+  "variant": "Alternate",
+  "car": "Copa Montana",
+  "month": "Dec",
+  "year": 2025,
+  "results": [
+    {
+      "position": 3,
+      "name": "Ieuan Rees",
+      "laptime": "1:44.600",
+      "sector1": "40.064",
+      "sector2": "31.215",
+      "sector3": "33.321",
+      "timestamp": "25-12-29 16:03"
+    },
+    {
+      "position": 5,
+      "name": "Chris Rees",
+      "laptime": "1:48.244",
+      "sector1": "42.667",
+      "sector2": "31.679",
+      "sector3": "33.898",
+      "timestamp": "25-12-31 23:18"
+    }
+  ]
+}
