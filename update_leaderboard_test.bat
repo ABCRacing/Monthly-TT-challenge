@@ -10,22 +10,24 @@ echo [1/3] Running Sanity Check...
 call sanity.bat
 
 if errorlevel 1 (
-    :: --- STROBE EFFECT ---
-    :: This flips the background Red/Black 4 times instantly
-    color 4F & color 0F & color 4F & color 0F & color 4F & color 0F & color 4F & color 0F
+    :: --- SUB-SECOND FLASH LOOP ---
+    :: Toggles background color with a 200ms delay
+    for /L %%i in (1,1,10) do (
+        color 4F
+        ping -n 1 -w 200 127.0.0.1 >nul
+        color 0F
+        ping -n 1 -w 200 127.0.0.1 >nul
+    )
 
     echo.
-    :: --- SOLID RED HEADER ---
-    color 4F
-    echo *******************************************************
-    echo * 🛑 ERROR: SANITY CHECK FAILED                      *
-    echo *******************************************************
     color 0C
+    echo =======================================================
+    echo   🛑 ERROR: SANITY CHECK FAILED
+    echo =======================================================
     echo.
-    echo  The script has been halted to protect your data.
-    echo  Please review the Git messages above and re-run.
+    echo  The script has stopped because Git is not clean.
+    echo  Review the messages above, then run this script again.
     echo.
-    echo *******************************************************
     pause
     color 0F
     exit /b 1
