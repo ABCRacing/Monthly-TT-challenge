@@ -1,48 +1,52 @@
 @echo off
-setlocal
 title Updating AMS2 Leaderboard
 
-:: 1. Navigate to the project folder FIRST so sanity.bat looks at the right repo
+:: ========================================================
+:: STEP 0: Go to the correct folder
+:: ========================================================
 cd /d "F:\Documents\python"
 
-:: 2. Run the sanity check
-echo === Running Git Sanity Check ===
+:: ========================================================
+:: STEP 1: Run Sanity Check FIRST
+:: ========================================================
+echo [1/3] Calling Sanity Check...
 call sanity.bat
 
-:: 3. Check if sanity.bat found issues
-:: If it returned 1 (it fixed something or found an error), stop here.
-if %errorlevel% neq 0 (
+:: CHECK: Did sanity.bat fail or fix something?
+:: "if errorlevel 1" means "if the error code is 1 OR HIGHER"
+if errorlevel 1 (
+    color 0C
     echo.
-    echo ⚠️ Sanity check required attention.
-    echo Please review the output above and re-run this script.
+    echo 🛑 STOPPING SCRIPT.
+    echo ⚠️ Sanity check found issues or made a "WIP" commit.
+    echo ⚠️ Review the output above, then run this script again.
+    echo.
     pause
-    exit /b 1
+    exit /b
 )
 
-:: 4. If we are here, Git is clean. Run the Scraper.
+:: ========================================================
+:: STEP 2: Run Python Script (Only runs if Step 1 was clean)
+:: ========================================================
 echo.
-echo 🚀 Sanity Passed. Running Python script...
+echo [2/3] Sanity Passed. Running Python scraper...
 python scrape_tt.py
 
 if errorlevel 1 (
-    echo ❌ Python script failed. Aborting.
+    echo ❌ Python script failed.
     pause
-    exit /b 1
+    exit /b
 )
 
-:: 5. Git Operations for the NEW data
+:: ========================================================
+:: STEP 3: Push New Data
+:: ========================================================
 echo.
-echo Staging changes...
+echo [3/3] Python success. Pushing results to GitHub...
 git add .
-
-echo Committing changes...
 git commit -m "Updated leaderboard with latest data"
-
-echo Pulling latest changes from GitHub...
 git pull --rebase
-
-echo Pushing to GitHub...
 git push
 
-echo ✅ All Done!
+echo ✅ SUCCESS: Leaderboard updated.
 pause
