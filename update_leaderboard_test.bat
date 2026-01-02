@@ -10,21 +10,22 @@ echo [1/3] Running Sanity Check...
 call sanity.bat
 
 if errorlevel 1 (
-    :: --- ATTENTION STROBE ---
-    :: Rapidly swaps colors to grab your eye
-    color 4F & color 0F & color 4F & color 0F & color 4F & color 0F
-    
-    :: --- HIGH CONTRAST ERROR MESSAGE ---
+    :: --- STROBE EFFECT ---
+    :: This flips the background Red/Black 4 times instantly
+    color 4F & color 0F & color 4F & color 0F & color 4F & color 0F & color 4F & color 0F
+
+    echo.
+    :: --- SOLID RED HEADER ---
     color 4F
-    echo =======================================================
-    echo   🛑 ATTENTION: SANITY CHECK FOUND ISSUES
-    echo =======================================================
+    echo *******************************************************
+    echo * 🛑 ERROR: SANITY CHECK FAILED                      *
+    echo *******************************************************
     color 0C
     echo.
-    echo  The script has stopped because Git is not in a safe state.
-    echo  Please scroll up to see the specific Git error.
+    echo  The script has been halted to protect your data.
+    echo  Please review the Git messages above and re-run.
     echo.
-    echo =======================================================
+    echo *******************************************************
     pause
     color 0F
     exit /b 1
