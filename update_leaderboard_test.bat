@@ -10,16 +10,18 @@ echo [1/3] Running Sanity Check...
 call sanity.bat
 
 if errorlevel 1 (
-    :: --- SUB-SECOND FLASH LOOP ---
-    :: Toggles background color with a 200ms delay
+    echo.
+    echo ⚠️ ALERT: Issues detected. Pulsing for 10 seconds...
+    
+    :: Loop 10 times (Each loop = 1 sec total: 0.5s red, 0.5s black)
     for /L %%i in (1,1,10) do (
         color 4F
-        ping -n 1 -w 200 127.0.0.1 >nul
+        ping 127.0.0.1 -n 1 -w 500 >nul
         color 0F
-        ping -n 1 -w 200 127.0.0.1 >nul
+        ping 127.0.0.1 -n 1 -w 500 >nul
     )
 
-    echo.
+    :: Final error state
     color 0C
     echo =======================================================
     echo   🛑 ERROR: SANITY CHECK FAILED
