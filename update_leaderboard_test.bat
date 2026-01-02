@@ -15,29 +15,19 @@ cd /d "F:\Documents\python"
 :: 2. Pre-flight Sanity Check
 echo [1/3] Running Sanity Check...
 call sanity.bat
-
 if errorlevel 1 (
     echo.
-    echo ⚠️ ALERT: Issues detected. Flashing for 10 seconds...
-    
-    :: V1 Style: 1-second interval flashing
-    :: 5 loops of (1s Red + 1s Black) = 10 seconds total
+    :: Loop 5 times to create a flashing effect
     for /L %%i in (1,1,5) do (
-        color 4F
-        timeout /t 1 /nobreak >nul
-        color 0F
-        timeout /t 1 /nobreak >nul
+        color 4F & timeout /t 1 /nobreak >nul
+        color 0F & timeout /t 1 /nobreak >nul
     )
-
+    :: Set back to Red for the final message
     color 0C
-    echo =======================================================
-    echo   🛑 ERROR: SANITY CHECK FAILED
-    echo =======================================================
-    echo.
-    echo  The script has stopped because Git is not clean.
-    echo  Review the messages above, then run this script again.
+    echo 🛑 Sanity check found issues. Review above and re-run.
     echo.
     pause
+    :: Reset color to normal before exiting
     color 0F
     exit /b 1
 )
