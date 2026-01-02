@@ -1,52 +1,44 @@
 @echo off
 title Updating AMS2 Leaderboard
+setlocal
 
-:: ========================================================
-:: STEP 0: Go to the correct folder
-:: ========================================================
+:: 1. Navigate to the root folder of your project
 cd /d "F:\Documents\python"
 
-:: ========================================================
-:: STEP 1: Run Sanity Check FIRST
-:: ========================================================
-echo [1/3] Calling Sanity Check...
+:: 2. Run the Sanity Check first
+echo [1/3] Running Sanity Check...
 call sanity.bat
-
-:: CHECK: Did sanity.bat fail or fix something?
-:: "if errorlevel 1" means "if the error code is 1 OR HIGHER"
 if errorlevel 1 (
-    color 0C
-    echo.
-    echo 🛑 STOPPING SCRIPT.
-    echo ⚠️ Sanity check found issues or made a "WIP" commit.
-    echo ⚠️ Review the output above, then run this script again.
-    echo.
+    echo 🛑 Sanity check failed or found manual fixes. Stopping.
     pause
-    exit /b
+    exit /b 1
 )
 
-:: ========================================================
-:: STEP 2: Run Python Script (Only runs if Step 1 was clean)
-:: ========================================================
-echo.
-echo [2/3] Sanity Passed. Running Python scraper...
+:: 3. Run the Python Scraper
+echo [2/3] Sanity Passed. Running Scraper...
 python scrape_tt.py
-
 if errorlevel 1 (
-    echo ❌ Python script failed.
+    echo ❌ Python script crashed. No data to push.
     pause
-    exit /b
+    exit /b 1
 )
 
-:: ========================================================
-:: STEP 3: Push New Data
-:: ========================================================
-echo.
-echo [3/3] Python success. Pushing results to GitHub...
-git add .
-git commit -m "Updated leaderboard with latest data"
-git pull --rebase
-git push
+:: 4. THE FIX: Stage and Push the JSON from the data folder
+echo [3/3] Python finished. Syncing new JSON to GitHub...
 
-echo ✅ SUCCESS: Leaderboard updated.
+:: This ensures Git adds everything, including the 'data' subfolder
+git add .
+
+:: Only commit and push if there is actually a change in the JSON
+git diff --cached --quiet
+if errorlevel 1 (
+    echo 📦 New data detected. Updating GitHub...
+    git commit -m "Auto-update leaderboard data (%date% %time%)"
+    git pull --rebase
+    git push
+    echo ✅ GitHub updated successfully.
+) else (
+    echo ℹ️ No changes found in the JSON data. Nothing to push.
+)
+
 pause
