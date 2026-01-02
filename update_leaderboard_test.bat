@@ -8,19 +8,24 @@ cd /d "F:\Documents\python"
 :: 2. Pre-flight Sanity Check
 echo [1/3] Running Sanity Check...
 call sanity.bat
+
 if errorlevel 1 (
-    echo.
-    :: Loop 5 times to create a flashing effect
-    for /L %%i in (1,1,5) do (
-        color 4F & timeout /t 1 /nobreak >nul
-        color 0F & timeout /t 1 /nobreak >nul
-    )
-    :: Set back to Red for the final message
+    :: --- ATTENTION STROBE ---
+    :: Rapidly swaps colors to grab your eye
+    color 4F & color 0F & color 4F & color 0F & color 4F & color 0F
+    
+    :: --- HIGH CONTRAST ERROR MESSAGE ---
+    color 4F
+    echo =======================================================
+    echo   🛑 ATTENTION: SANITY CHECK FOUND ISSUES
+    echo =======================================================
     color 0C
-    echo 🛑 Sanity check found issues. Review above and re-run.
     echo.
+    echo  The script has stopped because Git is not in a safe state.
+    echo  Please scroll up to see the specific Git error.
+    echo.
+    echo =======================================================
     pause
-    :: Reset color to normal before exiting
     color 0F
     exit /b 1
 )
