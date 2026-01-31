@@ -26,16 +26,16 @@
     "Flags": "W|+|C"
   },
   {
-    "Position": "6",
+    "Position": "5",
     "Name": "Chris Rees",
     "SteamID": "76561197971749679",
-    "LapTime": "1:37.727",
-    "Sector1": "32.402",
-    "Sector2": "29.417",
-    "Sector3": "35.908",
-    "Gap": "+6.848",
+    "LapTime": "1:36.020",
+    "Sector1": "31.626",
+    "Sector2": "28.733",
+    "Sector3": "35.661",
+    "Gap": "+5.141",
     "Car": "MetalMoro MRX Duratec Turbo P3",
-    "Date": "26-01-26 18:16",
-    "Flags": "W|-|C"
+    "Date": "26-01-31 16:18",
+    "Flags": "W|+|C"
   }
 ]
