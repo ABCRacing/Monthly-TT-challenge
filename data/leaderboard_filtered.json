@@ -1,41 +1,15 @@
 [
   {
-    "Position": "2",
+    "Position": "15",
     "Name": "Neil Bywater",
     "SteamID": "76561198118274739",
-    "LapTime": "1:31.280",
-    "Sector1": "30.910",
-    "Sector2": "27.190",
-    "Sector3": "33.180",
-    "Gap": "+0.401",
-    "Car": "MetalMoro MRX Duratec Turbo P3",
-    "Date": "26-01-03 19:06",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "3",
-    "Name": "Ieuan Rees",
-    "SteamID": "76561198207011993",
-    "LapTime": "1:32.021",
-    "Sector1": "31.080",
-    "Sector2": "27.380",
-    "Sector3": "33.561",
-    "Gap": "+1.142",
-    "Car": "MetalMoro MRX Duratec Turbo P3",
-    "Date": "26-01-04 11:53",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "5",
-    "Name": "Chris Rees",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:36.020",
-    "Sector1": "31.626",
-    "Sector2": "28.733",
-    "Sector3": "35.661",
-    "Gap": "+5.141",
-    "Car": "MetalMoro MRX Duratec Turbo P3",
-    "Date": "26-01-31 16:18",
+    "LapTime": "1:03.679",
+    "Sector1": "17.080",
+    "Sector2": "22.760",
+    "Sector3": "23.839",
+    "Gap": "+0.735",
+    "Car": "Ginetta G55 GT4",
+    "Date": "26-02-02 20:00",
     "Flags": "W|+|C"
   }
 ]
