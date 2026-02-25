@@ -1,6 +1,19 @@
 [
   {
-    "Position": "9",
+    "Position": "6",
+    "Name": "Ieuan Rees",
+    "SteamID": "76561198207011993",
+    "LapTime": "1:03.526",
+    "Sector1": "16.906",
+    "Sector2": "22.701",
+    "Sector3": "23.919",
+    "Gap": "+0.791",
+    "Car": "Ginetta G55 GT4 Supercup",
+    "Date": "26-02-21 08:45",
+    "Flags": "W|+|C"
+  },
+  {
+    "Position": "10",
     "Name": "Neil Bywater",
     "SteamID": "76561198118274739",
     "LapTime": "1:03.659",
@@ -10,19 +23,6 @@
     "Gap": "+0.924",
     "Car": "Ginetta G55 GT4 Supercup",
     "Date": "26-02-05 20:16",
-    "Flags": "W|+|C"
-  },
-  {
-    "Position": "16",
-    "Name": "Ieuan Rees",
-    "SteamID": "76561198207011993",
-    "LapTime": "1:04.119",
-    "Sector1": "17.279",
-    "Sector2": "22.568",
-    "Sector3": "24.272",
-    "Gap": "+1.384",
-    "Car": "Ginetta G55 GT4 Supercup",
-    "Date": "26-02-02 21:25",
     "Flags": "W|+|C"
   },
   {
