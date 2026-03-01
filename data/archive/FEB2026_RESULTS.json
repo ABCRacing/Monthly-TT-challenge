@@ -1,0 +1,36 @@
+{
+  "track": "Cascavel",
+  "variant": "",
+  "car": "Ginetta GT4 G55 Supercup",
+  "month": "Feb",
+  "year": 2026,
+  "results": [
+    {
+      "position": 6,
+      "name": "Ieuan Rees",
+      "laptime": "1:03.526",
+      "sector1": "16.906",
+      "sector2": "22.701",
+      "sector3": "23.919",
+      "timestamp": "26-02-21 08:45"
+    },
+    {
+      "position": 10,
+      "name": "Neil Bywater",
+      "laptime": "1:03.659",
+      "sector1": "17.320",
+      "sector2": "22.658",
+      "sector3": "23.681",
+      "timestamp": "26-02-05 20:16"
+    },
+    {
+      "position": 33,
+      "name": "Chris Rees",
+      "laptime": "1:04.639",
+      "sector1": "17.557",
+      "sector2": "22.778",
+      "sector3": "24.304",
+      "timestamp": "26-02-04 21:06"
+    }
+  ]
+}
