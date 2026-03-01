@@ -1,8 +1,8 @@
 {
-  "month": "Feb",
+  "month": "March",
   "year": "2026",
-  "track": "Cascavel",
+  "track": "Goiânia",
   "variant": "",
-  "car": "Ginetta GT4 G55 Supercup",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/G55%20Supercup/Cascavel.json"
+  "car": "G40Cup",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/G40Cup/Goi%C3%A2nia.json"
 }
