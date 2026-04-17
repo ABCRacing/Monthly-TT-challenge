@@ -1,6 +1,19 @@
 [
   {
     "Position": "2",
+    "Name": "Chris Rees",
+    "SteamID": "76561197971749679",
+    "LapTime": "1:39.018",
+    "Sector1": "24.921",
+    "Sector2": "52.787",
+    "Sector3": "21.310",
+    "Gap": "+0.022",
+    "Car": "Formula Vee Gen2",
+    "Date": "26-04-16 18:42",
+    "Flags": "W|-|C"
+  },
+  {
+    "Position": "3",
     "Name": "Ieuan Rees",
     "SteamID": "76561198207011993",
     "LapTime": "1:39.609",
@@ -10,19 +23,6 @@
     "Gap": "+0.613",
     "Car": "Formula Vee Gen2",
     "Date": "26-04-15 19:08",
-    "Flags": "W|-|C"
-  },
-  {
-    "Position": "3",
-    "Name": "Chris Rees",
-    "SteamID": "76561197971749679",
-    "LapTime": "1:40.405",
-    "Sector1": "25.184",
-    "Sector2": "53.779",
-    "Sector3": "21.442",
-    "Gap": "+1.409",
-    "Car": "Formula Vee Gen2",
-    "Date": "26-04-12 21:07",
     "Flags": "W|-|C"
   }
 ]
