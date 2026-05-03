@@ -1,8 +1,8 @@
 {
-  "month": "APRIL",
+  "month": "May",
   "year": "2026",
-  "track": "SANTA CRUZ",
-  "variant": "",
-  "car": "FORUMLA VEE GEN 2",
-  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/Formula%20Vee%20Gen2/Santa%20Cruz%20do%20Sul.json"
+  "track": "Juraz",
+  "variant": "Chicane",
+  "car": "GT5",
+  "data_link": "https://ams2leaderboards.krispnet.org/api/boards/GT5/Jerez%20Chicane.json"
 }
