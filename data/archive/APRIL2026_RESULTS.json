@@ -1,0 +1,27 @@
+{
+  "track": "SANTA CRUZ",
+  "variant": "",
+  "car": "FORUMLA VEE GEN 2",
+  "month": "APRIL",
+  "year": 2026,
+  "results": [
+    {
+      "position": 2,
+      "name": "Chris Rees",
+      "laptime": "1:39.018",
+      "sector1": "24.921",
+      "sector2": "52.787",
+      "sector3": "21.310",
+      "timestamp": "26-04-16 18:42"
+    },
+    {
+      "position": 3,
+      "name": "Ieuan Rees",
+      "laptime": "1:39.609",
+      "sector1": "24.639",
+      "sector2": "53.619",
+      "sector3": "21.351",
+      "timestamp": "26-04-15 19:08"
+    }
+  ]
+}
