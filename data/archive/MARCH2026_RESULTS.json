@@ -1,0 +1,27 @@
+{
+  "track": "Goi\u00e2nia",
+  "variant": "",
+  "car": "G40Cup",
+  "month": "March",
+  "year": 2026,
+  "results": [
+    {
+      "position": 12,
+      "name": "Chris Rees",
+      "laptime": "1:43.035",
+      "sector1": "39.212",
+      "sector2": "37.085",
+      "sector3": "26.738",
+      "timestamp": "26-03-27 10:47"
+    },
+    {
+      "position": 70,
+      "name": "Ieuan Rees",
+      "laptime": "1:45.154",
+      "sector1": "39.891",
+      "sector2": "38.222",
+      "sector3": "27.041",
+      "timestamp": "26-03-22 21:00"
+    }
+  ]
+}

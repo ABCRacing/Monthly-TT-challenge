@@ -1,0 +1,60 @@
+# Python / private tooling
+*.py
+*.pyc
+__pycache__/
+
+# Windows admin/update scripts
+*.ps1
+*.bat
+*.cmd
+
+# Local/admin files
+last_output.txt
+*.log
+*.tmp
+
+# Private/raw leaderboard data
+data/leaderboard_raw.json
+data/direct_steam_update_status.json
+data/direct_leaderboard_participants.json
+
+# AMS2 discovery / identity / eligibility data
+data/ams2_*.json
+data/ams2_*.csv
+data/test/
+data/private*/
+
+# Private working files
+*.xlsx
+*.xls
+*.zip
+
+data/direct_update_backup/
+
+# Root private/direct-Steam material
+direct_leaderboard_participants.json
+README.md
+README_TEST_SETUP.txt
+IMPORTED_LISTS_CHECK.json
+New Text Document.txt
+scrape_tt old.txt
+
+# Local/test webpages
+car-wheel.html
+challenge_draw_test.html
+test_index.html
+
+# Other private/admin files
+README.md
+README_TEST_SETUP.txt
+IMPORTED_LISTS_CHECK.json
+New Text Document.txt
+scrape_tt old.txt
+
+# Test/local webpages
+car-wheel.html
+challenge_draw_test.html
+test_index.html
+
+# Test archive
+data/archive/TEST MONTH2025_RESULTS.json

@@ -1,0 +1,27 @@
+{
+  "track": "VIRginia International Raceway Full",
+  "variant": "International Raceway Full",
+  "car": "Stock Car Germany",
+  "month": "June",
+  "year": 2026,
+  "results": [
+    {
+      "position": 5,
+      "name": "Chris Rees",
+      "laptime": "2:07.549",
+      "sector1": "32.189",
+      "sector2": "46.520",
+      "sector3": "48.840",
+      "timestamp": "26-05-10 20:16"
+    },
+    {
+      "position": 7,
+      "name": "Ieuan Rees",
+      "laptime": "2:08.399",
+      "sector1": "32.523",
+      "sector2": "47.019",
+      "sector3": "48.857",
+      "timestamp": "26-05-17 07:13"
+    }
+  ]
+}

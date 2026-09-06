@@ -1,0 +1,36 @@
+{
+  "track": "Buenos Aires",
+  "variant": "No 9",
+  "car": "MITSUBISHI LANCER CUP",
+  "month": "SEPTEMBER",
+  "year": 2025,
+  "results": [
+    {
+      "position": 1,
+      "name": "Ieuan Rees",
+      "laptime": "1:27.334",
+      "sector1": "18.293",
+      "sector2": "40.790",
+      "sector3": "28.251",
+      "timestamp": "25-09-30 20:06"
+    },
+    {
+      "position": 2,
+      "name": "Chris Rees",
+      "laptime": "1:27.701",
+      "sector1": "18.488",
+      "sector2": "40.931",
+      "sector3": "28.282",
+      "timestamp": "25-09-14 17:34"
+    },
+    {
+      "position": 3,
+      "name": "Neil Bywater",
+      "laptime": "1:27.843",
+      "sector1": "18.429",
+      "sector2": "41.030",
+      "sector3": "28.384",
+      "timestamp": "25-09-05 19:06"
+    }
+  ]
+}

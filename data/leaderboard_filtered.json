@@ -1,0 +1,41 @@
+[
+  {
+    "Position": "24",
+    "Name": "Chris Rees",
+    "SteamID": "76561197971749679",
+    "LapTime": "36.000",
+    "Sector1": "9.381",
+    "Sector2": "16.238",
+    "Sector3": "10.381",
+    "Gap": "+1.602",
+    "Car": "Kart 125cc Shifter",
+    "Date": "26-09-06 10:06",
+    "Flags": "W|+|C"
+  },
+  {
+    "Position": "34",
+    "Name": "Ieuan Rees",
+    "SteamID": "76561198207011993",
+    "LapTime": "36.220",
+    "Sector1": "9.600",
+    "Sector2": "16.379",
+    "Sector3": "10.241",
+    "Gap": "+1.822",
+    "Car": "Kart 125cc Shifter",
+    "Date": "26-09-05 16:07",
+    "Flags": "W|-|C"
+  },
+  {
+    "Position": "426",
+    "Name": "Joe Bywater",
+    "SteamID": "76561198083278256",
+    "LapTime": "41.079",
+    "Sector1": "10.338",
+    "Sector2": "18.880",
+    "Sector3": "11.861",
+    "Gap": "+6.681",
+    "Car": "Kart 125cc 2STROKE",
+    "Date": "25-06-10 18:38",
+    "Flags": "W|-|C"
+  }
+]
