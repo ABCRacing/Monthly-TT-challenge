@@ -95,6 +95,29 @@
       font-weight: 700;
       font-family: 'Orbitron', monospace;
     }
+    .lap-pb-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .lap-pb-asterisk {
+      position: absolute;
+      left: 100%;
+      top: -0.35em;
+      margin-left: 1px;
+      font-size: 0.68em;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .pb-footnote {
+      margin: 8px 0 0;
+      text-align: right;
+      font-size: 0.75rem;
+      color: #ffd166;
+      font-weight: 700;
+    }
+
     #error-message { color: #ff8080; text-align:center; margin: 8px 0; }
   </style>
 </head>
@@ -129,6 +152,7 @@
         </thead>
         <tbody></tbody>
       </table>
+      <div id="pb-footnote" class="pb-footnote" hidden>* PB not set during this Monthly TT.</div>
     </div>
   </main>
 
@@ -294,6 +318,9 @@
         // populate table
         const tbody = document.querySelector("#leaderboard tbody");
         tbody.innerHTML = '';
+        const pbFootnote = document.getElementById('pb-footnote');
+        let hasPbWarning = false;
+        pbFootnote.hidden = true;
 
         document.getElementById('event-header').textContent = `${data.track} – ${data.variant || ''} – ${data.car}`;
 
@@ -316,10 +343,19 @@
 
           const lapSeconds = parseLapTime(entry.laptime);
           const gapSeconds = lapSeconds - fastestTime;
+          const pbDuringChallenge = entry.pb_during_challenge;
+          const lapDisplay = pbDuringChallenge === false
+            ? `<span class="lap-pb-wrap">${entry.laptime}<span class="lap-pb-asterisk">*</span></span>`
+            : entry.laptime;
+
+          if (pbDuringChallenge === false) {
+            hasPbWarning = true;
+          }
+
           row.innerHTML = `
             <td>${index + 1}</td>
             <td>${entry.name}</td>
-            <td>${entry.laptime}</td>
+            <td>${lapDisplay}</td>
             <td class="${parseLapTime(entry.sector1) === fastestSector1 ? 'fastest' : ''}">${entry.sector1}</td>
             <td class="${parseLapTime(entry.sector2) === fastestSector2 ? 'fastest' : ''}">${entry.sector2}</td>
             <td class="${parseLapTime(entry.sector3) === fastestSector3 ? 'fastest' : ''}">${entry.sector3}</td>
@@ -327,6 +363,8 @@
           `;
           tbody.appendChild(row);
         });
+
+        pbFootnote.hidden = !hasPbWarning;
 
       } catch (err) {
         console.error('Error loading archive:', err);

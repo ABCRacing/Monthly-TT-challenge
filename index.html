@@ -79,6 +79,29 @@
     .bronze { background-color: #cd7f32; color: #000; }
     .fastest { background-color: purple; color: white; }
 
+    .lap-pb-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .lap-pb-asterisk {
+      position: absolute;
+      left: 100%;
+      top: -0.35em;
+      margin-left: 1px;
+      font-size: 0.68em;
+      line-height: 1;
+      font-weight: 700;
+    }
+
+    .pb-footnote {
+      margin: 8px 0 0;
+      text-align: right;
+      font-size: 0.75rem;
+      color: #ffd166;
+      font-weight: 700;
+    }
+
     #error-message {
       color: red;
       text-align: center;
@@ -113,17 +136,69 @@
         </thead>
         <tbody></tbody>
       </table>
+      <div id="pb-footnote" class="pb-footnote" hidden>* PB not set during this Monthly TT.</div>
     </div>
   </main>
 
   <script>
+    function parseSteamUtcDate(value) {
+      const match = String(value || '').trim().match(
+        /^(\d{2})-(\d{2})-(\d{2})\s+(\d{2}):(\d{2})$/
+      );
+      if (!match) return null;
+
+      const year = 2000 + Number(match[1]);
+      const month = Number(match[2]);
+      const day = Number(match[3]);
+      const hour = Number(match[4]);
+      const minute = Number(match[5]);
+
+      const date = new Date(Date.UTC(year, month - 1, day, hour, minute));
+      return Number.isNaN(date.getTime()) ? null : date;
+    }
+
+    function pbSetDuringChallenge(entry, challenge) {
+      if (typeof entry.PBSetDuringChallenge === 'boolean') {
+        return entry.PBSetDuringChallenge;
+      }
+
+      const date = parseSteamUtcDate(entry.Date);
+      if (!date || !challenge) return null;
+
+      const parts = new Intl.DateTimeFormat('en-GB', {
+        timeZone: 'Europe/London',
+        year: 'numeric',
+        month: '2-digit'
+      }).formatToParts(date);
+
+      const values = Object.fromEntries(
+        parts.filter(p => p.type !== 'literal').map(p => [p.type, p.value])
+      );
+
+      const challengeMonth = new Date(
+        `${String(challenge.month || '').trim()} 1, ${challenge.year}`
+      ).getMonth() + 1;
+
+      if (!challengeMonth || !values.year || !values.month) return null;
+
+      return Number(values.year) === Number(challenge.year)
+        && Number(values.month) === challengeMonth;
+    }
+
     async function fetchLeaderboard() {
       try {
-        const response = await fetch("data/leaderboard_filtered.json");
+        const [response, challengeResponse] = await Promise.all([
+          fetch("data/leaderboard_filtered.json"),
+          fetch("data/current_challenge.json")
+        ]);
+
         if (!response.ok) throw new Error("Network response was not ok");
 
         const data = await response.json();
+        const challenge = challengeResponse.ok ? await challengeResponse.json() : null;
         const tableBody = document.querySelector("#leaderboard tbody");
+        const pbFootnote = document.getElementById("pb-footnote");
+        let hasPbWarning = false;
 
         if (!Array.isArray(data) || data.length === 0) {
           document.getElementById("error-message").textContent = "No leaderboard data available.";
@@ -147,10 +222,19 @@
           const s2Class = entry.Sector2 == fastestS2 ? "fastest" : "";
           const s3Class = entry.Sector3 == fastestS3 ? "fastest" : "";
 
+          const pbDuringChallenge = pbSetDuringChallenge(entry, challenge);
+          const lapDisplay = pbDuringChallenge === false
+            ? `<span class="lap-pb-wrap">${entry.LapTime}<span class="lap-pb-asterisk">*</span></span>`
+            : entry.LapTime;
+
+          if (pbDuringChallenge === false) {
+            hasPbWarning = true;
+          }
+
           row.innerHTML = `
             <td>${index + 1}</td>
             <td>${entry.Name}</td>
-            <td>${entry.LapTime}</td>
+            <td>${lapDisplay}</td>
             <td class="${s1Class}">${entry.Sector1}</td>
             <td class="${s2Class}">${entry.Sector2}</td>
             <td class="${s3Class}">${entry.Sector3}</td>
@@ -159,6 +243,8 @@
 
           tableBody.appendChild(row);
         });
+
+        pbFootnote.hidden = !hasPbWarning;
 
       } catch (error) {
         console.error("Error loading leaderboard:", error);
