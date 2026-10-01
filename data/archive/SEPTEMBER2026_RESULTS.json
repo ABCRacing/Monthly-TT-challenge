@@ -1,0 +1,53 @@
+{
+  "track": "Granja Viana",
+  "variant": "Kart 121",
+  "car": "Kart (any)",
+  "month": "September",
+  "year": 2026,
+  "results": [
+    {
+      "position": 8,
+      "name": "Chris Rees",
+      "laptime": "35.360",
+      "sector1": "9.219",
+      "sector2": "16.140",
+      "sector3": "10.001",
+      "timestamp": "26-09-19 22:05",
+      "pb_during_challenge": true,
+      "pb_status": "PB set during this Monthly TT"
+    },
+    {
+      "position": 15,
+      "name": "Ieuan Rees",
+      "laptime": "35.738",
+      "sector1": "9.598",
+      "sector2": "16.200",
+      "sector3": "9.940",
+      "timestamp": "26-09-19 21:28",
+      "pb_during_challenge": true,
+      "pb_status": "PB set during this Monthly TT"
+    },
+    {
+      "position": 144,
+      "name": "Neil Bywater",
+      "laptime": "37.902",
+      "sector1": "10.061",
+      "sector2": "17.039",
+      "sector3": "10.802",
+      "timestamp": "26-09-27 17:19",
+      "pb_during_challenge": true,
+      "pb_status": "PB set during this Monthly TT"
+    },
+    {
+      "position": 438,
+      "name": "Joe Bywater",
+      "laptime": "41.079",
+      "sector1": "10.338",
+      "sector2": "18.880",
+      "sector3": "11.861",
+      "timestamp": "25-06-10 18:38",
+      "pb_during_challenge": false,
+      "pb_status": "PB not set during this Monthly TT"
+    }
+  ]
+}
