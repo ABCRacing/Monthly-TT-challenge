@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "Position": "28",
+    "Name": "Chris Rees",
+    "SteamID": "76561197971749679",
+    "LapTime": "1:08.883",
+    "Sector1": "15.094",
+    "Sector2": "36.203",
+    "Sector3": "17.586",
+    "Gap": "+1.424",
+    "Car": "ARC Camaro",
+    "Date": "26-10-03 12:22",
+    "Flags": "W|+|C",
+    "PBSetDuringChallenge": true,
+    "PBStatus": "PB set during this Monthly TT",
+    "PBWarning": ""
+  }
+]
