@@ -16,7 +16,23 @@
     "PBWarning": ""
   },
   {
-    "Position": "45",
+    "Position": "32",
+    "Name": "Chris Rees",
+    "SteamID": "76561197971749679",
+    "LapTime": "1:09.099",
+    "Sector1": "24.820",
+    "Sector2": "23.842",
+    "Sector3": "20.437",
+    "Gap": "+3.000",
+    "Car": "Ginetta G55 GT3",
+    "Date": "26-11-04 19:11",
+    "Flags": "W|+|C",
+    "PBSetDuringChallenge": true,
+    "PBStatus": "PB set during this Monthly TT",
+    "PBWarning": ""
+  },
+  {
+    "Position": "46",
     "Name": "Steve Jackson",
     "SteamID": "76561197990579300",
     "LapTime": "1:14.119",
