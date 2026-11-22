@@ -1,3 +1,3 @@
-// Set this only after the registration Worker has been deployed and tested.
-// Example: https://abc-monthly-tt-registration.YOUR-SUBDOMAIN.workers.dev
-window.ABC_REGISTRATION_ORIGIN = '';
+// ABC Racing Steam registration service. Approved registrations are still added manually
+// to the private participant registry after review.
+window.ABC_REGISTRATION_ORIGIN = 'https://abc-monthly-tt-registration.reesyboy4.workers.dev';
