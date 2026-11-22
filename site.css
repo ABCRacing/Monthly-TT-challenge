@@ -169,3 +169,20 @@ h1 { font-family: var(--font-timing); font-size: clamp(1.45rem, 3.25vw, 2.7rem);
   .brand-name strong { font-size: 11px; }
   .nav-link { padding: 7px 5px; font-size: 10px; }
 }
+/* Join the Grid registration page and responsive three-link navigation. */
+.join-layout{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:18px}
+.join-panel,.join-info{min-width:0}
+.join-panel>p,.join-info p{color:#b6c9da;line-height:1.7;font-size:14px}
+.join-panel h2,.join-info h2{margin-bottom:18px}
+.join-info h3{font-size:15px;margin:20px 0 6px;color:#f5f8fd}
+.join-steps{display:grid;gap:12px;margin:28px 0}
+.join-steps>div{display:flex;align-items:center;gap:16px;background:#203147;border:1px solid #3c5369;border-radius:12px;padding:14px;color:#e5edf7;font-size:14px;line-height:1.5}
+.join-steps strong{color:#2be0d3;font:700 18px var(--font-timing)}
+.join-button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;text-decoration:none;background:#2be0d3;color:#09111c;border-radius:10px;padding:13px 22px;font-weight:800}
+.join-button:hover{background:#66eee3}
+.join-button[aria-disabled="true"]{background:#33495e;color:#a7b9cc;cursor:not-allowed;pointer-events:none}
+.join-warning{padding:15px 17px;margin:20px 0;border:1px solid #8c6841;border-left:4px solid #e7bf67;border-radius:10px;background:#3a302366;color:#f5ddae;line-height:1.6;font-size:13px}
+.join-warning strong{color:#ffe3aa}
+.join-status{margin:14px 0 0;color:#a7b9cc!important}
+@media(max-width:800px){.join-layout{grid-template-columns:1fr}.nav-inner{flex-wrap:wrap;gap:10px}.nav-links{width:100%;justify-content:space-between}.nav-link{text-align:center;flex:1;white-space:normal}}
+@media(max-width:360px){.nav-link{padding:8px 5px;font-size:10px}}
