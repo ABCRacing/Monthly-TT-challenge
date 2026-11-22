@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09121e">
+  <title>Join the Grid | ABC Racing</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="icon" type="image/png" href="assets/abc-racing-driver.png">
+  <link rel="stylesheet" href="site.css">
+  <script defer src="registration-config.js"></script>
+  <script defer src="join.js"></script>
+</head>
+<body data-page="join">
+  <a class="skip-link" href="#main">Skip to registration</a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="ABC Racing home"><img class="brand-mark" src="assets/abc-racing-driver.png" width="48" height="48" alt="" aria-hidden="true"><span class="brand-name"><strong>ABC RACING</strong><small>MONTHLY TIME TRIAL</small></span></a>
+      <div class="nav-links"><a class="nav-link" href="index.html">Current challenge</a><a class="nav-link" href="archive.html">Results archive</a><a class="nav-link" aria-current="page" href="join.html">Join the Grid</a></div>
+    </div>
+  </nav>
+  <header class="page-hero">
+    <div class="hero-content"><span class="eyebrow">ABC RACING · COMMUNITY</span><h1>JOIN THE GRID.</h1><p class="hero-challenge">Your next lap could be the one to beat.</p><p class="hero-meta">Compete in our monthly Automobilista 2 Time Trial challenges.</p></div>
+  </header>
+  <main class="page-main" id="main">
+    <div class="content">
+      <div class="join-layout">
+        <section class="panel join-panel" aria-labelledby="join-heading">
+          <h2 id="join-heading">Register as a driver</h2>
+          <p>Sign in securely through Steam to prove which account is yours. Then choose the name you want on the ABC Racing leaderboard.</p>
+          <div class="join-steps">
+            <div><strong>01</strong><span>Sign in on the official Steam website</span></div>
+            <div><strong>02</strong><span>Choose your leaderboard display name and consent to publication</span></div>
+            <div><strong>03</strong><span>Wait for an ABC Racing organiser to approve your entry</span></div>
+          </div>
+          <a id="steam-register" class="join-button" aria-disabled="true">Sign in with Steam</a>
+          <p class="join-status" id="registration-status" role="status">Registration service setup is in progress. Sign-in is not active yet.</p>
+          <p class="legend">You never share your Steam password with ABC Racing. Steam sign-in verifies your Steam ID64; it does not automatically add you to the standings.</p>
+        </section>
+        <aside class="panel join-info" aria-labelledby="join-faq">
+          <h2 id="join-faq">Before you register</h2>
+          <h3>Do I need a new account?</h3><p>No. Your Steam login is enough. There is no separate ABC Racing password.</p>
+          <h3>When will my lap appear?</h3><p>After approval, any eligible Steam Time Trial personal best for the month's car and track is picked up by our normal collector.</p>
+          <h3>What becomes public?</h3><p>Your chosen driver name, Steam ID64 and eligible Time Trial results may be published on the ABC Racing leaderboard and monthly archives. Requests are kept private while pending.</p>
+          <h3>Can I leave later?</h3><p>Yes. Contact the ABC Racing organiser to request removal or discuss your data. A dedicated contact address will be displayed in the registration form when sign-in opens.</p>
+        </aside>
+      </div>
+    </div>
+  </main>
+  <footer class="site-footer">ABC Racing · Automobilista 2 community time trial · New registrations require approval</footer>
+</body>
+</html>
