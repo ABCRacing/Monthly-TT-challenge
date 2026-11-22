@@ -27,7 +27,7 @@ button { cursor: pointer; }
 .site-nav { z-index: 3; position: relative; background: #09121eea; border-bottom: 1px solid #2c3c50; }
 .nav-inner { max-width: 1240px; margin: auto; padding: 15px 24px; display: flex; align-items: center; gap: 20px; justify-content: space-between; }
 .brand { text-decoration: none; display: inline-flex; gap: 11px; align-items: center; font-weight: 800; letter-spacing: .065em; }
-.brand-mark { display: grid; place-items: center; width: 39px; height: 39px; border-radius: 9px; background: var(--accent); color: #08131d; font: 900 15px var(--font-timing); letter-spacing: -1px; }
+.brand-mark { display: block; width: 48px; height: 48px; flex-shrink: 0; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(43, 224, 211, 0.12)); }
 .brand-name strong { font-size: 15px; display: block; }
 .brand-name small { color: var(--muted); display: block; font-size: 10px; margin-top: 2px; letter-spacing: .14em; font-weight: 700; }
 .nav-links { display: flex; align-items: center; gap: 8px; }
@@ -126,7 +126,7 @@ h1 { font-family: var(--font-timing); font-size: clamp(1.45rem, 3.25vw, 2.7rem);
 @media (max-width: 640px) {
   .nav-inner { padding: 11px 15px; }
   .brand-name strong { font-size: 13px; }
-  .brand-mark { width: 34px; height: 34px; font-size: 13px; }
+  .brand-mark { width: 39px; height: 39px; }
   .nav-link { padding: 9px 10px; font-size: 12px; }
   .page-hero { min-height: 255px; }
   .page-hero::before { background: linear-gradient(90deg, rgba(6,13,23,.92), rgba(6,13,23,.55)),linear-gradient(0deg,rgba(6,13,23,.8),transparent 65%); }
@@ -165,7 +165,7 @@ h1 { font-family: var(--font-timing); font-size: clamp(1.45rem, 3.25vw, 2.7rem);
 @media (max-width: 360px) {
   .nav-inner { padding: 10px 8px; gap: 4px; }
   .brand { gap: 5px; }
-  .brand-mark { height: 30px; width: 30px; font-size: 12px; }
+  .brand-mark { height: 30px; width: 30px; }
   .brand-name strong { font-size: 11px; }
   .nav-link { padding: 7px 5px; font-size: 10px; }
 }
