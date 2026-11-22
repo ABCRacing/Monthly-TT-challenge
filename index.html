@@ -14,6 +14,7 @@
       margin: 0;
       background-color: #0f0f0f;
       color: #f0f0f0;
+      overflow-x: hidden;
     }
 
     header {
@@ -49,16 +50,37 @@
       background: url('https://images.pexels.com/photos/29321044/pexels-photo-29321044/free-photo-of-exciting-race-day-at-mexico-city-speedway.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
       background-size: cover;
       background-attachment: fixed;
+      box-sizing: border-box;
+      min-width: 0;
     }
 
     .overlay {
       background-color: rgba(0, 0, 0, 0.6);
       padding: 20px;
       border-radius: 10px;
+      box-sizing: border-box;
+      width: 100%;
+      min-width: 0;
+    }
+
+    /* Contain horizontal table scrolling so the page background fills the viewport. */
+    .leaderboard-scroll {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .table-scroll-hint {
+      display: none;
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      color: #d8e5ee;
     }
 
     table {
       width: 100%;
+      min-width: 730px;
       border-collapse: collapse;
       border: 5px solid white;
     }
@@ -102,6 +124,19 @@
       font-weight: 700;
     }
 
+    @media (max-width: 760px) {
+      main {
+        padding: 12px;
+        /* Fixed backgrounds do not paint reliably in mobile Safari. */
+        background-attachment: scroll;
+      }
+      .overlay { padding: 12px; }
+      .table-scroll-hint { display: block; }
+      header { padding: 12px; box-sizing: border-box; text-align: center; }
+      header h1 { padding: 12px; font-size: clamp(1.25rem, 5vw, 2rem); }
+      header h2 { font-size: clamp(0.85rem, 3vw, 1.2rem); overflow-wrap: anywhere; }
+    }
+
     #error-message {
       color: red;
       text-align: center;
@@ -122,6 +157,8 @@
   <main>
     <div class="overlay">
       <div id="error-message"></div>
+      <p class="table-scroll-hint">Swipe sideways across the table to see all sectors and the gap.</p>
+      <div class="leaderboard-scroll" role="region" aria-label="Monthly leaderboard, scroll horizontally for more columns" tabindex="0">
       <table id="leaderboard">
         <thead>
           <tr>
@@ -136,6 +173,7 @@
         </thead>
         <tbody></tbody>
       </table>
+      </div>
       <div id="pb-footnote" class="pb-footnote" hidden>* PB not set during this Monthly TT.</div>
     </div>
   </main>

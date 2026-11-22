@@ -13,6 +13,7 @@
       margin: 0;
       background-color: #0f0f0f;
       color: #f0f0f0;
+      overflow-x: hidden;
     }
     header {
       background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
@@ -63,15 +64,32 @@
     .home-button:hover {
       background-color: #444;
     }
+    main { box-sizing: border-box; min-width: 0; }
     .overlay {
+      box-sizing: border-box;
+      width: calc(100% - 24px);
+      min-width: 0;
       background-color: rgba(0, 0, 0, 0.6);
       padding: 20px;
       margin: 0 auto 40px;
       max-width: 1100px;
       border-radius: 10px;
     }
+    .leaderboard-scroll {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    .table-scroll-hint {
+      display: none;
+      margin: 0 0 10px;
+      font-size: 0.8rem;
+      color: #d8e5ee;
+    }
     table {
       width: 100%;
+      min-width: 730px;
       border-collapse: collapse;
       border: 5px solid white;
       font-size: 1em;
@@ -118,6 +136,12 @@
       font-weight: 700;
     }
 
+    @media (max-width: 760px) {
+      .overlay { padding: 12px; }
+      .table-scroll-hint { display: block; }
+      header { padding: 12px; box-sizing: border-box; text-align: center; }
+      header h1 { padding: 12px; font-size: clamp(1.25rem, 5vw, 2rem); }
+    }
     #error-message { color: #ff8080; text-align:center; margin: 8px 0; }
   </style>
 </head>
@@ -138,6 +162,8 @@
 
   <main>
     <div class="overlay">
+      <p class="table-scroll-hint">Swipe sideways across the table to see all sectors and the gap.</p>
+      <div class="leaderboard-scroll" role="region" aria-label="Archived leaderboard, scroll horizontally for more columns" tabindex="0">
       <table id="leaderboard">
         <thead>
           <tr>
@@ -152,6 +178,7 @@
         </thead>
         <tbody></tbody>
       </table>
+      </div>
       <div id="pb-footnote" class="pb-footnote" hidden>* PB not set during this Monthly TT.</div>
     </div>
   </main>
