@@ -1,406 +1,55 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Archived Results</title>
-
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet" />
-
-  <style>
-    body {
-      font-family: 'Orbitron', sans-serif;
-      margin: 0;
-      background-color: #0f0f0f;
-      color: #f0f0f0;
-      overflow-x: hidden;
-    }
-    header {
-      background: url('https://images.pexels.com/photos/2770516/pexels-photo-2770516.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1') no-repeat center center;
-      background-size: cover;
-      height: 200px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    header h1 {
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 10px 20px;
-      border-radius: 10px;
-      font-size: 2em;
-      color: #fff;
-    }
-    .controls {
-      padding: 20px;
-      text-align: center;
-    }
-    .controls select,
-    .controls button {
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1em;
-      margin: 5px;
-      padding: 10px;
-      background-color: #1f1f1f;
-      color: #f0f0f0;
-      border: 1px solid #444;
-      border-radius: 5px;
-    }
-    .controls button:hover {
-      background-color: #333;
-      cursor: pointer;
-    }
-    .home-button {
-      margin-top: 10px;
-      display: inline-block;
-      text-decoration: none;
-      font-family: 'Orbitron', sans-serif;
-      font-size: 1em;
-      background-color: #222;
-      color: #fff;
-      padding: 10px 15px;
-      border-radius: 5px;
-      border: 1px solid #555;
-    }
-    .home-button:hover {
-      background-color: #444;
-    }
-    main { box-sizing: border-box; min-width: 0; }
-    .overlay {
-      box-sizing: border-box;
-      width: calc(100% - 24px);
-      min-width: 0;
-      background-color: rgba(0, 0, 0, 0.6);
-      padding: 20px;
-      margin: 0 auto 40px;
-      max-width: 1100px;
-      border-radius: 10px;
-    }
-    .leaderboard-scroll {
-      width: 100%;
-      max-width: 100%;
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-    .table-scroll-hint {
-      display: none;
-      margin: 0 0 10px;
-      font-size: 0.8rem;
-      color: #d8e5ee;
-    }
-    table {
-      width: 100%;
-      min-width: 730px;
-      border-collapse: collapse;
-      border: 5px solid white;
-      font-size: 1em;
-    }
-    th, td {
-      border: 1px solid white;
-      padding: 10px;
-      text-align: center;
-      font-variant-numeric: tabular-nums;
-    }
-    th {
-      background-color: red;
-      color: white;
-    }
-    .gold { background-color: #ffd700; color: #000; font-weight: bold; }
-    .silver { background-color: #c0c0c0; color: #000; font-weight: bold; }
-    .bronze { background-color: #cd7f32; color: #000; font-weight: bold; }
-    td.fastest {
-      background-color: purple;
-      color: white;
-      font-weight: 700;
-      font-family: 'Orbitron', monospace;
-    }
-    .lap-pb-wrap {
-      position: relative;
-      display: inline-block;
-    }
-
-    .lap-pb-asterisk {
-      position: absolute;
-      left: 100%;
-      top: -0.35em;
-      margin-left: 1px;
-      font-size: 0.68em;
-      line-height: 1;
-      font-weight: 700;
-    }
-
-    .pb-footnote {
-      margin: 8px 0 0;
-      text-align: right;
-      font-size: 0.75rem;
-      color: #ffd166;
-      font-weight: 700;
-    }
-
-    @media (max-width: 760px) {
-      .overlay { padding: 12px; }
-      .table-scroll-hint { display: block; }
-      header { padding: 12px; box-sizing: border-box; text-align: center; }
-      header h1 { padding: 12px; font-size: clamp(1.25rem, 5vw, 2rem); }
-    }
-    #error-message { color: #ff8080; text-align:center; margin: 8px 0; }
-  </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#09121e">
+  <title>ABC Racing | Results Archive</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@500;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="site.css">
+  <script defer src="site.js"></script>
 </head>
-
-<body>
-  <header>
-    <h1 id="event-header">Archived Results</h1>
+<body data-page="archive">
+  <a class="skip-link" href="#main">Skip to results</a>
+  <nav class="site-nav" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a class="brand" href="index.html" aria-label="ABC Racing home"><span class="brand-mark">ABC</span><span class="brand-name"><strong>ABC RACING</strong><small>MONTHLY TIME TRIAL</small></span></a>
+      <div class="nav-links"><a class="nav-link" href="index.html">Current challenge</a><a class="nav-link" aria-current="page" href="archive.html">Results archive</a></div>
+    </div>
+  </nav>
+  <header class="page-hero">
+    <div class="hero-content"><span class="eyebrow">THE HISTORY</span><h1>RACE ARCHIVE.</h1><p class="hero-challenge" id="challenge-car">Past challenges. Final results.</p><p class="hero-meta" id="challenge-track">Select a month to revisit the competition.</p></div>
   </header>
-
-  <div class="controls">
-    <select id="yearSelect"></select>
-    <select id="monthSelect"></select>
-    <button onclick="loadArchive()">Load Archive</button>
-    <br />
-    <a class="home-button" href="index.html">🏠 Home</a>
-    <div id="error-message"></div>
-  </div>
-
-  <main>
-    <div class="overlay">
-      <p class="table-scroll-hint">Swipe sideways across the table to see all sectors and the gap.</p>
-      <div class="leaderboard-scroll" role="region" aria-label="Archived leaderboard, scroll horizontally for more columns" tabindex="0">
-      <table id="leaderboard">
-        <thead>
-          <tr>
-            <th>Pos</th>
-            <th>Name</th>
-            <th>Laptime</th>
-            <th>Sector 1</th>
-            <th>Sector 2</th>
-            <th>Sector 3</th>
-            <th>Gap</th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-      </div>
-      <div id="pb-footnote" class="pb-footnote" hidden>* PB not set during this Monthly TT.</div>
+  <main class="page-main" id="main">
+    <div class="content">
+      <div class="status-bar"><span class="status-group"><span class="status-dot" aria-hidden="true"></span>Historical results</span><span>Final standings from completed challenges</span></div>
+      <form class="archive-controls" id="archive-form">
+        <label>Year<select id="yearSelect" aria-label="Archive year"></select></label>
+        <label>Month<select id="monthSelect" aria-label="Archive month"></select></label>
+        <button class="action-button" type="submit">Show results</button>
+      </form>
+      <p class="error-message" id="error-message" role="alert"></p>
+      <section class="stats" aria-label="Archive statistics">
+        <div class="stat"><span class="stat-label">Winning lap</span><div class="stat-value" id="leader-lap">—</div><p class="stat-note" id="leader-name">Choose a challenge</p></div>
+        <div class="stat"><span class="stat-label">Gap between P1 &amp; P2</span><div class="stat-value accent" id="first-gap">—</div><p class="stat-note">Final ABC standings</p></div>
+        <div class="stat"><span class="stat-label">Competitors</span><div class="stat-value" id="driver-count">—</div><p class="stat-note">Recorded results</p></div>
+      </section>
+      <section class="panel" aria-labelledby="results-heading">
+        <div class="panel-heading"><h2 id="results-heading">Archived leaderboard</h2><small>Fastest sectors highlighted in purple</small></div>
+        <div id="desktop-standings" class="desktop-table-wrap" aria-label="Archived detailed leaderboard table"></div>
+        <div id="mobile-standings" class="mobile-leaderboard" aria-label="Tap a driver to view sectors"></div>
+        <p class="legend" id="pb-note" hidden>* This driver set their personal best outside the selected Monthly TT.</p>
+      </section>
+      <section id="battle-panel" class="battle" aria-label="Final battle for first place" hidden>
+        <div class="battle-driver" id="battle-first"></div>
+        <div><div class="battle-label">FINAL GAP · P1 vs P2</div><div class="battle-gap" id="battle-gap"></div></div>
+        <div class="battle-driver" id="battle-second"></div>
+      </section>
+      <p class="legend">Archive gaps show the difference to the fastest ABC Racing time for the selected challenge. Historical Steam world-record gaps were not saved in all archived results.</p>
     </div>
   </main>
-
-  <script>
-    // month ordering
-    const MONTH_ORDER = ["January","February","March","April","May","June","July","August","September","October","November","December"];
-
-    function capitalize(s){
-      if(!s) return s;
-      return s[0].toUpperCase() + s.slice(1).toLowerCase();
-    }
-
-    function parseLapTime(lapTime) {
-      if (!lapTime) return Infinity;
-      const parts = String(lapTime).split(':');
-      if (parts.length === 2) return parseFloat(parts[0]) * 60 + parseFloat(parts[1]);
-      return parseFloat(lapTime);
-    }
-
-    function formatLapTime(seconds) {
-      if (seconds === Infinity) return '-';
-      if (seconds >= 60) {
-        const m = Math.floor(seconds / 60);
-        const s = (seconds % 60).toFixed(3);
-        return `${m}:${s.padStart(6, '0')}`;
-      }
-      return seconds.toFixed(3);
-    }
-
-    // Robust index.json loader and dropdown population
-    async function loadIndex() {
-      const errEl = document.getElementById('error-message');
-      try {
-        // no-cache to make sure you're seeing latest index
-        const res = await fetch('data/archive/index.json', { cache: 'no-store' });
-        if (!res.ok) throw new Error(`index.json fetch failed (${res.status})`);
-        const raw = await res.json();
-        console.log('index.json content:', raw);
-
-        // Normalize into an array of filename strings
-        let files = [];
-        if (Array.isArray(raw)) {
-          files = raw.slice();
-        } else if (typeof raw === 'object' && raw !== null) {
-          // if it's an object attempt to find a files array or values
-          if (Array.isArray(raw.files)) files = raw.files.slice();
-          else {
-            // flatten object values and pull strings
-            files = Object.values(raw).flat().filter(Boolean);
-          }
-        }
-
-        // map to just the filename (strip paths)
-        files = files.map(f => {
-          if (typeof f !== 'string') return null;
-          const parts = f.split('/');
-          return parts[parts.length - 1].trim();
-        }).filter(Boolean);
-
-        // parse filenames like "MAY2025_RESULTS.json" (case-insensitive)
-        const entries = files.map(fn => {
-          const m = fn.match(/([A-Za-z]+)(\d{4})_RESULTS\.json$/i);
-          if (!m) return null;
-          const month = capitalize(m[1]);
-          const year = parseInt(m[2], 10);
-          return { file: fn, month, year };
-        }).filter(Boolean);
-
-        if (entries.length === 0) {
-          errEl.textContent = "No valid archive files found in data/archive/index.json.";
-          console.warn('No parseable entries from index.json:', files);
-          return;
-        }
-
-        // build year list (unique, newest first)
-        const years = [...new Set(entries.map(e => e.year))].sort((a,b) => b - a);
-
-        const yearSelect = document.getElementById('yearSelect');
-        const monthSelect = document.getElementById('monthSelect');
-        yearSelect.innerHTML = '';
-        monthSelect.innerHTML = '';
-
-        years.forEach(y => {
-          const opt = document.createElement('option');
-          opt.value = y;
-          opt.textContent = y;
-          yearSelect.appendChild(opt);
-        });
-
-        // when the year changes we populate months for that year
-        yearSelect.addEventListener('change', () => populateMonths(entries, parseInt(yearSelect.value, 10)));
-
-        // populate months for the newest year by default
-        populateMonths(entries, years[0]);
-        errEl.textContent = ''; // clear any previous error
-      } catch (err) {
-        console.error('Error loading index.json:', err);
-        document.getElementById('error-message').textContent = 'Could not load data/archive/index.json — check the file and JSON format.';
-      }
-    }
-
-    function populateMonths(entries, year) {
-      const monthSelect = document.getElementById('monthSelect');
-      monthSelect.innerHTML = '';
-
-      // get months available for year; dedupe and sort by MONTH_ORDER
-      const monthsSet = entries
-        .filter(e => e.year === year)
-        .map(e => e.month);
-
-      const uniqueMonths = [...new Set(monthsSet)].sort((a,b) => {
-        return MONTH_ORDER.indexOf(capitalize(a)) - MONTH_ORDER.indexOf(capitalize(b));
-      });
-
-      // Fill select in calendar order (Jan -> Dec)
-      uniqueMonths.forEach(m => {
-        const opt = document.createElement('option');
-        opt.value = m;
-        opt.textContent = m;
-        monthSelect.appendChild(opt);
-      });
-
-      // Select latest available month by default (the last item because sorted Jan->Dec)
-      if (uniqueMonths.length) {
-        monthSelect.selectedIndex = uniqueMonths.length - 1;
-      }
-    }
-
-    // load the chosen archive file and display it
-    async function loadArchive() {
-      const year = document.getElementById('yearSelect').value;
-      const month = document.getElementById('monthSelect').value;
-      if (!year || !month) {
-        document.getElementById('error-message').textContent = 'Please select year and month.';
-        return;
-      }
-      document.getElementById('error-message').textContent = '';
-
-      // fetch index.json again to find the exact filename (safer than constructing name)
-      try {
-        const res = await fetch('data/archive/index.json', { cache: 'no-store' });
-        const raw = await res.json();
-        let files = Array.isArray(raw) ? raw.slice() : (Array.isArray(raw.files) ? raw.files.slice() : Object.values(raw).flat());
-        files = files.map(f => (typeof f === 'string' ? f.split('/').pop().trim() : null)).filter(Boolean);
-
-        // find the entry matching month/year (case-insensitive)
-        const match = files.find(fn => {
-          const m = fn.match(/([A-Za-z]+)(\d{4})_RESULTS\.json$/i);
-          if (!m) return false;
-          return m[1].toLowerCase() === month.toLowerCase() && m[2] === String(year);
-        });
-
-        if (!match) {
-          document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Archive file not listed in index.json</td></tr>`;
-          return;
-        }
-
-        const filePath = `data/archive/${match}`;
-        const r = await fetch(filePath, { cache: 'no-store' });
-        if (!r.ok) throw new Error(`Failed to fetch ${filePath} (${r.status})`);
-        const data = await r.json();
-
-        // populate table
-        const tbody = document.querySelector("#leaderboard tbody");
-        tbody.innerHTML = '';
-        const pbFootnote = document.getElementById('pb-footnote');
-        let hasPbWarning = false;
-        pbFootnote.hidden = true;
-
-        document.getElementById('event-header').textContent = `${data.track} – ${data.variant || ''} – ${data.car}`;
-
-        const sortedResults = (data.results || []).slice().sort((a,b) => parseLapTime(a.laptime) - parseLapTime(b.laptime));
-        if (sortedResults.length === 0) {
-          tbody.innerHTML = `<tr><td colspan="7">No results in this archive file.</td></tr>`;
-          return;
-        }
-
-        const fastestTime = parseLapTime(sortedResults[0].laptime);
-        const fastestSector1 = Math.min(...sortedResults.map(r => parseLapTime(r.sector1)));
-        const fastestSector2 = Math.min(...sortedResults.map(r => parseLapTime(r.sector2)));
-        const fastestSector3 = Math.min(...sortedResults.map(r => parseLapTime(r.sector3)));
-
-        sortedResults.forEach((entry, index) => {
-          const row = document.createElement('tr');
-          if (index === 0) row.classList.add('gold');
-          else if (index === 1) row.classList.add('silver');
-          else if (index === 2) row.classList.add('bronze');
-
-          const lapSeconds = parseLapTime(entry.laptime);
-          const gapSeconds = lapSeconds - fastestTime;
-          const pbDuringChallenge = entry.pb_during_challenge;
-          const lapDisplay = pbDuringChallenge === false
-            ? `<span class="lap-pb-wrap">${entry.laptime}<span class="lap-pb-asterisk">*</span></span>`
-            : entry.laptime;
-
-          if (pbDuringChallenge === false) {
-            hasPbWarning = true;
-          }
-
-          row.innerHTML = `
-            <td>${index + 1}</td>
-            <td>${entry.name}</td>
-            <td>${lapDisplay}</td>
-            <td class="${parseLapTime(entry.sector1) === fastestSector1 ? 'fastest' : ''}">${entry.sector1}</td>
-            <td class="${parseLapTime(entry.sector2) === fastestSector2 ? 'fastest' : ''}">${entry.sector2}</td>
-            <td class="${parseLapTime(entry.sector3) === fastestSector3 ? 'fastest' : ''}">${entry.sector3}</td>
-            <td>${gapSeconds === 0 ? '-' : '+' + formatLapTime(gapSeconds)}</td>
-          `;
-          tbody.appendChild(row);
-        });
-
-        pbFootnote.hidden = !hasPbWarning;
-
-      } catch (err) {
-        console.error('Error loading archive:', err);
-        document.querySelector("#leaderboard tbody").innerHTML = `<tr><td colspan="7">Error loading results</td></tr>`;
-      }
-    }
-
-    // start
-    loadIndex();
-  </script>
+  <footer class="site-footer">ABC Racing · Automobilista 2 community time trial · Results preserved by month</footer>
 </body>
 </html>
